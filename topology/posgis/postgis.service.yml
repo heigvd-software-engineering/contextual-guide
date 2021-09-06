@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    component: postgis-db-service
+    app: contextual-guide
+  name: postgis-db-service
+spec:
+  ports:
+    - port: 5432
+      targetPort: 5432
+      name: postgis
+  selector:
+    component: postgis-db
+    app: contextual-guide
+  type: LoadBalancer
