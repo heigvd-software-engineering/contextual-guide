@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gotrue
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      component: gotrue
+      app: contextual-guide
+  template:
+    metadata:
+      labels:
+        app: contextual-guide
+        component: gotrue
+    spec:
+      containers:
+        - name: gotrue
+          image: exlinc/gotrue-auth
+          ports:
+            - containerPort: 8080
+          env:
+            - name: GOTRUE_API_HOST
+              value: localhost
+            - name: PORT
+              value: "8080"
+            - name: GOTRUE_DB_DRIVER
+              value: "postgres"
+            - name: DATABASE_URL
+              value: "postgres://postgresadmin:admin123@postgis-db-service:5432/gotrue?sslmode=disable"
+            - name: GOTRUE_SITE_URL
+              value: "http://localhost:8080"
+            - name: GOTRUE_JWT_SECRET
+              value: secretToChange
+          resources:
+            limits:
+              memory: "1Gi"
+              cpu: "500m"
