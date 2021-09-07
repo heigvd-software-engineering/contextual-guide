@@ -1,0 +1,25 @@
+apiVersion: tile38s/v1
+kind: Deployment
+metadata:
+  name: tile38
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      component: tile38
+      tile38: contextual-guide
+  template:
+    metadata:
+      labels:
+        tile38: contextual-guide
+        component: tile38
+    spec:
+      containers:
+        - name: tile38
+          image: tile38/tile38:1.25.3
+          ports:
+            - containerPort: 9851
+          resources:
+            limits:
+              memory: "1Gi"
+              cpu: "500m"
