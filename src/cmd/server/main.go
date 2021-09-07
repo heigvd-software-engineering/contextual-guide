@@ -14,6 +14,10 @@ func home(w http.ResponseWriter, req *http.Request)  {
 	}
 }
 
+func Sum(x int, y int) int {
+	return x+y
+}
+
 func main() {
 	http.HandleFunc("/", home)
 	_ = http.ListenAndServe(":3000", nil)
