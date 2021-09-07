@@ -20,4 +20,4 @@ jobs:
         run: |
           TAG_NAME=$(echo ${GITHUB_REF:10})
           docker build --cache-from flatrome/contextual-guide:latest -t flatrome/contextual-guide:latest -t flatrome/contextual-guide:$TAG_NAME .
-          docker push flatrome/contextual-guide:TAG_NAME
+          docker push flatrome/contextual-guide:$TAG_NAME
