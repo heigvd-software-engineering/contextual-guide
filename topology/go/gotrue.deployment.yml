@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      component: app
+      app: contextual-guide
+  template:
+    metadata:
+      labels:
+        app: contextual-guide
+        component: app
+    spec:
+      containers:
+        - name: app
+          image: go
+          ports:
+            - containerPort: 3000
+          resources:
+            limits:
+              memory: "1Gi"
+              cpu: "500m"

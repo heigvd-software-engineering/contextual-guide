@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    component: app
+    app: contextual-guide
+  name: app
+spec:
+  ports:
+    - port: 80
+      targetPort: 3000
+      name: app
+  selector:
+    component: app
+    app: contextual-guide
+  type: LoadBalancer
