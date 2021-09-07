@@ -1,0 +1,17 @@
+name: Contextual Guide
+on:
+  push:
+    branches: [master]
+    tags: ['*']
+  pull_request:
+    types: [opened, synchronize, reopened]
+jobs:
+  test:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup go
+        uses: actions/setup-go@v2
+        with:
+          go-version: '1.13'
+      - run: go test ./...
