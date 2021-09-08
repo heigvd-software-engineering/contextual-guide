@@ -1,25 +1,54 @@
 package account
 
+import "main/src/internal/storage"
 
 type Model struct {
-	gotrueId string
+	GoTrueId string
 }
 
-func Create(uri *Model) (bool,*Model){
-	return true,nil
+type IService interface {
+	Patate() bool
 }
 
-func Read() (bool, []Model){
-	return true,nil
+type IRepository interface {
+	Create(*Model) Model
+	Update(int64,*Model) Model
+	Delete(int64)
+	Get()[]Model
 }
 
-func Update(id int, uri *Model) (bool,*Model){
-	return true,nil
+type service struct {
+	accountRepository IRepository
+}
+type repository struct {
+	datastore storage.Storage
 }
 
-func Delete(id int) bool{
+func NewRepo(datastore storage.Storage) IRepository {
+	return &repository{datastore: datastore}
+}
+
+
+func NewService(repository IRepository) IService {
+	return &service{accountRepository: repository}
+}
+
+func (r *repository) Create(model *Model) Model{
+	r.datastore.CreateAccount(model)
+	return Model{}
+
+}
+func (r *repository) Update(id int64,model *Model) Model{
+	return Model{}
+
+}
+func (r *repository) Delete(id int64){
+
+}
+func (r *repository) Get()[]Model{
+	return nil
+}
+
+func (s *service) Patate() bool  {
 	return true
-
 }
-
-
