@@ -1,23 +1,12 @@
 package main
 
 import (
-	"database/sql"
+	"flag"
 	"fmt"
-	_ "github.com/lib/pq"
-	"log"
 	"main/src/internal/account"
 	"main/src/internal/storage"
 	"net/http"
 )
-
-const (
-	host     = "localhost"
-	port     = 5432
-	user     = "postgresadmin"
-	password = "admin123"
-	dbname   = "postgresdb"
-)
-
 
 func home(w http.ResponseWriter, req *http.Request)  {
 	fmt.Println("Hello")
@@ -33,39 +22,8 @@ func Sum(x int, y int) int {
 	return x+y
 }
 
-func setupDatabase(connString string) (*sql.DB, error) {
-	// change "postgres" for whatever supported database you want to use
-	db, err := sql.Open("postgres", connString)
-
-	if err != nil {
-		return nil, err
-	}
-
-	// ping the DB to ensure that it is connected
-	err = db.Ping()
-
-	if err != nil {
-		return nil, err
-	}
-
-	return db, nil
-}
 func run() error{
-
-	psqlInfo := fmt.Sprintf("host=%s port=%d user=%s "+
-		"password=%s dbname=%s sslmode=disable",
-		host, port, user, password, dbname)
-
-
-	// setup database connection
-	db, err := setupDatabase(psqlInfo)
-
-	if err != nil {
-		log.Fatal("Error connection to database", err)
-	}
-
-	// create storage dependency
-	datastore := storage.New(db)
+	datastore := storage.New()
 
 	accountRepository := account.NewRepo(datastore)
 	accountService := account.New(accountRepository)
@@ -78,7 +36,12 @@ func run() error{
 }
 
 func main() {
-	run()
+	port := flag.Int("port",3000, "-port=3000")
+	flag.Parse()
+
+	run();
+
 	http.HandleFunc("/", home)
-	_ = http.ListenAndServe(":3000", nil)
+
+	_ = http.ListenAndServe(fmt.Sprintf(":%d",*port), nil)
 }
