@@ -5,8 +5,9 @@ metadata:
   labels:
     type: local
     app: postgis
+  namespace: contextual-guide
 spec:
-  storageClassName: manual
+  storageClassName: longhorn
   capacity:
     storage: 5Gi
   accessModes:
@@ -18,10 +19,11 @@ kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
   name: postgis-pv-claim
+  namespace: contextual-guide
   labels:
     app: postgis
 spec:
-  storageClassName: manual
+  storageClassName: longhorn
   accessModes:
     - ReadWriteMany
   resources:
