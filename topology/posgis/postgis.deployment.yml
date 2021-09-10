@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: postgis
+  namespace: contextual-guide
 spec:
   replicas: 1
   selector:
@@ -31,5 +32,3 @@ spec:
               cpu: "500m"
       volumes:
         - name: postgisdata
-          persistentVolumeClaim:
-            claimName: postgis-pv-claim

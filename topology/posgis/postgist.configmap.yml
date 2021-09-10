@@ -2,6 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: postgis-db-config
+  namespace: contextual-guide
   labels:
     component: postgis-db-config
     app: contextual-guide

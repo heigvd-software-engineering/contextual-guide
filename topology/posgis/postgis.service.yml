@@ -5,11 +5,12 @@ metadata:
     component: postgis-db-service
     app: contextual-guide
   name: postgis-db-service
+  namespace: contextual-guide
 spec:
   ports:
-    - port: 5432
+    - name: postgis
+      port: 5432
       targetPort: 5432
-      name: postgis
   selector:
     component: postgis-db
     app: contextual-guide
