@@ -13,6 +13,7 @@ var (
 
 func init() {
 	router = gin.Default()
+	router.LoadHTMLGlob("view/*.html")
 }
 
 
@@ -26,7 +27,7 @@ func main() {
 
 
 	router.GET("/accounts/:accountId", controllers.GetAccount)
-	router.POST("/accounts",controllers.CreateAccount)
+	router.GET("/uri/create",controllers.RenderUriForm)
 
 	if err := router.Run(fmt.Sprintf(":%d",*port)); err != nil {
 		panic(err)

@@ -15,6 +15,8 @@ func GetAccount(c *gin.Context)  {
 	c.JSON(http.StatusOK, user)
 }
 
-func CreateAccount(c *gin.Context) {
-
+func RenderUriForm(c *gin.Context) {
+	c.HTML(http.StatusOK,"uri-form.html",gin.H{
+		"title": "patate",
+	})
 }
