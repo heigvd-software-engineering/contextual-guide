@@ -29,6 +29,7 @@ func Sum(x int, y int) int {
 func createMyRender() multitemplate.Renderer {
 	r := multitemplate.NewRenderer()
 	r.AddFromFiles("home", "views/layouts/default.html","views/layouts/header.html", "views/layouts/footer.html","views/pages/home.html")
+	r.AddFromFiles("uri-view", "views/layouts/default.html","views/layouts/header.html", "views/layouts/footer.html","views/uri-view.html")
 	return r
 }
 

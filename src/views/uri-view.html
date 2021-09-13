@@ -1,12 +1,22 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-{{ range .uris }}
-{{ . }}
-{{ end }}
-</body>
-</html>
+{{define "content"}}
+<main class="container">
+    <h1>Your URIs</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Uri</th>
+                <th>Document</th>
+            </tr>
+        </thead>
+        <tbody>
+        {{ range .uris }}
+            <tr>
+                <td><a href='/uri/{{ .Id }}'>/uri/{{ .Id }}</a></td>
+                <td>{{ .Document }}</td>
+            </tr>
+        {{ end }}
+        </tbody>
+    </table>
+    <a href="/uri/create" role="button">New URIs</a>
+</main>
+{{end}}
