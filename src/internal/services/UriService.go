@@ -24,3 +24,9 @@ func (us *uriService) GetAll() []models.Uri  {
 	uri := repository.UriRepository.GetAll()
 	return uri
 }
+
+func (us *uriService) GetOne(uuid string) *models.Uri  {
+
+	uri := repository.UriRepository.GetUri(uuid)
+	return uri
+}
