@@ -1,20 +1,27 @@
 package account
 
-type IService interface {
-	Create(*Model) bool
-}
-
+import "main/src/pkg/httpserver"
 
 type service struct {
-	accountRepository IRepository
+	accountRepository *httpserver.Repository
 }
 
-func New(repository IRepository) IService {
+func NewService(repository *httpserver.Repository) httpserver.Service {
 	return &service{accountRepository: repository}
 }
 
-func (s *service) Create(accountToCreate *Model) bool  {
-	s.accountRepository.Create(accountToCreate)
+func (s *service) Create(accountToCreate *accountModel) bool  {
+	s.accountRepository.C
 
 	return true
+}
+
+func (s *service) GetAll() []httpserver.Model  {
+	accounts, err := s.accountRepository.Get()
+
+	if err {
+		return nil
+	}
+
+	return accounts
 }
