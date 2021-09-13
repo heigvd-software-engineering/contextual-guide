@@ -20,6 +20,7 @@ func init()  {
 }
 
 
-func (a *accountRepository) GetAccount(id int64) *models.Account {
+func (ar *accountRepository) GetAccount(id int64) *models.Account {
 	return &models.Account{GoTrueId: "test"}
 }
+
