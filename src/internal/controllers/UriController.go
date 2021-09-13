@@ -31,7 +31,7 @@ func GetUri(c *gin.Context) {
 
 	uris := services.UriService.GetAll()
 
-	c.HTML(http.StatusOK,"uri-view.html",gin.H{
+	c.HTML(http.StatusOK,"uri-views.html",gin.H{
 		"uris": uris,
 	})
 }
