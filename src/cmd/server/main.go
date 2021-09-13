@@ -28,7 +28,7 @@ func Sum(x int, y int) int {
 
 func createMyRender() multitemplate.Renderer {
 	r := multitemplate.NewRenderer()
-	r.AddFromFiles("home", "views/layouts/default.html", "views/pages/home.html")
+	r.AddFromFiles("home", "views/layouts/default.html","views/layouts/header.html", "views/layouts/footer.html","views/pages/home.html")
 	return r
 }
 
@@ -38,8 +38,9 @@ func main() {
 	port := flag.Int("port",3000, "-port=3000")
 	flag.Parse()
 
-	router.GET("/", controllers.Render)
+	router.Static("/assets", "./assets")
 
+	router.GET("/", controllers.Render)
 	router.GET("/accounts/:accountId", controllers.GetAccount)
 	router.GET("/uri/create",controllers.RenderUriForm)
 	router.POST("/uri/create",controllers.CreateUri)
