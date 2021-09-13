@@ -3,15 +3,8 @@ package main
 import (
 	"flag"
 	"fmt"
-	"main/src/internal/storage"
-	"main/src/pkg/httpserver"
-	"net/http"
-	"github.com/gorilla/mux"
 	"github.com/gin-gonic/gin"
-)
-
-
-import (
+	"main/src/internal/controllers"
 )
 
 var (
@@ -23,52 +16,19 @@ func init() {
 }
 
 
-func home(w http.ResponseWriter, req *http.Request)  {
-	fmt.Println("Hello")
-
-	_, err := w.Write([]byte("Hello"))
-	if err != nil {
-		return 
-	}
-}
-
-
 func Sum(x int, y int) int {
 	return x+y
-}
-
-func serve(port int){
-	router.GET("/accounts/:accountId", controllers.GetUser)
-	_ = http.ListenAndServe(fmt.Sprintf(":%d",port), router)
-
 }
 
 func main() {
 	port := flag.Int("port",3000, "-port=3000")
 	flag.Parse()
-	datastore := storage.New()
 
 
+	router.GET("/accounts/:accountId", controllers.GetAccount)
+	router.POST("/accounts",controllers.CreateAccount)
 
-
-	//accountModel := account.NewModel("ksdvkns")
-	//
-	//accountRepository := account.NewRepo(datastore)
-	//accountService := account.NewService(accountRepository)
-	//accountRouter := account.NewRouter(accountService)
-	//
-	//accountResource := httpserver.Resource{
-	//	Name:  "Account",
-	//	Model: accountModel,
-	//	Router: accountRouter,
-	//	Service: accountService,
-	//	Repository: accountRepository,
-	//}
-
-	server := httpserver.New(*port,*datastore)
-
-
-
-	server.Register(&accountResource)
-	serve(*port)
+	if err := router.Run(fmt.Sprintf(":%d",*port)); err != nil {
+		panic(err)
+	}
 }

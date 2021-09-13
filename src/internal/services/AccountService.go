@@ -1,21 +1,20 @@
 package services
 
-import "main/src/internal/models"
+import (
+	"main/src/internal/models"
+	"main/src/internal/repository"
+)
 
-type AccountService struct {
+type accountService struct {
 
 }
 
 var (
-	accountService AccountService
+	AccountService accountService
 )
 
-func (us *AccountService) GetAccount(accountId int64) (*models.Account)  {
-	user, err := domain.UserDao.GetUser(userID)
-
-	if err != nil {
-		return nil
-	}
+func (us *accountService) GetAccount(accountId int64) *models.Account  {
+	user := repository.AccountRepository.GetAccount(accountId)
 
 	return user
 }
