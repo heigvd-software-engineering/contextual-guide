@@ -3,18 +3,16 @@ package main
 import (
 	"flag"
 	"fmt"
-	"main/src/internal/account"
-	"main/src/internal/storage"
-	"net/http"
+	"github.com/gin-gonic/gin"
+	"main/src/internal/controllers"
 )
 
-func home(w http.ResponseWriter, req *http.Request)  {
-	fmt.Println("Hello")
+var (
+	router *gin.Engine
+)
 
-	_, err := w.Write([]byte("Hello"))
-	if err != nil {
-		return 
-	}
+func init() {
+	router = gin.Default()
 }
 
 
@@ -22,26 +20,15 @@ func Sum(x int, y int) int {
 	return x+y
 }
 
-func run() error{
-	datastore := storage.New()
-
-	accountRepository := account.NewRepo(datastore)
-	accountService := account.New(accountRepository)
-
-	account := account.Model{GoTrueId: "thisIsAnId"}
-	accountService.Create(&account)
-
-	return nil
-
-}
-
 func main() {
 	port := flag.Int("port",3000, "-port=3000")
 	flag.Parse()
 
-	run();
 
-	http.HandleFunc("/", home)
+	router.GET("/accounts/:accountId", controllers.GetAccount)
+	router.POST("/accounts",controllers.CreateAccount)
 
-	_ = http.ListenAndServe(fmt.Sprintf(":%d",*port), nil)
+	if err := router.Run(fmt.Sprintf(":%d",*port)); err != nil {
+		panic(err)
+	}
 }
