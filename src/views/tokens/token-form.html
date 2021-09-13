@@ -1,0 +1,11 @@
+{{define "content"}}
+
+<main class="container">
+    <h2>New Token</h2>
+    <form action="/tokens/create" method="POST">
+        <label for="name">Name</label>
+        <input name="name" id="name">
+        <button type="submit">Enregistrer</button>
+    </form>
+</main>
+{{ end }}

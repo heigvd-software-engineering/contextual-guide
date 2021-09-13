@@ -1,0 +1,17 @@
+{{define "content"}}
+<main class="container">
+  <h1>Created token</h1>
+  Name:
+  <code>
+    {{ .token.Name }}
+  </code><br>
+  Value :
+  <code>
+    {{ .token.Value }}
+  </code>
+
+  <p class="primary ">
+  <i>Please save the token, you will not be able to show it again !</i>
+  </p>
+</main>
+{{end}}

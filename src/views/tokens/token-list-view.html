@@ -1,0 +1,21 @@
+{{define "content"}}
+<main class="container">
+    <h1>Your Tokens</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+        {{ range .tokens }}
+            <tr>
+                <td>{{ .Name }}</td>
+            </tr>
+        {{ end }}
+        </tbody>
+    </table>
+    <a href="/tokens/create" role="button">New Token</a>
+</main>
+{{end}}
