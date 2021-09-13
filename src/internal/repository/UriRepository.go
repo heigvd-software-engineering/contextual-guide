@@ -12,7 +12,7 @@ type uriRepository struct {
 
 
 type IUriRepository interface {
-	GetUri(int64) *models.Uri
+	GetUri(string) *models.Uri
 	GetAll() []models.Uri
 	CreateUri(*models.Uri) *models.Uri
 }
@@ -26,10 +26,10 @@ func init()  {
 }
 
 
-func (ur *uriRepository) GetUri(id int64) *models.Uri {
+func (ur *uriRepository) GetUri(uuid string) *models.Uri {
 
 	var uris models.Uri
-	database.DB.Find(&uris)
+	database.DB.Where(&models.Uri{Id: uuid}).Find(&uris)
 
 	return &uris
 }

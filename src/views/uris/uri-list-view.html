@@ -11,12 +11,12 @@
         <tbody>
         {{ range .uris }}
             <tr>
-                <td><a href='/uri/{{ .Id }}'>/uri/{{ .Id }}</a></td>
+                <td><a href='/uris/{{ .Id }}'>/uris/{{ .Id }}</a></td>
                 <td>{{ .Document }}</td>
             </tr>
         {{ end }}
         </tbody>
     </table>
-    <a href="/uri/create" role="button">New URIs</a>
+    <a href="/uris/create" role="button">New URIs</a>
 </main>
 {{end}}

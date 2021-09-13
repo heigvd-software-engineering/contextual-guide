@@ -1,0 +1,28 @@
+{{define "content"}}
+<main class="container">
+  <h1>/uris/{{ .uri.Id }}</h1>
+
+  <div class="grid">
+    <section>
+      <code>
+        {{ .uri.Document }}
+      </code>
+    </section>
+    <aside>
+      <div id="qrcode"></div>
+    </aside>
+  </div>
+</main>
+
+<script src="/assets/js/qrcode.min.js"></script>
+<script>
+  const qrcode = new QRCode("qrcode");
+
+  const doc = JSON.parse("{{ .uri.Document }}")
+  function makeCode () {
+    qrcode.makeCode(doc.redirect);
+  }
+
+  makeCode();
+</script>
+{{end}}

@@ -19,7 +19,5 @@ func Render(c *gin.Context) {
 		viewName = "home"
 	}
 
-	c.HTML(200, viewName, gin.H{
-		"title": "Html5 Template Engine",
-	})
+	c.HTML(200, viewName, nil)
 }

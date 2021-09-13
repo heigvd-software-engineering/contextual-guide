@@ -1,7 +1,37 @@
-:root {
-    --primary: #8e24aa;
+/* Red Light scheme (Default) */
+/* Can be forced with data-theme="light" */
+[data-theme="light"],
+:root:not([data-theme="dark"]) {
+    --primary: #e53935;
+    --primary-hover: #d32f2f;
+    --primary-focus: rgba(229, 57, 53, 0.125);
+    --primary-inverse: #FFF;
 }
 
-header{
-    padding: 0 5rem 0 5rem;
+/* Red Dark scheme (Auto) */
+/* Automatically enabled if user has Dark mode enabled */
+@media only screen and (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+        --primary: #e53935;
+        --primary-hover: #f44336;
+        --primary-focus: rgba(229, 57, 53, 0.25);
+        --primary-inverse: #FFF;
+    }
+}
+
+/* Red Dark scheme (Forced) */
+/* Enabled if forced with data-theme="dark" */
+[data-theme="dark"] {
+    --primary: #e53935;
+    --primary-hover: #f44336;
+    --primary-focus: rgba(229, 57, 53, 0.25);
+    --primary-inverse: #FFF;
+}
+
+/* Red (Common styles) */
+:root {
+    --form-element-active-border-color: var(--primary);
+    --form-element-focus-color: var(--primary-focus);
+    --switch-color: var(--primary-inverse);
+    --switch-checked-background-color: var(--primary);
 }
