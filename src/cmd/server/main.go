@@ -61,6 +61,7 @@ func main() {
 	router.GET("/tokens",controllers.GetTokens)
 	router.GET("/tokens/create",controllers.RenderTokenForm)
 	router.POST("/tokens/create",controllers.CreateToken)
+	router.GET("/tokens/:id/delete",controllers.DeleteToken)
 
 	if err := router.Run(fmt.Sprintf(":%d",*port)); err != nil {
 		panic(err)

@@ -24,3 +24,8 @@ func (us *tokenService) GetAll() []models.Token  {
 	token := repository.TokenRepository.GetAll()
 	return token
 }
+
+
+func (us *tokenService) Delete(id int64)  {
+	repository.TokenRepository.Delete(id)
+}

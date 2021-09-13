@@ -12,6 +12,7 @@ type tokenRepository struct {
 
 type ITokenRepository interface {
 	GetToken(int64) *models.Token
+	Delete(int64)
 	GetAll() []models.Token
 	CreateToken(*models.Token) *models.Token
 }
@@ -45,5 +46,11 @@ func (ur *tokenRepository) GetAll() []models.Token {
 
 	database.DB.Find(&tokens)
 	return tokens
+}
+
+func (ur *tokenRepository) Delete(id int64) {
+
+
+	database.DB.Delete(&models.Token{}, id)
 }
 

@@ -12,6 +12,11 @@
         {{ range .tokens }}
             <tr>
                 <td>{{ .Name }}</td>
+                <td>
+                    <a href="/tokens/{{ .Id }}/delete">
+                        <i class="gg-trash trash"></i>
+                    </a>
+                </td>
             </tr>
         {{ end }}
         </tbody>

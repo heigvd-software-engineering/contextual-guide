@@ -6,6 +6,7 @@ import (
 	"main/src/internal/models"
 	"main/src/internal/services"
 	"net/http"
+	"strconv"
 )
 
 
@@ -38,4 +39,13 @@ func GetTokens(c *gin.Context) {
 	})
 }
 
+func DeleteToken(c *gin.Context) {
+
+	id, _ := strconv.ParseInt(c.Param("id"), 10, 64)
+
+	services.TokenService.Delete(id)
+
+	c.Redirect(http.StatusMovedPermanently, "/tokens")
+	c.Abort()
+}
 

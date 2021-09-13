@@ -1,3 +1,14 @@
+
+@import url('https://css.gg/trash.css');
+
+.trash{
+    color: #e53935;
+}
+
+.trash:hover{
+    color: rgb(229, 57, 53);
+}
+
 /* Red Light scheme (Default) */
 /* Can be forced with data-theme="light" */
 [data-theme="light"],
