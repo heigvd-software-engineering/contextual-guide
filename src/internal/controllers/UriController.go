@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 	"main/src/internal/models"
@@ -40,7 +39,6 @@ func GetUri(c *gin.Context) {
 func GetUriByUUID(c *gin.Context) {
 
 	uriUUID := c.Param("uuid")
-	fmt.Println(uriUUID)
 	uri := services.UriService.GetOne(uriUUID)
 
 	c.HTML(http.StatusOK,"uri-view",gin.H{

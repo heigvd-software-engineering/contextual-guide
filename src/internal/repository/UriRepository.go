@@ -1,7 +1,6 @@
 package repository
 
 import (
-	"fmt"
 	"main/src/internal/database"
 	"main/src/internal/models"
 )
@@ -45,9 +44,6 @@ func (ur *uriRepository) GetAll() []models.Uri {
 	uris := []models.Uri{}
 
 	database.DB.Find(&uris)
-
-	fmt.Println(uris)
-
 	return uris
 }
 
