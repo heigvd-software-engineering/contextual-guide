@@ -16,7 +16,7 @@ services:
     networks:
       - net
   gotrue:
-    image: test
+    image: ghcr.io/heigvd-software-engineering/gotrue
     container_name: gotrue
     env_file:
       - .env
