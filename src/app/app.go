@@ -27,7 +27,7 @@ func init() {
 
 	Engine = gin.Default()
 
-	Engine.Static("/assets", "./assets")
+	Engine.Static("/assets", "./src/assets")
 
 	Engine = initGuiRouter(Engine)
 	Engine = initApiRouter(Engine)
