@@ -1,0 +1,33 @@
+# docker-compose.yml
+version: '3.7'
+services:
+  db:
+    image: postgis/postgis
+    container_name: db
+    environment:
+      - POSTGRES_DB=contextual-guide
+      - POSTGRES_USER=postgresadmin
+      - POSTGRES_PASSWORD=admin123
+    ports:
+      - "5432:5432"
+    volumes:
+      - data:/var/lib/postgresql/data/
+      - ./scripts:/docker-entrypoint-initdb.d
+    networks:
+      - net
+  gotrue:
+    image: test
+    container_name: gotrue
+    env_file:
+      - .env
+    networks:
+      - net
+    ports:
+      - "8082:9999"  
+
+volumes:
+  data:
+
+networks:
+  net:
+    external: false  
