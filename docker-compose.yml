@@ -23,7 +23,19 @@ services:
     networks:
       - net
     ports:
-      - "8082:9999"  
+      - "8082:9999"
+  app:
+    image: cosmtrek/air
+    container_name: app
+    env_file:
+      - .env
+    networks:
+      - net
+    ports:
+      - "3000:3000"
+    working_dir: /go/src/github.com/cosmtrek/hub
+    volumes: 
+      - ".:/go/src/github.com/cosmtrek/hub"
 
 volumes:
   data:

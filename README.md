@@ -11,10 +11,10 @@ You can set the http port with the command `-port=<the port>`
 
 The database configuration is set with some env variables
 
-| Key     | Exemple       |
-| ------- | ------------- |
-| DB_HOST | localhost     |
-| DB_PORT | 5432          |
-| DB_NAME | postgresdb    |
-| DB_USER | postgresadmin |
-| DB_PASS | admin123      |
+| Key     | Exemple             |
+| ------- | ------------------- |
+| DB_HOST | localhost           |
+| DB_PORT | 5432                |
+| DB_NAME | contextual-guide    |
+| DB_USER | postgresadmin       |
+| DB_PASS | admin123            |

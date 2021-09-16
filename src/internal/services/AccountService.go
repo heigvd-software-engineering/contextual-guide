@@ -6,14 +6,13 @@ import (
 )
 
 type accountService struct {
-
 }
 
 var (
 	AccountService accountService
 )
 
-func (us *accountService) GetAccount(accountId int64) *models.Account  {
+func (us *accountService) GetAccount(accountId int64) *models.Account {
 	user := repository.AccountRepository.GetAccount(accountId)
 
 	return user

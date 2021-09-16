@@ -6,9 +6,7 @@ import (
 )
 
 type uriRepository struct {
-	
 }
-
 
 type IUriRepository interface {
 	GetUri(string) *models.Uri
@@ -20,10 +18,9 @@ var (
 	UriRepository IUriRepository
 )
 
-func init()  {
-	     UriRepository = &uriRepository{}
+func init() {
+	UriRepository = &uriRepository{}
 }
-
 
 func (ur *uriRepository) GetUri(uuid string) *models.Uri {
 
@@ -34,9 +31,9 @@ func (ur *uriRepository) GetUri(uuid string) *models.Uri {
 }
 
 func (ur *uriRepository) CreateUri(model *models.Uri) *models.Uri {
-		database.DB.Create(model)
+	database.DB.Create(model)
 
-		return model
+	return model
 }
 
 func (ur *uriRepository) GetAll() []models.Uri {
@@ -46,4 +43,3 @@ func (ur *uriRepository) GetAll() []models.Uri {
 	database.DB.Find(&uris)
 	return uris
 }
-
