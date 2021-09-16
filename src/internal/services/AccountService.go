@@ -12,8 +12,12 @@ var (
 	AccountService accountService
 )
 
-func (us *accountService) GetAccount(accountId int64) *models.Account {
-	user := repository.AccountRepository.GetAccount(accountId)
+func (us *accountService) GetAccount(id string) *models.Account  {
+	user := repository.AccountRepository.GetAccount(id)
 
 	return user
+}
+
+func (us *accountService) CreateAccount(model *models.Account) (*models.Account, error)  {
+	return repository.AccountRepository.CreateAccount(model)
 }

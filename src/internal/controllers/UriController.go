@@ -9,9 +9,7 @@ import (
 )
 
 func RenderUriForm(c *gin.Context) {
-	c.HTML(http.StatusOK, "uri-form", gin.H{
-		"title": "patate",
-	})
+	c.HTML(http.StatusOK,"uri-form", nil)
 }
 
 func CreateUri(c *gin.Context) {
@@ -22,7 +20,9 @@ func CreateUri(c *gin.Context) {
 
 	services.UriService.CreateUri(&uri)
 
-	c.Redirect(http.StatusOK, "/uris")
+	c.Redirect(http.StatusMovedPermanently,"/uris")
+	c.Abort()
+
 }
 
 func GetUri(c *gin.Context) {

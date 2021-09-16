@@ -34,6 +34,7 @@ func connect() (*gorm.DB, error) {
 
 	db.AutoMigrate(&models.Uri{})
 	db.AutoMigrate(&models.Token{})
+	db.AutoMigrate(&models.Account{})
 
 	return db, nil
 }

@@ -31,8 +31,8 @@ func CreateToken(c *gin.Context) {
 func GetTokens(c *gin.Context) {
 
 	tokens := services.TokenService.GetAll()
-
 	c.HTML(http.StatusOK, "token-list-view", gin.H{
+
 		"tokens": tokens,
 	})
 }
