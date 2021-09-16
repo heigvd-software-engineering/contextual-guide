@@ -7,7 +7,7 @@ import (
 	"strconv"
 )
 
-func GetAccount(c *gin.Context)  {
+func GetAccount(c *gin.Context) {
 	id, _ := strconv.ParseInt(c.Param("accountId"), 10, 64)
 
 	user := services.AccountService.GetAccount(id)

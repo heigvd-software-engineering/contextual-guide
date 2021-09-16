@@ -12,7 +12,7 @@ var (
 	DB *gorm.DB
 )
 
-func init()  {
+func init() {
 	DB, _ = connect()
 
 }

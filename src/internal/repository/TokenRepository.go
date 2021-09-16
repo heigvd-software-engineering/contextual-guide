@@ -6,9 +6,7 @@ import (
 )
 
 type tokenRepository struct {
-	
 }
-
 
 type ITokenRepository interface {
 	GetToken(int64) *models.Token
@@ -21,10 +19,9 @@ var (
 	TokenRepository ITokenRepository
 )
 
-func init()  {
-	     TokenRepository = &tokenRepository{}
+func init() {
+	TokenRepository = &tokenRepository{}
 }
-
 
 func (ur *tokenRepository) GetToken(id int64) *models.Token {
 
@@ -35,9 +32,9 @@ func (ur *tokenRepository) GetToken(id int64) *models.Token {
 }
 
 func (ur *tokenRepository) CreateToken(model *models.Token) *models.Token {
-		database.DB.Create(model)
+	database.DB.Create(model)
 
-		return model
+	return model
 }
 
 func (ur *tokenRepository) GetAll() []models.Token {
@@ -50,7 +47,5 @@ func (ur *tokenRepository) GetAll() []models.Token {
 
 func (ur *tokenRepository) Delete(id int64) {
 
-
 	database.DB.Delete(&models.Token{}, id)
 }
-

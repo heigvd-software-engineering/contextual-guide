@@ -8,15 +8,13 @@ import (
 	"net/http"
 )
 
-
-
 func RenderUriForm(c *gin.Context) {
-	c.HTML(http.StatusOK,"uri-form",gin.H{
+	c.HTML(http.StatusOK, "uri-form", gin.H{
 		"title": "patate",
 	})
 }
 
-func CreateUri(c *gin.Context)  {
+func CreateUri(c *gin.Context) {
 
 	uri := models.Uri{
 		Id: uuid.New().String(), Document: c.PostForm("document"),
@@ -24,14 +22,14 @@ func CreateUri(c *gin.Context)  {
 
 	services.UriService.CreateUri(&uri)
 
-	c.Redirect(http.StatusOK,"/uris")
+	c.Redirect(http.StatusOK, "/uris")
 }
 
 func GetUri(c *gin.Context) {
 
 	uris := services.UriService.GetAll()
 
-	c.HTML(http.StatusOK,"uri-list-view",gin.H{
+	c.HTML(http.StatusOK, "uri-list-view", gin.H{
 		"uris": uris,
 	})
 }
@@ -41,7 +39,7 @@ func GetUriByUUID(c *gin.Context) {
 	uriUUID := c.Param("uuid")
 	uri := services.UriService.GetOne(uriUUID)
 
-	c.HTML(http.StatusOK,"uri-view",gin.H{
+	c.HTML(http.StatusOK, "uri-view", gin.H{
 		"uri": uri,
 	})
 }
