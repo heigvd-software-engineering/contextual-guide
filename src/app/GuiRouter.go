@@ -12,6 +12,7 @@ func initGuiRouter(router *gin.Engine) *gin.Engine {
 
 	router.GET("/uris", controllers.GetUri)
 	router.GET("/uris/:uuid", controllers.GetUriByUUID)
+	router.GET("/uris/:uuid/qrcode.png", controllers.GetQRCode)
 
 	router.GET("/uris/create", controllers.RenderUriForm)
 	router.POST("/uris/create", controllers.CreateUri)
