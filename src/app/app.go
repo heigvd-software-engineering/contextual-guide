@@ -13,9 +13,9 @@ func createRender() multitemplate.Renderer {
 	renderer := multitemplate.NewRenderer()
 	renderer.AddFromFiles("home", "src/views/layouts/default.html", "src/views/layouts/header.html", "src/views/layouts/footer.html", "src/views/pages/home.html")
 	renderer.AddFromFiles("error", "src/views/layouts/default.html", "src/views/layouts/header.html", "src/views/layouts/footer.html", "src/views/pages/error.html")
-	renderer.AddFromFiles("uri-list-view", "src/views/layouts/default.html", "src/views/layouts/header.html", "src/views/layouts/footer.html", "src/views/uris/uri-list-view.html")
-	renderer.AddFromFiles("uri-view", "src/views/layouts/default.html", "src/views/layouts/header.html", "src/views/layouts/footer.html", "src/views/uris/uri-view.html")
-	renderer.AddFromFiles("uri-form", "src/views/layouts/default.html", "src/views/layouts/header.html", "src/views/layouts/footer.html", "src/views/uris/uri-form.html")
+	renderer.AddFromFiles("resource-list-view", "src/views/layouts/default.html", "src/views/layouts/header.html", "src/views/layouts/footer.html", "src/views/resources/resource-list-view.html")
+	renderer.AddFromFiles("resource-view", "src/views/layouts/default.html", "src/views/layouts/header.html", "src/views/layouts/footer.html", "src/views/resources/resource-view.html")
+	renderer.AddFromFiles("resource-form", "src/views/layouts/default.html", "src/views/layouts/header.html", "src/views/layouts/footer.html", "src/views/resources/resource-form.html")
 
 	renderer.AddFromFiles("token-form", "src/views/layouts/default.html", "src/views/layouts/header.html", "src/views/layouts/footer.html", "src/views/tokens/token-form.html")
 	renderer.AddFromFiles("token-list-view", "src/views/layouts/default.html", "src/views/layouts/header.html", "src/views/layouts/footer.html", "src/views/tokens/token-list-view.html")

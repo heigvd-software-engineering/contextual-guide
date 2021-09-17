@@ -16,12 +16,6 @@ func initGuiRouter(router *gin.Engine) *gin.Engine {
 	router.GET("/", controllers.Render)
 	router.GET("/accounts/:accountId", extractCookie, controllers.GetAccount)
 
-	router.GET("/uris",controllers.GetUri)
-	router.GET("/uris/:uuid", controllers.GetUriByUUID)
-
-	router.GET("/uris/create", checkLogged, controllers.RenderUriForm)
-	router.POST("/uris/create", checkLogged, controllers.CreateUri)
-
 	router.GET("/tokens", checkLogged,  controllers.GetTokens)
 	router.GET("/tokens/create", checkLogged,controllers.RenderTokenForm)
 	router.POST("/tokens/create", checkLogged, controllers.CreateToken)
@@ -38,8 +32,13 @@ func initGuiRouter(router *gin.Engine) *gin.Engine {
 
 	router.GET("/logout", controllers.HandleLogout)
 
+	router.GET("/resources", controllers.ListResources)
+	router.GET("/resources/:id", controllers.ViewResource)
+	router.GET("/resources/:id/qrcode.png", controllers.RenderResourceQRCode)
+	router.GET("/resources/:id/redirect", controllers.RedirectResource)
 
-
+	router.GET("/resources/create", checkLogged,controllers.RenderResourceForm)
+	router.POST("/resources/create",checkLogged, controllers.CreateResource)
 	return router
 
 }

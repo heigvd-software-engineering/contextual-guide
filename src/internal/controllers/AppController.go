@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"fmt"
 	"github.com/gin-gonic/gin"
 )
 
@@ -25,7 +24,6 @@ func Render(c *gin.Context) {
 		loggedUser = user.(*LoggedUser)
 	}
 
-	fmt.Println(loggedUser)
 	c.HTML(200, viewName, gin.H{
 		"user": loggedUser,
 	})

@@ -48,6 +48,6 @@ func DeleteToken(c *gin.Context) {
 
 	services.TokenService.Delete(id)
 
-	c.Redirect(http.StatusMovedPermanently, "/tokens")
+	c.Redirect(http.StatusFound, "/tokens")
 	c.Abort()
 }

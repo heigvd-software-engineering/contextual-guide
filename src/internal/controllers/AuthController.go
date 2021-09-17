@@ -31,7 +31,6 @@ func RenderRegisterForm(c *gin.Context)  {
 }
 
 func HandleRegistration(c *gin.Context)  {
-
 	user := credentials{
 		Email: c.PostForm("email"),
 		Password: c.PostForm("password"),
@@ -128,8 +127,7 @@ func HandleLogin(c *gin.Context)  {
 	//FIXME: secure=true for prod
 	c.SetCookie("sessionid", tokenDto.AccessToken, 3600, "/", "localhost", false, false)
 
-
-	c.Redirect(http.StatusMovedPermanently,"/uris")
+	c.Redirect(http.StatusFound,"/resources")
 }
 
 
@@ -138,5 +136,4 @@ func HandleLogout(c *gin.Context) {
 	c.SetCookie("sessionid","",-1,"/","localhost",false,false)
 
 	c.Redirect(http.StatusFound,"/")
-
 }
