@@ -9,6 +9,18 @@ type LoggedUser struct {
 	Email string
 }
 
+func getUserFromContext(c *gin.Context) *LoggedUser {
+	user , ok :=c.Get("user")
+	if !ok || user == nil{
+		return nil
+	}
+
+	var loggedUser LoggedUser
+	loggedUser = user.(LoggedUser)
+
+	return &loggedUser
+}
+
 func Render(c *gin.Context) {
 
 	viewName := c.Request.RequestURI
@@ -17,24 +29,16 @@ func Render(c *gin.Context) {
 	if viewName == "" {
 		viewName = "home"
 	}
-	var loggedUser *LoggedUser
-	user , ok :=c.Get("user")
-
-	if !ok {
-		loggedUser = user.(*LoggedUser)
-	}
-
 	c.HTML(200, viewName, gin.H{
-		"user": loggedUser,
+		"user": getUserFromContext(c),
 	})
 }
 
 func RenderErrorPage(code int, message string, c *gin.Context){
-	user , _ :=c.Get("user")
 	c.HTML(code,"error",gin.H{
 		"code": code,
 		"message": message,
-		"user": user,
+		"user": getUserFromContext(c),
 	})
 	c.Abort()
 }

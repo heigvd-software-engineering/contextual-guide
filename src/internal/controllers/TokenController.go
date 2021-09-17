@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 	"main/src/internal/models"
@@ -11,7 +10,9 @@ import (
 )
 
 func RenderTokenForm(c *gin.Context) {
-	c.HTML(http.StatusOK, "token-form", nil)
+	c.HTML(http.StatusOK, "token-form", gin.H{
+		"user": getUserFromContext(c),
+	})
 }
 
 func CreateToken(c *gin.Context) {
@@ -23,22 +24,19 @@ func CreateToken(c *gin.Context) {
 
 	services.TokenService.CreateToken(&token)
 
-	user , _ :=c.Get("user")
 	c.HTML(http.StatusOK, "created-token-view", gin.H{
 		"token": token,
-		"user": user,
+		"user": getUserFromContext(c),
 	})
 
 }
 
 func GetTokens(c *gin.Context) {
-	fmt.Println("TOKENS")
 	tokens := services.TokenService.GetAll()
-	user , _ :=c.Get("user")
 
 	c.HTML(http.StatusOK, "token-list-view", gin.H{
 		"tokens": tokens,
-		"user": user,
+		"user": getUserFromContext(c),
 	})
 }
 

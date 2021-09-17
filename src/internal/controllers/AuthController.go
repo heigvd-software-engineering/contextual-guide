@@ -111,8 +111,6 @@ func HandleLogin(c *gin.Context)  {
 	res, err := client.Do(r)
 	defer res.Body.Close()
 
-	fmt.Println(res)
-
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -121,8 +119,6 @@ func HandleLogin(c *gin.Context)  {
 
 	tokenDto := tokenDTO{}
 	_ = json.Unmarshal(body, &tokenDto)
-
-	fmt.Println(tokenDto)
 
 	//FIXME: secure=true for prod
 	c.SetCookie("sessionid", tokenDto.AccessToken, 3600, "/", "localhost", false, false)

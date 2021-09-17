@@ -14,7 +14,6 @@ func initGuiRouter(router *gin.Engine) *gin.Engine {
 	router.Use(extractCookie)
 
 	router.GET("/", controllers.Render)
-	router.GET("/accounts/:accountId", extractCookie, controllers.GetAccount)
 
 	router.GET("/tokens", checkLogged,  controllers.GetTokens)
 	router.GET("/tokens/create", checkLogged,controllers.RenderTokenForm)

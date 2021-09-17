@@ -17,7 +17,9 @@ type Content struct {
 }
 
 func RenderResourceForm(c *gin.Context) {
-	c.HTML(http.StatusOK, "resource-form", nil)
+	c.HTML(http.StatusOK, "resource-form", gin.H{
+		"user": getUserFromContext(c),
+	})
 }
 
 func CreateResource(c *gin.Context) {
@@ -36,6 +38,8 @@ func ListResources(c *gin.Context) {
 
 	c.HTML(http.StatusOK, "resource-list-view", gin.H{
 		"resources": resources,
+		"user": getUserFromContext(c),
+
 	})
 }
 
@@ -45,6 +49,7 @@ func ViewResource(c *gin.Context) {
 
 	c.HTML(http.StatusOK, "resource-view", gin.H{
 		"resource": resource,
+		"user": getUserFromContext(c),
 	})
 }
 
