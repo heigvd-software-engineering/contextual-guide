@@ -31,7 +31,6 @@ func RenderRegisterForm(c *gin.Context)  {
 }
 
 func HandleRegistration(c *gin.Context)  {
-
 	user := credentials{
 		Email: c.PostForm("email"),
 		Password: c.PostForm("password"),
@@ -127,5 +126,5 @@ func HandleLogin(c *gin.Context)  {
 	c.SetCookie("sessionid", tokenDto.AccessToken, 1, "/", "localhost", false, false)
 
 
-	c.Redirect(http.StatusMovedPermanently,"/uris")
+	c.Redirect(http.StatusMovedPermanently,"/resources")
 }

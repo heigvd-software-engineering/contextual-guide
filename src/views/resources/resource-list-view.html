@@ -1,0 +1,22 @@
+{{define "content"}}
+<main class="container">
+    <h1>Your Resources</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Resource</th>
+            </tr>
+        </thead>
+        <tbody>
+        {{ range .resources }}
+            <tr>
+                <td><a href='/resources/{{ .Id }}'>{{ .Id }}</a></td>
+                <td>{{ .Content }}</td>
+            </tr>
+        {{ end }}
+        </tbody>
+    </table>
+    <a href="/resources/create" role="button">New Resource</a>
+</main>
+{{end}}
