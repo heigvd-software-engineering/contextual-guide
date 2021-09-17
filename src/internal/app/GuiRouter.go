@@ -37,7 +37,7 @@ func initGuiRouter(router *gin.Engine) *gin.Engine {
 	router.GET("/resources/:id/redirect", controllers.RedirectResource)
 
 	router.GET("/resources/create", checkLogged,controllers.RenderResourceForm)
-	router.POST("/resources/create",checkLogged, controllers.CreateResource)
+	router.POST("/resources/create", checkLogged, controllers.CreateResource)
 	return router
 
 }

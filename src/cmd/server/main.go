@@ -2,7 +2,7 @@ package server
 
 import (
 	"fmt"
-	"main/src/app"
+	"main/src/internal/app"
 )
 
 func Run(port int) {
