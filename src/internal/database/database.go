@@ -14,11 +14,9 @@ var (
 
 func init() {
 	DB, _ = connect()
-
 }
 
 func connect() (*gorm.DB, error) {
-
 	connString := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
 		os.Getenv("DB_HOST"),
 		os.Getenv("DB_PORT"),
@@ -26,13 +24,14 @@ func connect() (*gorm.DB, error) {
 		os.Getenv("DB_PASS"),
 		os.Getenv("DB_NAME"),
 	)
+
 	db, err := gorm.Open("postgres", connString)
 
 	if err != nil {
 		panic(err)
 	}
 
-	db.AutoMigrate(&models.Uri{})
+	db.AutoMigrate(&models.Resource{})
 	db.AutoMigrate(&models.Token{})
 	db.AutoMigrate(&models.Account{})
 

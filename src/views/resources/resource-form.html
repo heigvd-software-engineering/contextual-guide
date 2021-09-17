@@ -1,0 +1,10 @@
+{{define "content"}}
+<main class="container">
+    <h2>New Resource</h2>
+    <form action="/resources/create" method="POST">
+        <label for="resource">Resources</label>
+        <textarea name="resource" id="resource" cols="30" rows="10"></textarea>
+        <button type="submit">Save</button>
+    </form>
+</main>
+{{ end }}
