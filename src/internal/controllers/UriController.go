@@ -28,9 +28,10 @@ func CreateUri(c *gin.Context) {
 func GetUri(c *gin.Context) {
 
 	uris := services.UriService.GetAll()
-
+	user , _ :=c.Get("user")
 	c.HTML(http.StatusOK, "uri-list-view", gin.H{
 		"uris": uris,
+		"user": user,
 	})
 }
 
@@ -38,8 +39,10 @@ func GetUriByUUID(c *gin.Context) {
 
 	uriUUID := c.Param("uuid")
 	uri := services.UriService.GetOne(uriUUID)
+	user , _ :=c.Get("user")
 
 	c.HTML(http.StatusOK, "uri-view", gin.H{
 		"uri": uri,
+		"user": user,
 	})
 }

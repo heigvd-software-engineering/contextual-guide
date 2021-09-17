@@ -1,8 +1,14 @@
 package controllers
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 )
+
+type LoggedUser struct {
+	Id string
+	Email string
+}
 
 func Render(c *gin.Context) {
 
@@ -12,14 +18,25 @@ func Render(c *gin.Context) {
 	if viewName == "" {
 		viewName = "home"
 	}
+	var loggedUser *LoggedUser
+	user , ok :=c.Get("user")
 
-	c.HTML(200, viewName, nil)
+	if !ok {
+		loggedUser = user.(*LoggedUser)
+	}
+
+	fmt.Println(loggedUser)
+	c.HTML(200, viewName, gin.H{
+		"user": loggedUser,
+	})
 }
 
 func RenderErrorPage(code int, message string, c *gin.Context){
+	user , _ :=c.Get("user")
 	c.HTML(code,"error",gin.H{
 		"code": code,
 		"message": message,
+		"user": user,
 	})
 	c.Abort()
 }

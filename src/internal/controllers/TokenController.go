@@ -23,8 +23,10 @@ func CreateToken(c *gin.Context) {
 
 	services.TokenService.CreateToken(&token)
 
+	user , _ :=c.Get("user")
 	c.HTML(http.StatusOK, "created-token-view", gin.H{
 		"token": token,
+		"user": user,
 	})
 
 }
@@ -32,9 +34,11 @@ func CreateToken(c *gin.Context) {
 func GetTokens(c *gin.Context) {
 	fmt.Println("TOKENS")
 	tokens := services.TokenService.GetAll()
-	c.HTML(http.StatusOK, "token-list-view", gin.H{
+	user , _ :=c.Get("user")
 
+	c.HTML(http.StatusOK, "token-list-view", gin.H{
 		"tokens": tokens,
+		"user": user,
 	})
 }
 

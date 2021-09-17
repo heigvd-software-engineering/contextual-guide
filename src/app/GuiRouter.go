@@ -11,19 +11,21 @@ import (
 
 func initGuiRouter(router *gin.Engine) *gin.Engine {
 
+	router.Use(extractCookie)
+
 	router.GET("/", controllers.Render)
-	router.GET("/accounts/:accountId", checkAuthorization, controllers.GetAccount)
+	router.GET("/accounts/:accountId", extractCookie, controllers.GetAccount)
 
 	router.GET("/uris",controllers.GetUri)
 	router.GET("/uris/:uuid", controllers.GetUriByUUID)
 
-	router.GET("/uris/create", checkAuthorization, controllers.RenderUriForm)
-	router.POST("/uris/create", checkAuthorization, controllers.CreateUri)
+	router.GET("/uris/create", checkLogged, controllers.RenderUriForm)
+	router.POST("/uris/create", checkLogged, controllers.CreateUri)
 
-	router.GET("/tokens",checkAuthorization,  controllers.GetTokens)
-	router.GET("/tokens/create", checkAuthorization,controllers.RenderTokenForm)
-	router.POST("/tokens/create", checkAuthorization, controllers.CreateToken)
-	router.GET("/tokens/:id/delete",checkAuthorization,controllers.DeleteToken)
+	router.GET("/tokens", checkLogged,  controllers.GetTokens)
+	router.GET("/tokens/create", checkLogged,controllers.RenderTokenForm)
+	router.POST("/tokens/create", checkLogged, controllers.CreateToken)
+	router.GET("/tokens/:id/delete", checkLogged,controllers.DeleteToken)
 
 
 	router.GET("/login", controllers.RenderLoginForm)
@@ -33,18 +35,33 @@ func initGuiRouter(router *gin.Engine) *gin.Engine {
 	router.GET("/register", controllers.RenderRegisterForm)
 	router.POST("/register", controllers.HandleRegistration)
 
+
+	router.GET("/logout", controllers.HandleLogout)
+
+
+
 	return router
 
 }
 
 
-func checkAuthorization(c *gin.Context) {
-	jwtToken, err := c.Request.Cookie("sessionid")
-	if err != nil {
-		fmt.Println(err)
+func checkLogged(c *gin.Context)  {
+
+	user, _ := c.Get("user")
+
+	if user == nil {
 		controllers.RenderErrorPage(http.StatusUnauthorized, "You are not authorized",c)
+	}
+}
+
+func extractCookie(c *gin.Context) {
+	jwtToken, err := c.Request.Cookie("sessionid")
+
+	c.Set("user",nil)
+	if err != nil {
 		return
 	}
+
 	secret := os.Getenv("JWT_SECRET")
 	token, _ := jwt.Parse(jwtToken.Value, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
@@ -55,12 +72,12 @@ func checkAuthorization(c *gin.Context) {
 	})
 	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
 		accountId, _ := claims["sub"].(string)
+		email, _ := claims["email"].(string)
 
-		fmt.Println(accountId)
-
-		c.Set("accountid",accountId)
-		return
-
+		user := controllers.LoggedUser{
+			Id: accountId,
+			Email: email,
+		}
+		c.Set("user",user)
 	}
-	controllers.RenderErrorPage(http.StatusUnauthorized, "You are not authorized",c)
 }

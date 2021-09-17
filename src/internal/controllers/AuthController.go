@@ -131,3 +131,12 @@ func HandleLogin(c *gin.Context)  {
 
 	c.Redirect(http.StatusMovedPermanently,"/uris")
 }
+
+
+func HandleLogout(c *gin.Context) {
+
+	c.SetCookie("sessionid","",-1,"/","localhost",false,false)
+
+	c.Redirect(http.StatusFound,"/")
+
+}
