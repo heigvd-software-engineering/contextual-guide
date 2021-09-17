@@ -1,5 +1,5 @@
 package models
 
 type Account struct {
-	GoTrueId string
+	GoTrueId string `gorm:"primary_key"`
 }

@@ -1,0 +1,14 @@
+{{define "content"}}
+<main class="container">
+    <h1>Validate the email</h1>
+    <form action="/verify" method="post">
+        <input type="hidden" name="confirmation_token" id="confirmation_token">
+        <label for="password">Password</label>
+        <input type="password" name="password" id="password">
+        <button type="submit">Verfify</button>
+    </form>
+</main>
+<script type="application/javascript">
+    document.getElementById("confirmation_token").value = window.location.hash.split("=")[1]
+</script>
+{{end}}

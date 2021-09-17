@@ -71,7 +71,7 @@ func HandleRegistration(c *gin.Context)  {
 		message = err.Error()
 	}
 
-	c.HTML(http.StatusOK,"register-callback", gin.H{
+	c.HTML(http.StatusOK,"callback", gin.H{
 		"Message": message,
 	})
 
@@ -121,7 +121,7 @@ func HandleLogin(c *gin.Context)  {
 	_ = json.Unmarshal(body, &tokenDto)
 
 	//FIXME: secure=true for prod
-	c.SetCookie("sessionid", tokenDto.AccessToken, 3600, "/", "localhost", false, false)
+	c.SetCookie("sessionid", tokenDto.AccessToken, 3600, "/", os.Getenv("APP_URL"), false, false)
 
 	c.Redirect(http.StatusFound,"/resources")
 }
@@ -129,7 +129,35 @@ func HandleLogin(c *gin.Context)  {
 
 func HandleLogout(c *gin.Context) {
 
-	c.SetCookie("sessionid","",-1,"/","localhost",false,false)
+	c.SetCookie("sessionid","",-1,"/",os.Getenv("APP_URL"),false,false)
 
 	c.Redirect(http.StatusFound,"/")
+}
+
+func RenderVerifyForm(c *gin.Context) {
+	c.HTML(200, "verify",nil)
+}
+
+func Verfify(c *gin.Context) {
+	password := c.PostForm("password")
+	token := c.PostForm("confirmation_token")
+	verificationType := "signup"
+
+	bodyString := map[string]string{"password": password, "token": token, "type" : verificationType}
+
+	fmt.Println(bodyString)
+
+	body, _ := json.Marshal(bodyString)
+
+	_, err := http.Post(fmt.Sprintf("%s/verify",os.Getenv("GOTRUE_URL")), "application/json", bytes.NewBuffer(body))
+	message := fmt.Sprintf("Account successfully verified")
+
+	if err != nil {
+		fmt.Println(err)
+		message = err.Error()
+	}
+
+	c.HTML(http.StatusOK,"callback", gin.H{
+		"Message": message,
+	})
 }
