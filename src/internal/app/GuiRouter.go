@@ -28,6 +28,8 @@ func initGuiRouter(router *gin.Engine) *gin.Engine {
 	router.GET("/register", controllers.RenderRegisterForm)
 	router.POST("/register", controllers.HandleRegistration)
 
+	router.GET("/verify", controllers.RenderVerifyForm)
+	router.POST("/verify", controllers.Verfify)
 
 	router.GET("/logout", controllers.HandleLogout)
 

@@ -23,8 +23,14 @@ func RenderResourceForm(c *gin.Context) {
 }
 
 func CreateResource(c *gin.Context) {
+
+	account := services.AccountService.GetAccount(getUserFromContext(c).Id)
+
+
 	resource := models.Resource{
-		Id: shortuuid.New(), Content: c.PostForm("resource"),
+		Id: shortuuid.New(),
+		Content: c.PostForm("resource"),
+		Account: *account,
 	}
 
 	services.ResourceService.CreateResource(&resource)
