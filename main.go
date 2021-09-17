@@ -2,15 +2,12 @@ package main
 
 import (
 	"flag"
-	"fmt"
-	"main/src/app"
+	"main/src/cmd/server"
 )
 
 func main() {
-	port := flag.Int("port", 3000, "-port=3000")
+	port := flag.Int("port",3000, "-port=3000")
 	flag.Parse()
 
-	if err := app.Engine.Run(fmt.Sprintf(":%d", *port)); err != nil {
-		panic(err)
-	}
+	server.Run(*port)
 }
