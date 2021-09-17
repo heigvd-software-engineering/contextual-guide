@@ -17,7 +17,9 @@ type Content struct {
 }
 
 func RenderResourceForm(c *gin.Context) {
-	c.HTML(http.StatusOK, "resource-form", nil)
+	c.HTML(http.StatusOK, "resource-form", gin.H{
+		"user": getUserFromContext(c),
+	})
 }
 
 func CreateResource(c *gin.Context) {
@@ -27,7 +29,7 @@ func CreateResource(c *gin.Context) {
 
 	services.ResourceService.CreateResource(&resource)
 
-	c.Redirect(http.StatusMovedPermanently, "/resources")
+	c.Redirect(http.StatusFound, "/resources")
 	c.Abort()
 }
 
@@ -36,6 +38,8 @@ func ListResources(c *gin.Context) {
 
 	c.HTML(http.StatusOK, "resource-list-view", gin.H{
 		"resources": resources,
+		"user": getUserFromContext(c),
+
 	})
 }
 
@@ -45,6 +49,7 @@ func ViewResource(c *gin.Context) {
 
 	c.HTML(http.StatusOK, "resource-view", gin.H{
 		"resource": resource,
+		"user": getUserFromContext(c),
 	})
 }
 
@@ -83,10 +88,10 @@ func RedirectResource(c *gin.Context) {
 	}
 
 	if content.Redirect != "" {
-		c.Redirect(http.StatusMovedPermanently, content.Redirect)
+		c.Redirect(http.StatusFound, content.Redirect)
 	} else {
 		uri := fmt.Sprintf("/resources/%s", resourceId)
-		c.Redirect(http.StatusMovedPermanently, uri)
+		c.Redirect(http.StatusFound, uri)
 	}
 
 	c.Abort()

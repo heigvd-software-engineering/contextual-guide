@@ -44,14 +44,16 @@ func HandleRegistration(c *gin.Context)  {
 
 	req, _ := http.NewRequest("POST", fmt.Sprintf("%s/signup",os.Getenv("GOTRUE_URL")), payloadBuf)
 
+
 	res, err := client.Do(req)
-	defer res.Body.Close()
 
 	if err != nil {
 		fmt.Println(err)
 	}
 
 	body, _ := ioutil.ReadAll(res.Body)
+	defer res.Body.Close()
+
 
 	registeredUser := RegisteredUser{}
 
@@ -60,7 +62,6 @@ func HandleRegistration(c *gin.Context)  {
 	localAccount := models.Account{
 		GoTrueId: registeredUser.Id,
 	}
-
 	_, err = services.AccountService.CreateAccount(&localAccount)
 
 	message := fmt.Sprintf("Account successfully created ! Please validate your email : %s", registeredUser.Email)
@@ -73,6 +74,7 @@ func HandleRegistration(c *gin.Context)  {
 	c.HTML(http.StatusOK,"register-callback", gin.H{
 		"Message": message,
 	})
+
 }
 
 
@@ -109,8 +111,6 @@ func HandleLogin(c *gin.Context)  {
 	res, err := client.Do(r)
 	defer res.Body.Close()
 
-	fmt.Println(res)
-
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -120,11 +120,16 @@ func HandleLogin(c *gin.Context)  {
 	tokenDto := tokenDTO{}
 	_ = json.Unmarshal(body, &tokenDto)
 
-	fmt.Println(tokenDto)
-
 	//FIXME: secure=true for prod
-	c.SetCookie("sessionid", tokenDto.AccessToken, 1, "/", "localhost", false, false)
+	c.SetCookie("sessionid", tokenDto.AccessToken, 3600, "/", "localhost", false, false)
+
+	c.Redirect(http.StatusFound,"/resources")
+}
 
 
-	c.Redirect(http.StatusMovedPermanently,"/resources")
+func HandleLogout(c *gin.Context) {
+
+	c.SetCookie("sessionid","",-1,"/","localhost",false,false)
+
+	c.Redirect(http.StatusFound,"/")
 }

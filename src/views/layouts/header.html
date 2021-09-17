@@ -2,10 +2,15 @@
 <nav class="container-fluid">
         <ul><li><strong><a class="contrast" href="/">Contextual Guide</a></strong></li></ul>
         <ul>
-                <li><a class="contrast" href="/">Home</a></li>
-                <li><a class="contrast" href="/resources">Resources</a></li>
-                <li><a class="contrast" href="/tokens">Tokens</a></li>
-                <li><a href="https://github.com/heigvd-software-engineering/contextual-guide">Contribute</a></li>
+                <li><a class="contrast" href="/resources">URIs</a></li>
+                {{ if .user }}
+                <li><a class="contrast" href="/tokens">My tokens</a></li>
+                <li class="primary">{{.user.Email}}</li>
+                | <li><a href="/logout">Logout</a></li>
+                {{ else }}
+                | <li><a href="/login">Login</a></li>
+
+                {{ end }}
         </ul>
 </nav>
 {{end}}

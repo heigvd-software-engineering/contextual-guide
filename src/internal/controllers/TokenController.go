@@ -10,7 +10,9 @@ import (
 )
 
 func RenderTokenForm(c *gin.Context) {
-	c.HTML(http.StatusOK, "token-form", nil)
+	c.HTML(http.StatusOK, "token-form", gin.H{
+		"user": getUserFromContext(c),
+	})
 }
 
 func CreateToken(c *gin.Context) {
@@ -24,16 +26,17 @@ func CreateToken(c *gin.Context) {
 
 	c.HTML(http.StatusOK, "created-token-view", gin.H{
 		"token": token,
+		"user": getUserFromContext(c),
 	})
 
 }
 
 func GetTokens(c *gin.Context) {
-
 	tokens := services.TokenService.GetAll()
-	c.HTML(http.StatusOK, "token-list-view", gin.H{
 
+	c.HTML(http.StatusOK, "token-list-view", gin.H{
 		"tokens": tokens,
+		"user": getUserFromContext(c),
 	})
 }
 
@@ -43,6 +46,6 @@ func DeleteToken(c *gin.Context) {
 
 	services.TokenService.Delete(id)
 
-	c.Redirect(http.StatusMovedPermanently, "/tokens")
+	c.Redirect(http.StatusFound, "/tokens")
 	c.Abort()
 }
