@@ -12,18 +12,18 @@ import (
 func initGuiRouter(router *gin.Engine) *gin.Engine {
 
 	router.GET("/", controllers.Render)
-	router.GET("/accounts/:accountId", controllers.GetAccount)
+	router.GET("/accounts/:accountId", checkAuthorization, controllers.GetAccount)
 
-	router.GET("/uris", controllers.GetUri)
+	router.GET("/uris",controllers.GetUri)
 	router.GET("/uris/:uuid", controllers.GetUriByUUID)
 
-	router.GET("/uris/create", controllers.RenderUriForm)
-	router.POST("/uris/create", controllers.CreateUri)
+	router.GET("/uris/create", checkAuthorization, controllers.RenderUriForm)
+	router.POST("/uris/create", checkAuthorization, controllers.CreateUri)
 
 	router.GET("/tokens",checkAuthorization,  controllers.GetTokens)
-	router.GET("/tokens/create", controllers.RenderTokenForm)
-	router.POST("/tokens/create", controllers.CreateToken)
-	router.GET("/tokens/:id/delete", controllers.DeleteToken)
+	router.GET("/tokens/create", checkAuthorization,controllers.RenderTokenForm)
+	router.POST("/tokens/create", checkAuthorization, controllers.CreateToken)
+	router.GET("/tokens/:id/delete",checkAuthorization,controllers.DeleteToken)
 
 
 	router.GET("/login", controllers.RenderLoginForm)
@@ -62,7 +62,5 @@ func checkAuthorization(c *gin.Context) {
 		return
 
 	}
-	fmt.Println("YOP")
 	controllers.RenderErrorPage(http.StatusUnauthorized, "You are not authorized",c)
-
 }
