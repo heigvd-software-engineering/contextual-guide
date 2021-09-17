@@ -15,3 +15,11 @@ func Render(c *gin.Context) {
 
 	c.HTML(200, viewName, nil)
 }
+
+func RenderErrorPage(code int, message string, c *gin.Context){
+	c.HTML(code,"error",gin.H{
+		"code": code,
+		"message": message,
+	})
+	c.Abort()
+}

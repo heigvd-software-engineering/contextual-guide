@@ -34,7 +34,7 @@ services:
     ports:
       - "3000:3000"
     working_dir: /go/src/github.com/cosmtrek/hub
-    volumes: 
+    volumes:
       - ".:/go/src/github.com/cosmtrek/hub"
 
 volumes:

@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 	"main/src/internal/models"
@@ -29,7 +30,7 @@ func CreateToken(c *gin.Context) {
 }
 
 func GetTokens(c *gin.Context) {
-
+	fmt.Println("TOKENS")
 	tokens := services.TokenService.GetAll()
 	c.HTML(http.StatusOK, "token-list-view", gin.H{
 
