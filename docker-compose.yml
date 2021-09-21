@@ -1,17 +1,18 @@
 # docker-compose.yml
 version: '3.7'
 services:
+
   db:
-    image: postgis/postgis
+    image: mysql:8
     container_name: db
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
     environment:
-      - POSTGRES_DB=contextual-guide
-      - POSTGRES_USER=postgresadmin
-      - POSTGRES_PASSWORD=admin123
+      MYSQL_ROOT_PASSWORD: root
     ports:
-      - "5432:5432"
+      - "3306:3306"
     volumes:
-      - data:/var/lib/postgresql/data/
+      - db_data:/var/lib/mysql
       - ./scripts:/docker-entrypoint-initdb.d
     networks:
       - net
@@ -24,22 +25,21 @@ services:
       - net
     ports:
       - "8082:9999"
-#  app:
-#    image: cosmtrek/air
-#    container_name: app
-#    env_file:
-#      - .env
-#    networks:
-#      - net
-#    ports:
-#      - "3000:3000"
-#    working_dir: /go/src/github.com/cosmtrek/hub
-#    volumes:
-#      - ".:/go/src/github.com/cosmtrek/hub"
+  app:
+    image: cosmtrek/air
+    container_name: app
+    env_file:
+      - .env
+    networks:
+      - net
+    ports:
+      - "3000:3000"
+    working_dir: /go/src/github.com/cosmtrek/hub
+    volumes:
+      - ".:/go/src/github.com/cosmtrek/hub"
 
 volumes:
-  data:
-
+  db_data:
 networks:
   net:
     external: false  
