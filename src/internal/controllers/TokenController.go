@@ -37,7 +37,10 @@ func CreateToken(c *gin.Context) {
 }
 
 func GetTokens(c *gin.Context) {
-	tokens := services.TokenService.GetAll()
+
+	accountId := getUserFromContext(c).Id
+
+	tokens := services.TokenService.GetAllByAccountId(accountId)
 
 	c.HTML(http.StatusOK, "token-list-view", gin.H{
 		"tokens": tokens,

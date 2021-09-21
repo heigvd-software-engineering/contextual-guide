@@ -11,7 +11,7 @@ type tokenRepository struct {
 type ITokenRepository interface {
 	GetToken(int64) *models.Token
 	Delete(int64)
-	GetAll() []models.Token
+	GetAllByAccountId(string) []models.Token
 	CreateToken(*models.Token) *models.Token
 }
 
@@ -37,11 +37,11 @@ func (ur *tokenRepository) CreateToken(model *models.Token) *models.Token {
 	return model
 }
 
-func (ur *tokenRepository) GetAll() []models.Token {
+func (ur *tokenRepository) GetAllByAccountId(id string) []models.Token {
 
 	tokens := []models.Token{}
 
-	database.DB.Find(&tokens)
+	database.DB.Where(&models.Token{AccountId: id}).Find(&tokens)
 	return tokens
 }
 

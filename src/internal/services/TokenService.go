@@ -18,8 +18,8 @@ func (us *tokenService) CreateToken(newToken *models.Token) *models.Token {
 	return token
 }
 
-func (us *tokenService) GetAll() []models.Token {
-	token := repository.TokenRepository.GetAll()
+func (us *tokenService) GetAllByAccountId(id string) []models.Token {
+	token := repository.TokenRepository.GetAllByAccountId(id)
 	return token
 }
 
