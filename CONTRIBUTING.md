@@ -23,3 +23,9 @@ You can now start the services with Docker Compose.
 ```
 docker-compose up
 ```
+
+The first time you execute gotrue, you need to run the migration to init the database:
+
+```
+docker exec -it gotrue migrate
+```
