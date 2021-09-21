@@ -3,7 +3,6 @@ version: '3.7'
 services:
   db:
     image: mysql/mysql-server:5.7
-    command: --bind-address=172.30.%.%
     container_name: db
     environment:
       MYSQL_DATABASE: gotrue
@@ -19,7 +18,7 @@ services:
     image: ghcr.io/heigvd-software-engineering/gotrue
     container_name: gotrue
     env_file:
-      - .env
+      - .gotrue.env
     networks:
       - net
     depends_on:
@@ -30,7 +29,7 @@ services:
 #    image: cosmtrek/air
 #    container_name: app
 #    env_file:
-#      - .env
+#      - .app.env
 #    networks:
 #      - net
 #    ports:
