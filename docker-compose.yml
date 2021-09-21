@@ -5,13 +5,12 @@ services:
     image: mysql/mysql-server:5.7
     container_name: db
     environment:
-      MYSQL_DATABASE: gotrue
       MYSQL_ROOT_PASSWORD: root
     ports:
       - "3306:3306"
     volumes:
       - db_data:/var/lib/mysql
-      - ./scripts:/docker-entrypoint-initdb.d
+      - ./database/scripts:/docker-entrypoint-initdb.d
     networks:
       - net
   gotrue:
