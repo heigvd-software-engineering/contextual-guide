@@ -1,7 +1,6 @@
 package repository
 
 import (
-	"fmt"
 	"main/src/internal/database"
 	"main/src/internal/models"
 )
@@ -38,7 +37,6 @@ func (ur *resourceRepository) CreateResource(model *models.Resource) *models.Res
 func (ur *resourceRepository) GetAllResource() []models.Resource {
 	var resources []models.Resource
 	database.DB.Preloads("Account").Find(&resources)
-	fmt.Println(resources)
 	return resources
 }
 
@@ -46,6 +44,5 @@ func (ur *resourceRepository) GetAllResourceByAccountId(id string) []models.Reso
 	var resources []models.Resource
 	database.DB.Preloads("Account").Find(&resources)
 	database.DB.Where(&models.Resource{AccountId: id}).Find(&resources)
-	fmt.Println(resources)
 	return resources
 }

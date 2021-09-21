@@ -15,6 +15,7 @@ func initGuiRouter(router *gin.Engine) *gin.Engine {
 
 	router.GET("/", controllers.Render)
 
+	// Get account related token
 	router.GET("/tokens", checkLogged,  controllers.GetTokens)
 	router.GET("/tokens/create", checkLogged,controllers.RenderTokenForm)
 	router.POST("/tokens/create", checkLogged, controllers.CreateToken)
