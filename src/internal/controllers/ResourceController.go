@@ -28,21 +28,35 @@ func CreateResource(c *gin.Context) {
 
 
 	resource := models.Resource{
-		Id: shortuuid.New(),
+		Uuid: shortuuid.New(),
 		Content: c.PostForm("resource"),
 		Account: *account,
+		AccountId: account.GoTrueId,
 	}
 
 	services.ResourceService.CreateResource(&resource)
 
-	c.Redirect(http.StatusFound, "/resources")
+	c.Redirect(http.StatusFound, "/resources/mine")
 	c.Abort()
 }
 
-func ListResources(c *gin.Context) {
+func ListAllResources(c *gin.Context) {
 	resources := services.ResourceService.GetAll()
 
-	c.HTML(http.StatusOK, "resource-list-view", gin.H{
+
+	c.HTML(http.StatusOK, "public-resource-list-view", gin.H{
+		"resources": resources,
+		"user": getUserFromContext(c),
+
+	})
+}
+
+func ListPrivateResources(c *gin.Context) {
+	accountId := getUserFromContext(c).Id
+	resources := services.ResourceService.GetAllByAccountId(accountId)
+
+
+	c.HTML(http.StatusOK, "private-resource-list-view", gin.H{
 		"resources": resources,
 		"user": getUserFromContext(c),
 

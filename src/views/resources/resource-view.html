@@ -1,6 +1,6 @@
 {{define "content"}}
 <main class="container">
-  <h1>/resources/{{ .resource.Id }}</h1>
+  <h1>/resources/{{ .resource.Uuid }}</h1>
   <div class="grid">
     <section>
       <code>
@@ -8,7 +8,7 @@
       </code>
     </section>
     <aside>
-      <img src="/resources/{{ .resource.Id }}/qrcode.png" alt="QRCode" />
+      <img src="/resources/{{ .resource.Uuid }}/qrcode.png" alt="QRCode" />
 
       <div id="qrcode"></div>
     </aside>
@@ -19,7 +19,7 @@
 <script src="/assets/js/qrcode.min.js"></script>
 <script>
   const qrcode = new QRCode("qrcode");
-  const url = location.protocol + "/" + location.host + "/resources/{{ .resource.Id }}";
+  const url = location.protocol + "/" + location.host + "/resources/{{ .resource.Uuid }}";
   qrcode.makeCode(url);
 </script>
 {{end}}

@@ -22,6 +22,11 @@ func (us *resourceService) GetAll() []models.Resource {
 	return resource
 }
 
+func (us *resourceService) GetAllByAccountId(id string) []models.Resource {
+	resource := repository.ResourceRepository.GetAllResourceByAccountId(id)
+	return resource
+}
+
 func (us *resourceService) GetOne(id string) *models.Resource {
 	resource := repository.ResourceRepository.GetResource(id)
 	return resource
