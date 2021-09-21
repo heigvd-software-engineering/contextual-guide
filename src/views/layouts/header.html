@@ -2,9 +2,10 @@
 <nav class="container-fluid">
         <ul><li><strong><a class="contrast" href="/">Contextual Guide</a></strong></li></ul>
         <ul>
-                <li><a class="contrast" href="/resources">URIs</a></li>
+                <li><a class="contrast" href="/resources">Resources</a></li>
                 {{ if .user }}
                 <li><a class="contrast" href="/tokens">My tokens</a></li>
+                <li><a class="contrast" href="/resources/mine">My resource</a></li>
                 <li class="primary">{{.user.Email}}</li>
                 | <li><a href="/logout">Logout</a></li>
                 {{ else }}

@@ -33,7 +33,8 @@ func initGuiRouter(router *gin.Engine) *gin.Engine {
 
 	router.GET("/logout", controllers.HandleLogout)
 
-	router.GET("/resources", controllers.ListResources)
+	router.GET("/resources", controllers.ListAllResources)
+	router.GET("/resources/mine", controllers.ListPrivateResources)
 	router.GET("/resources/:id", controllers.ViewResource)
 	router.GET("/resources/:id/qrcode.png", controllers.RenderResourceQRCode)
 	router.GET("/resources/:id/redirect", controllers.RedirectResource)

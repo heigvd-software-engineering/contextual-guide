@@ -26,7 +26,7 @@ func init() {
 func (ur *tokenRepository) GetToken(id int64) *models.Token {
 
 	var tokens models.Token
-	database.DB.Where(&models.Token{Id: id}).Find(&tokens)
+	//database.DB.Where(&models.Token{: id}).Find(&tokens)
 
 	return &tokens
 }
