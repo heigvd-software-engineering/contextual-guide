@@ -5,6 +5,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v4"
 	"main/src/internal/controllers"
+	"main/src/internal/controllers/web"
 	"os"
 )
 
@@ -15,32 +16,32 @@ func initGuiRouter(router *gin.Engine) *gin.Engine {
 	router.GET("/", controllers.Render)
 
 	// Get account related token
-	router.GET("/tokens", checkLogged,  controllers.GetTokens)
-	router.GET("/tokens/create", checkLogged,controllers.RenderTokenForm)
-	router.POST("/tokens/create", checkLogged, controllers.CreateToken)
-	router.GET("/tokens/:id/delete", checkLogged,controllers.DeleteToken)
+	router.GET("/tokens", checkLogged, webController.GetTokens)
+	router.GET("/tokens/create", checkLogged, webController.RenderTokenForm)
+	router.POST("/tokens/create", checkLogged, webController.CreateToken)
+	router.GET("/tokens/:id/delete", checkLogged, webController.DeleteToken)
 
 
-	router.GET("/login", controllers.RenderLoginForm)
-	router.POST("/login", controllers.HandleLogin)
+	router.GET("/login", webController.RenderLoginForm)
+	router.POST("/login", webController.HandleLogin)
 
 
-	router.GET("/register", controllers.RenderRegisterForm)
-	router.POST("/register", controllers.HandleRegistration)
+	router.GET("/register", webController.RenderRegisterForm)
+	router.POST("/register", webController.HandleRegistration)
 
-	router.GET("/verify", controllers.RenderVerifyForm)
-	router.POST("/verify", controllers.Verfify)
+	router.GET("/verify", webController.RenderVerifyForm)
+	router.POST("/verify", webController.Verfify)
 
-	router.GET("/logout", controllers.HandleLogout)
+	router.GET("/logout", webController.HandleLogout)
 
-	router.GET("/resources", controllers.ListAllResources)
-	router.GET("/resources/mine", controllers.ListPrivateResources)
-	router.GET("/resources/:id", controllers.ViewResource)
-	router.GET("/resources/:id/qrcode.png", controllers.RenderResourceQRCode)
-	router.GET("/resources/:id/redirect", controllers.RedirectResource)
+	router.GET("/resources", webController.ListAllResources)
+	router.GET("/resources/mine", webController.ListPrivateResources)
+	router.GET("/resources/:id", webController.ViewResource)
+	router.GET("/resources/:id/qrcode.png", webController.RenderResourceQRCode)
+	router.GET("/resources/:id/redirect", webController.RedirectResource)
 
-	router.GET("/resources/create", checkLogged,controllers.RenderResourceForm)
-	router.POST("/resources/create", checkLogged, controllers.CreateResource)
+	router.GET("/resources/create", checkLogged, webController.RenderResourceForm)
+	router.POST("/resources/create", checkLogged, webController.CreateResource)
 	return router
 
 }

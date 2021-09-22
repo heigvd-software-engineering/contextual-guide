@@ -3,6 +3,7 @@ package app
 import (
 	"github.com/gin-gonic/gin"
 	"main/src/internal/controllers"
+	apiController "main/src/internal/controllers/api"
 	"main/src/internal/services"
 	"net/http"
 )
@@ -10,11 +11,11 @@ import (
 func initApiRouter(router *gin.Engine) *gin.Engine {
 
 	// scoped by the api-key
-	router.GET("/api/resources",getAccountFromApiKey, checkLogged,controllers.ListPrivateResourcesApi)
+	router.GET("/api/resources",getAccountFromApiKey, checkLogged, apiController.ListPrivateResources)
 
-	router.POST("/api/resources",getAccountFromApiKey, checkLogged,controllers.CreateResourceApi)
+	router.POST("/api/resources",getAccountFromApiKey, checkLogged, apiController.CreateResource)
 
-	router.GET("/api/resources/:id",getAccountFromApiKey, checkLogged, controllers.ViewResourceApi)
+	router.GET("/api/resources/:id",getAccountFromApiKey, checkLogged, apiController.ViewResource)
 	//router.PUT("/api/resources/:id", controllers.UpdateResourceApi)
 	//router.DELETE("/api/resources/:id", controllers.ArchiveRessourceApi)
 

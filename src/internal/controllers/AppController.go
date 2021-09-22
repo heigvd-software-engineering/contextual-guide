@@ -9,7 +9,7 @@ type LoggedUser struct {
 	Email string
 }
 
-func getUserFromContext(c *gin.Context) *LoggedUser {
+func GetUserFromContext(c *gin.Context) *LoggedUser {
 	user , ok :=c.Get("user")
 	if !ok || user == nil{
 		return nil
@@ -30,15 +30,15 @@ func Render(c *gin.Context) {
 		viewName = "home"
 	}
 	c.HTML(200, viewName, gin.H{
-		"user": getUserFromContext(c),
+		"user": GetUserFromContext(c),
 	})
 }
 
 func RenderErrorPage(code int, message string, c *gin.Context){
 	c.HTML(code,"error",gin.H{
-		"code": code,
+		"code":    code,
 		"message": message,
-		"user": getUserFromContext(c),
+		"user":    GetUserFromContext(c),
 	})
 	c.Abort()
 }

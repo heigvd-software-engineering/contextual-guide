@@ -27,14 +27,14 @@
 package docs
 
 import (
-	"main/src/internal/controllers"
+	"main/src/internal/controllers/web"
 	"main/src/internal/models"
 )
 
 // swagger:parameters resourceSaveCommand
 type ResourceSaveCommandWrapper struct {
 	// in:body
-	Body controllers.ResourceSaveCommand
+	Body web.ResourceSaveCommand
 }
 
 // An JSON representation of the resource

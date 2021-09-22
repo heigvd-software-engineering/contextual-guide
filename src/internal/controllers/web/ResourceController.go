@@ -1,4 +1,4 @@
-package controllers
+package webController
 
 import (
 	"encoding/json"
@@ -7,6 +7,7 @@ import (
 	"github.com/lithammer/shortuuid/v3"
 	qrcode "github.com/skip2/go-qrcode"
 	"log"
+	"main/src/internal/controllers"
 	"main/src/internal/models"
 	"main/src/internal/services"
 	"net/http"
@@ -18,13 +19,13 @@ type Content struct {
 
 func RenderResourceForm(c *gin.Context) {
 	c.HTML(http.StatusOK, "resource-form", gin.H{
-		"user": getUserFromContext(c),
+		"user": controllers.GetUserFromContext(c),
 	})
 }
 
 func CreateResource(c *gin.Context) {
 
-	account := services.AccountService.GetAccount(getUserFromContext(c).Id)
+	account := services.AccountService.GetAccount(controllers.GetUserFromContext(c).Id)
 
 
 	resource := models.Resource{
@@ -46,19 +47,19 @@ func ListAllResources(c *gin.Context) {
 
 	c.HTML(http.StatusOK, "public-resource-list-view", gin.H{
 		"resources": resources,
-		"user": getUserFromContext(c),
+		"user":      controllers.GetUserFromContext(c),
 
 	})
 }
 
 func ListPrivateResources(c *gin.Context) {
-	accountId := getUserFromContext(c).Id
+	accountId := controllers.GetUserFromContext(c).Id
 	resources := services.ResourceService.GetAllByAccountId(accountId)
 
 
 	c.HTML(http.StatusOK, "private-resource-list-view", gin.H{
 		"resources": resources,
-		"user": getUserFromContext(c),
+		"user":      controllers.GetUserFromContext(c),
 	})
 }
 
@@ -68,7 +69,7 @@ func ViewResource(c *gin.Context) {
 
 	c.HTML(http.StatusOK, "resource-view", gin.H{
 		"resource": resource,
-		"user": getUserFromContext(c),
+		"user":     controllers.GetUserFromContext(c),
 	})
 }
 
@@ -118,61 +119,4 @@ func RedirectResource(c *gin.Context) {
 
 type ResourceSaveCommand struct {
 	Document    string `json:"document"`
-}
-// swagger:route POST /resource Resource resourceSaveCommand
-// Create a new Resource
-// responses:
-//   201:
-//     description: Resource successfully created
-//   401:
-//     description: Unauthorized
-//   422:
-//     description: The model validation failed
-func CreateResourceApi(c *gin.Context) {
-
-	account := services.AccountService.GetAccount(getUserFromContext(c).Id)
-
-	var Command ResourceSaveCommand
-
-	if err := c.ShouldBindJSON(&Command); err != nil {
-		c.JSON(http.StatusBadRequest, nil)
-		return
-	}
-
-
-	resource := models.Resource{
-		Uuid: shortuuid.New(),
-		Content: Command.Document,
-		Account: *account,
-		AccountId: account.GoTrueId,
-	}
-
-	services.ResourceService.CreateResource(&resource)
-
-	c.JSON(http.StatusCreated,nil)
-}
-
-// swagger:route GET /resource Resource Resource
-// Get all resources scoped by the apikey
-// responses:
-//   200: resourceList
-//   401:
-//     description: Unauthorized
-func ListPrivateResourcesApi(c *gin.Context) {
-	accountId := getUserFromContext(c).Id
-	resources := services.ResourceService.GetAllByAccountId(accountId)
-
-	c.JSON(http.StatusOK, resources)
-}
-// swagger:route GET /resource/:uuid Resource resourceGetById
-// Get one resource by id
-// responses:
-//   200: resource
-//   401:
-//     description: Unauthorized
-func ViewResourceApi(c *gin.Context) {
-	resourceId := c.Param("id")
-	resource := services.ResourceService.GetOne(resourceId)
-
-	c.JSON(http.StatusOK,resource)
 }

@@ -1,4 +1,4 @@
-package controllers
+package webController
 
 import (
 	"main/src/internal/models"
