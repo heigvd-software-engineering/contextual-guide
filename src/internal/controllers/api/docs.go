@@ -24,17 +24,16 @@
 //      name: x-api-key
 //
 // swagger:meta
-package docs
+package apiController
 
 import (
-	"main/src/internal/controllers/web"
 	"main/src/internal/models"
 )
 
 // swagger:parameters resourceSaveCommand
 type ResourceSaveCommandWrapper struct {
 	// in:body
-	Body web.ResourceSaveCommand
+	Body ResourceSaveCommand
 }
 
 // An JSON representation of the resource

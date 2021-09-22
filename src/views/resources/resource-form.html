@@ -2,8 +2,19 @@
 <main class="container">
     <h2>New Resource</h2>
     <form action="/resources/create" method="POST">
-        <label for="resource">Resources</label>
-        <textarea name="resource" id="resource" cols="30" rows="10"></textarea>
+        <label for="tile">Title</label>
+        <input id="tile" type="text" name="title">
+        <label for="description">Description</label>
+        <input id="description" type="text" name="description">
+        <label for="timestamp">Timestamp</label>
+        <input id="timestamp" type="datetime-local" name="timestamp" value="2021-01-01T00:00"
+               min="2021-01-01T00:00">
+        <label for="longitude">Longitude</label>
+        <input id="longitude" type="text" name="longitude" pattern="\s*[-+]?(180(\.0+)?|((1[0-7]\d)|([1-9]?\d))(\.\d+)?)$"title="x.xxxxxxxx between -180 to 180" required>
+        <label for="latitude">Latitude</label>
+        <input id="latitude" type="text" name="latitude" pattern="^[-+]?([1-8]?\d(\.\d+)?|90(\.0+)?)" title="x.xxxxxxxx between -90 to 90" required>
+        <label for="redirect">Redirect</label>
+        <input id="redirect" type="url" name="redirect" required>
         <button type="submit">Save</button>
     </form>
 </main>

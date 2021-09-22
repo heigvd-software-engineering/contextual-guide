@@ -8,6 +8,7 @@ import (
 	qrcode "github.com/skip2/go-qrcode"
 	"log"
 	"main/src/internal/controllers"
+	apiController "main/src/internal/controllers/api"
 	"main/src/internal/models"
 	"main/src/internal/services"
 	"net/http"
@@ -26,12 +27,21 @@ func RenderResourceForm(c *gin.Context) {
 func CreateResource(c *gin.Context) {
 
 	account := services.AccountService.GetAccount(controllers.GetUserFromContext(c).Id)
+	
+	command := apiController.ResourceSaveCommand{
+		Title:       c.PostForm("title"),
+		Description: c.PostForm("description"),
+		Timestamp:   c.PostForm("timestamp"),
+		Longitude:   c.PostForm("longitude"),
+		Latitude:    c.PostForm("latitude"),
+		Redirect:    c.PostForm("redirect"),
+	}
 
+	document, _ := json.Marshal(command)
 
 	resource := models.Resource{
 		Uuid: shortuuid.New(),
-		Content: c.PostForm("resource"),
-		Account: *account,
+		Document: string(document),
 		AccountId: account.GoTrueId,
 	}
 
@@ -98,7 +108,7 @@ func RedirectResource(c *gin.Context) {
 	resource := services.ResourceService.GetOne(resourceId)
 
 	// Unmarshal the resource content
-	blob := []byte(resource.Content)
+	blob := []byte(resource.Document)
 	var content Content
 	err := json.Unmarshal(blob, &resource)
 	if err != nil {
@@ -115,8 +125,4 @@ func RedirectResource(c *gin.Context) {
 	}
 
 	c.Abort()
-}
-
-type ResourceSaveCommand struct {
-	Document    string `json:"document"`
 }

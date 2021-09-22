@@ -1,6 +1,7 @@
 package apiController
 
 import (
+	"encoding/json"
 	"github.com/gin-gonic/gin"
 	"github.com/lithammer/shortuuid/v3"
 	"main/src/internal/controllers"
@@ -15,7 +16,12 @@ type Content struct {
 
 
 type ResourceSaveCommand struct {
-	Document    string `json:"document"`
+	Title    string `json:"title"`
+	Description    string `json:"description"`
+	Timestamp    string `json:"timestamp"`
+	Longitude    string `json:"longitude"`
+	Latitude    string `json:"latitude"`
+	Redirect    string `json:"redirect"`
 }
 // swagger:route POST /resource Resource resourceSaveCommand
 // Create a new Resource
@@ -30,18 +36,19 @@ func CreateResource(c *gin.Context) {
 
 	account := services.AccountService.GetAccount(controllers.GetUserFromContext(c).Id)
 
-	var Command ResourceSaveCommand
+	var command ResourceSaveCommand
 
-	if err := c.ShouldBindJSON(&Command); err != nil {
+	if err := c.ShouldBindJSON(&command); err != nil {
 		c.JSON(http.StatusBadRequest, nil)
 		return
 	}
 
+	document, _ := json.Marshal(command)
+
 
 	resource := models.Resource{
 		Uuid: shortuuid.New(),
-		Content: Command.Document,
-		Account: *account,
+		Document: string(document),
 		AccountId: account.GoTrueId,
 	}
 
