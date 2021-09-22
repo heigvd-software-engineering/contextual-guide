@@ -1,4 +1,4 @@
-package controllers
+package webController
 
 import (
 	"encoding/json"
@@ -7,6 +7,7 @@ import (
 	"github.com/lithammer/shortuuid/v3"
 	qrcode "github.com/skip2/go-qrcode"
 	"log"
+	"main/src/internal/controllers"
 	"main/src/internal/models"
 	"main/src/internal/services"
 	"net/http"
@@ -18,13 +19,13 @@ type Content struct {
 
 func RenderResourceForm(c *gin.Context) {
 	c.HTML(http.StatusOK, "resource-form", gin.H{
-		"user": getUserFromContext(c),
+		"user": controllers.GetUserFromContext(c),
 	})
 }
 
 func CreateResource(c *gin.Context) {
 
-	account := services.AccountService.GetAccount(getUserFromContext(c).Id)
+	account := services.AccountService.GetAccount(controllers.GetUserFromContext(c).Id)
 
 
 	resource := models.Resource{
@@ -46,20 +47,19 @@ func ListAllResources(c *gin.Context) {
 
 	c.HTML(http.StatusOK, "public-resource-list-view", gin.H{
 		"resources": resources,
-		"user": getUserFromContext(c),
+		"user":      controllers.GetUserFromContext(c),
 
 	})
 }
 
 func ListPrivateResources(c *gin.Context) {
-	accountId := getUserFromContext(c).Id
+	accountId := controllers.GetUserFromContext(c).Id
 	resources := services.ResourceService.GetAllByAccountId(accountId)
 
 
 	c.HTML(http.StatusOK, "private-resource-list-view", gin.H{
 		"resources": resources,
-		"user": getUserFromContext(c),
-
+		"user":      controllers.GetUserFromContext(c),
 	})
 }
 
@@ -69,7 +69,7 @@ func ViewResource(c *gin.Context) {
 
 	c.HTML(http.StatusOK, "resource-view", gin.H{
 		"resource": resource,
-		"user": getUserFromContext(c),
+		"user":     controllers.GetUserFromContext(c),
 	})
 }
 
@@ -115,5 +115,8 @@ func RedirectResource(c *gin.Context) {
 	}
 
 	c.Abort()
+}
 
+type ResourceSaveCommand struct {
+	Document    string `json:"document"`
 }

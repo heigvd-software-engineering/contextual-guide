@@ -1,0 +1,101 @@
+basePath: /api
+consumes:
+- application/json
+definitions:
+  Account:
+    properties:
+      GoTrueId:
+        type: string
+    type: object
+    x-go-package: main/src/internal/models
+  Resource:
+    properties:
+      Account:
+        $ref: '#/definitions/Account'
+      AccountId:
+        type: string
+      Content:
+        type: string
+      Uuid:
+        type: string
+    type: object
+    x-go-package: main/src/internal/models
+  ResourceSaveCommand:
+    properties:
+      document:
+        type: string
+        x-go-name: Document
+    type: object
+    x-go-package: main/src/internal/controllers
+host: localhost:3000
+info:
+  description: Documentation of the open API of the Contextual-guide project
+  title: Contextual Guide
+  version: 0.0.1
+paths:
+  /resource:
+    get:
+      description: Get all resources scoped by the apikey
+      operationId: Resource
+      responses:
+        "200":
+          $ref: '#/responses/resourceList'
+        "401":
+          description: ""
+      tags:
+      - Resource
+    post:
+      description: Create a new Resource
+      operationId: resourceSaveCommand
+      parameters:
+      - in: body
+        name: Body
+        schema:
+          $ref: '#/definitions/ResourceSaveCommand'
+      responses:
+        "201":
+          description: ""
+        "401":
+          description: ""
+        "422":
+          description: ""
+      tags:
+      - Resource
+  /resource/:uuid:
+    get:
+      description: Get one resource by id
+      operationId: resourceGetById
+      parameters:
+      - description: 'name: uuid'
+        in: path
+        name: Uuid
+        required: true
+        type: string
+      responses:
+        "200":
+          $ref: '#/responses/resource'
+        "401":
+          description: ""
+      tags:
+      - Resource
+produces:
+- application/json
+responses:
+  resource:
+    description: An JSON representation of the resource
+    schema:
+      $ref: '#/definitions/Resource'
+  resourceList:
+    description: A list of resource
+    schema:
+      items:
+        $ref: '#/definitions/Resource'
+      type: array
+schemes:
+- http
+securityDefinitions:
+  apikey:
+    in: header
+    name: x-api-key
+    type: apiKey
+swagger: "2.0"

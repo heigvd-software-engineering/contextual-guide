@@ -1,8 +1,9 @@
-package controllers
+package webController
 
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
+	"main/src/internal/controllers"
 	"main/src/internal/models"
 	"main/src/internal/services"
 	"net/http"
@@ -11,13 +12,13 @@ import (
 
 func RenderTokenForm(c *gin.Context) {
 	c.HTML(http.StatusOK, "token-form", gin.H{
-		"user": getUserFromContext(c),
+		"user": controllers.GetUserFromContext(c),
 	})
 }
 
 func CreateToken(c *gin.Context) {
 
-	account := services.AccountService.GetAccount(getUserFromContext(c).Id)
+	account := services.AccountService.GetAccount(controllers.GetUserFromContext(c).Id)
 
 
 	token := models.Token{
@@ -31,20 +32,20 @@ func CreateToken(c *gin.Context) {
 
 	c.HTML(http.StatusOK, "created-token-view", gin.H{
 		"token": token,
-		"user": getUserFromContext(c),
+		"user":  controllers.GetUserFromContext(c),
 	})
 
 }
 
 func GetTokens(c *gin.Context) {
 
-	accountId := getUserFromContext(c).Id
+	accountId := controllers.GetUserFromContext(c).Id
 
 	tokens := services.TokenService.GetAllByAccountId(accountId)
 
 	c.HTML(http.StatusOK, "token-list-view", gin.H{
 		"tokens": tokens,
-		"user": getUserFromContext(c),
+		"user":   controllers.GetUserFromContext(c),
 	})
 }
 
