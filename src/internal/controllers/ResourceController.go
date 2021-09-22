@@ -117,14 +117,25 @@ func RedirectResource(c *gin.Context) {
 	c.Abort()
 }
 
+type ResourceSaveCommand struct {
+	Document    string `json:"document"`
+}
+
 func CreateResourceApi(c *gin.Context) {
 
 	account := services.AccountService.GetAccount(getUserFromContext(c).Id)
 
+	var Command ResourceSaveCommand;
+
+	if err := c.ShouldBindJSON(&Command); err != nil {
+		c.JSON(http.StatusBadRequest, nil)
+		return
+	}
+
 
 	resource := models.Resource{
 		Uuid: shortuuid.New(),
-		Content: c.PostForm("resource"),
+		Content: Command.Document,
 		Account: *account,
 		AccountId: account.GoTrueId,
 	}
