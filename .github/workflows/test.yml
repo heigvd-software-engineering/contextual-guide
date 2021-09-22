@@ -1,7 +1,6 @@
 name: Contextual Guide
 on:
   push:
-    branches: [master]
     tags: ['*']
   pull_request:
     types: [opened, synchronize, reopened]
