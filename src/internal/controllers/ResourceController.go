@@ -115,5 +115,35 @@ func RedirectResource(c *gin.Context) {
 	}
 
 	c.Abort()
+}
 
+func CreateResourceApi(c *gin.Context) {
+
+	account := services.AccountService.GetAccount(getUserFromContext(c).Id)
+
+
+	resource := models.Resource{
+		Uuid: shortuuid.New(),
+		Content: c.PostForm("resource"),
+		Account: *account,
+		AccountId: account.GoTrueId,
+	}
+
+	services.ResourceService.CreateResource(&resource)
+
+	c.JSON(http.StatusCreated,nil)
+}
+
+func ListPrivateResourcesApi(c *gin.Context) {
+	accountId := getUserFromContext(c).Id
+	resources := services.ResourceService.GetAllByAccountId(accountId)
+
+	c.JSON(http.StatusOK, resources)
+}
+
+func ViewResourceApi(c *gin.Context) {
+	resourceId := c.Param("id")
+	resource := services.ResourceService.GetOne(resourceId)
+
+	c.JSON(http.StatusOK,resource)
 }
