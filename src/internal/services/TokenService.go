@@ -17,6 +17,15 @@ func (us *tokenService) CreateToken(newToken *models.Token) *models.Token {
 	token := repository.TokenRepository.CreateToken(newToken)
 	return token
 }
+func (us *tokenService) GetAccountIdByToken(value string) string {
+	token := repository.TokenRepository.GetTokenByValue(value)
+
+	if token == nil {
+		return ""
+	}
+
+	return token.AccountId
+}
 
 func (us *tokenService) GetAllByAccountId(id string) []models.Token {
 	token := repository.TokenRepository.GetAllByAccountId(id)

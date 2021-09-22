@@ -5,7 +5,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v4"
 	"main/src/internal/controllers"
-	"net/http"
 	"os"
 )
 
@@ -47,14 +46,7 @@ func initGuiRouter(router *gin.Engine) *gin.Engine {
 }
 
 
-func checkLogged(c *gin.Context)  {
 
-	user, _ := c.Get("user")
-
-	if user == nil {
-		controllers.RenderErrorPage(http.StatusUnauthorized, "You are not authorized",c)
-	}
-}
 
 func extractCookie(c *gin.Context) {
 	jwtToken, err := c.Request.Cookie("sessionid")

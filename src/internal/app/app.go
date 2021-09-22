@@ -3,6 +3,8 @@ package app
 import (
 	"github.com/gin-contrib/multitemplate"
 	"github.com/gin-gonic/gin"
+	"main/src/internal/controllers"
+	"net/http"
 )
 
 var (
@@ -44,4 +46,11 @@ func init() {
 
 }
 
+func checkLogged(c *gin.Context)  {
 
+	user, _ := c.Get("user")
+
+	if user == nil {
+		controllers.RenderErrorPage(http.StatusUnauthorized, "You are not authorized",c)
+	}
+}
