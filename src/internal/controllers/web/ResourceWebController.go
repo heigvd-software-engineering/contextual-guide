@@ -55,7 +55,7 @@ func ListAllResources(c *gin.Context) {
 	resources := services.ResourceService.GetAll()
 
 
-	c.HTML(http.StatusOK, "public-resource-list-view", gin.H{
+	c.HTML(http.StatusOK, "resource-list-view", gin.H{
 		"resources": resources,
 		"user":      controllers.GetUserFromContext(c),
 
@@ -67,7 +67,7 @@ func ListPrivateResources(c *gin.Context) {
 	resources := services.ResourceService.GetAllByAccountId(accountId)
 
 
-	c.HTML(http.StatusOK, "private-resource-list-view", gin.H{
+	c.HTML(http.StatusOK, "resource-list-view-admin", gin.H{
 		"resources": resources,
 		"user":      controllers.GetUserFromContext(c),
 	})

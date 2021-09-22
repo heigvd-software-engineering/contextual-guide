@@ -43,7 +43,7 @@ func GetTokens(c *gin.Context) {
 
 	tokens := services.TokenService.GetAllByAccountId(accountId)
 
-	c.HTML(http.StatusOK, "token-list-view", gin.H{
+	c.HTML(http.StatusOK, "token-list-view-admin", gin.H{
 		"tokens": tokens,
 		"user":   controllers.GetUserFromContext(c),
 	})
