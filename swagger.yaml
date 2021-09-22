@@ -2,16 +2,24 @@ basePath: /api
 consumes:
 - application/json
 definitions:
-  ResourceDTO:
+  Account:
     properties:
-      document:
+      GoTrueId:
         type: string
-        x-go-name: Document
-      uuid:
-        type: string
-        x-go-name: Uuid
     type: object
-    x-go-package: main/src/internal/controllers
+    x-go-package: main/src/internal/models
+  Resource:
+    properties:
+      Account:
+        $ref: '#/definitions/Account'
+      AccountId:
+        type: string
+      Content:
+        type: string
+      Uuid:
+        type: string
+    type: object
+    x-go-package: main/src/internal/models
   ResourceSaveCommand:
     properties:
       document:
@@ -31,7 +39,7 @@ paths:
       operationId: Resource
       responses:
         "200":
-          $ref: '#/responses/resourceDTOList'
+          $ref: '#/responses/resourceList'
         "401":
           description: ""
       tags:
@@ -65,7 +73,7 @@ paths:
         type: string
       responses:
         "200":
-          $ref: '#/responses/resourceDTO'
+          $ref: '#/responses/resource'
         "401":
           description: ""
       tags:
@@ -73,15 +81,15 @@ paths:
 produces:
 - application/json
 responses:
-  resourceDTO:
+  resource:
     description: An JSON representation of the resource
     schema:
-      $ref: '#/definitions/ResourceDTO'
-  resourceDTOList:
-    description: A list of resourceDTO
+      $ref: '#/definitions/Resource'
+  resourceList:
+    description: A list of resource
     schema:
       items:
-        $ref: '#/definitions/ResourceDTO'
+        $ref: '#/definitions/Resource'
       type: array
 schemes:
 - http

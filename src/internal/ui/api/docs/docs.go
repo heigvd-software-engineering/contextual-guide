@@ -26,7 +26,10 @@
 // swagger:meta
 package docs
 
-import "main/src/internal/controllers"
+import (
+	"main/src/internal/controllers"
+	"main/src/internal/models"
+)
 
 // swagger:parameters resourceSaveCommand
 type ResourceSaveCommandWrapper struct {
@@ -35,17 +38,17 @@ type ResourceSaveCommandWrapper struct {
 }
 
 // An JSON representation of the resource
-// swagger:response resourceDTO
+// swagger:response resource
 type ResourceDTOWrapper struct {
 	// in:body
-	Body controllers.ResourceDTO
+	Body models.Resource
 }
 
-// A list of resourceDTO
-// swagger:response resourceDTOList
+// A list of resource
+// swagger:response resourceList
 type ResourceDTOListWrapper struct {
 	// in:body
-	Body []controllers.ResourceDTO
+	Body []models.Resource
 }
 // swagger:parameters resourceGetById
 type ResourceGetByIdWrapper struct {

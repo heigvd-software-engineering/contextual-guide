@@ -119,11 +119,6 @@ func RedirectResource(c *gin.Context) {
 type ResourceSaveCommand struct {
 	Document    string `json:"document"`
 }
-
-type ResourceDTO struct {
-	Uuid		string `json:"uuid"`
-	Document    string `json:"document"`
-}
 // swagger:route POST /resource Resource resourceSaveCommand
 // Create a new Resource
 // responses:
@@ -160,7 +155,7 @@ func CreateResourceApi(c *gin.Context) {
 // swagger:route GET /resource Resource Resource
 // Get all resources scoped by the apikey
 // responses:
-//   200: resourceDTOList
+//   200: resourceList
 //   401:
 //     description: Unauthorized
 func ListPrivateResourcesApi(c *gin.Context) {
@@ -172,7 +167,7 @@ func ListPrivateResourcesApi(c *gin.Context) {
 // swagger:route GET /resource/:uuid Resource resourceGetById
 // Get one resource by id
 // responses:
-//   200: resourceDTO
+//   200: resource
 //   401:
 //     description: Unauthorized
 func ViewResourceApi(c *gin.Context) {
