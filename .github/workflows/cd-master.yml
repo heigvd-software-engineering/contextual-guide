@@ -6,6 +6,7 @@ jobs:
   release-docker:
     name: Release on DockerHub
     runs-on: ubuntu-latest
+    needs: [test]
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
