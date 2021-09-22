@@ -2,7 +2,7 @@ package webController
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/google/uuid"
+	"github.com/lithammer/shortuuid/v3"
 	"main/src/internal/controllers"
 	"main/src/internal/models"
 	"main/src/internal/services"
@@ -23,7 +23,7 @@ func CreateToken(c *gin.Context) {
 
 	token := models.Token{
 		Name:  c.PostForm("name"),
-		Value: uuid.New().String(),
+		Value: shortuuid.New(),
 		Account: *account,
 		AccountId: account.GoTrueId,
 	}
