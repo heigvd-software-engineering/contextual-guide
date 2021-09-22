@@ -42,5 +42,4 @@ func getAccountFromApiKey(c *gin.Context)  {
 		Email: "",
 	}
 	c.Set("user",user)
-
 }

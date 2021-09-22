@@ -59,7 +59,6 @@ func ListPrivateResources(c *gin.Context) {
 	c.HTML(http.StatusOK, "private-resource-list-view", gin.H{
 		"resources": resources,
 		"user": getUserFromContext(c),
-
 	})
 }
 
@@ -121,6 +120,10 @@ type ResourceSaveCommand struct {
 	Document    string `json:"document"`
 }
 
+// swagger:route POST /foobar foobar-tag idOfFoobarEndpoint
+// Foobar does some amazing stuff.
+// responses:
+//   201: foobarResponse
 func CreateResourceApi(c *gin.Context) {
 
 	account := services.AccountService.GetAccount(getUserFromContext(c).Id)

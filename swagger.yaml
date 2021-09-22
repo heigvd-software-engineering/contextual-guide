@@ -1,0 +1,28 @@
+basePath: /api
+consumes:
+- application/json
+host: localhost:3000
+info:
+  description: Documentation of the open API of the Contextual-guide project
+  title: Contextual Guide
+  version: 0.0.1
+paths:
+  /foobar:
+    post:
+      operationId: idOfFoobarEndpoint
+      responses:
+        "201":
+          $ref: '#/responses/foobarResponse'
+      summary: Foobar does some amazing stuff.
+      tags:
+      - foobar-tag
+produces:
+- application/json
+schemes:
+- http
+securityDefinitions:
+  apikey:
+    in: header
+    name: x-api-key
+    type: apiKey
+swagger: "2.0"
