@@ -1,23 +1,88 @@
 basePath: /api
 consumes:
 - application/json
+definitions:
+  ResourceDTO:
+    properties:
+      document:
+        type: string
+        x-go-name: Document
+      uuid:
+        type: string
+        x-go-name: Uuid
+    type: object
+    x-go-package: main/src/internal/controllers
+  ResourceSaveCommand:
+    properties:
+      document:
+        type: string
+        x-go-name: Document
+    type: object
+    x-go-package: main/src/internal/controllers
 host: localhost:3000
 info:
   description: Documentation of the open API of the Contextual-guide project
   title: Contextual Guide
   version: 0.0.1
 paths:
-  /foobar:
+  /resource:
+    get:
+      description: Get all resources scoped by the apikey
+      operationId: Resource
+      responses:
+        "200":
+          $ref: '#/responses/resourceDTOList'
+        "401":
+          description: ""
+      tags:
+      - Resource
     post:
-      operationId: idOfFoobarEndpoint
+      description: Create a new Resource
+      operationId: resourceSaveCommand
+      parameters:
+      - in: body
+        name: Body
+        schema:
+          $ref: '#/definitions/ResourceSaveCommand'
       responses:
         "201":
-          $ref: '#/responses/foobarResponse'
-      summary: Foobar does some amazing stuff.
+          description: ""
+        "401":
+          description: ""
+        "422":
+          description: ""
       tags:
-      - foobar-tag
+      - Resource
+  /resource/:uuid:
+    get:
+      description: Get one resource by id
+      operationId: resourceGetById
+      parameters:
+      - description: 'name: uuid'
+        in: path
+        name: Uuid
+        required: true
+        type: string
+      responses:
+        "200":
+          $ref: '#/responses/resourceDTO'
+        "401":
+          description: ""
+      tags:
+      - Resource
 produces:
 - application/json
+responses:
+  resourceDTO:
+    description: An JSON representation of the resource
+    schema:
+      $ref: '#/definitions/ResourceDTO'
+  resourceDTOList:
+    description: A list of resourceDTO
+    schema:
+      items:
+        $ref: '#/definitions/ResourceDTO'
+      type: array
 schemes:
 - http
 securityDefinitions:

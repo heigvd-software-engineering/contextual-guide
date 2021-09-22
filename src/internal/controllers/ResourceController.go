@@ -120,15 +120,24 @@ type ResourceSaveCommand struct {
 	Document    string `json:"document"`
 }
 
-// swagger:route POST /foobar foobar-tag idOfFoobarEndpoint
-// Foobar does some amazing stuff.
+type ResourceDTO struct {
+	Uuid		string `json:"uuid"`
+	Document    string `json:"document"`
+}
+// swagger:route POST /resource Resource resourceSaveCommand
+// Create a new Resource
 // responses:
-//   201: foobarResponse
+//   201:
+//     description: Resource successfully created
+//   401:
+//     description: Unauthorized
+//   422:
+//     description: The model validation failed
 func CreateResourceApi(c *gin.Context) {
 
 	account := services.AccountService.GetAccount(getUserFromContext(c).Id)
 
-	var Command ResourceSaveCommand;
+	var Command ResourceSaveCommand
 
 	if err := c.ShouldBindJSON(&Command); err != nil {
 		c.JSON(http.StatusBadRequest, nil)
@@ -148,13 +157,24 @@ func CreateResourceApi(c *gin.Context) {
 	c.JSON(http.StatusCreated,nil)
 }
 
+// swagger:route GET /resource Resource Resource
+// Get all resources scoped by the apikey
+// responses:
+//   200: resourceDTOList
+//   401:
+//     description: Unauthorized
 func ListPrivateResourcesApi(c *gin.Context) {
 	accountId := getUserFromContext(c).Id
 	resources := services.ResourceService.GetAllByAccountId(accountId)
 
 	c.JSON(http.StatusOK, resources)
 }
-
+// swagger:route GET /resource/:uuid Resource resourceGetById
+// Get one resource by id
+// responses:
+//   200: resourceDTO
+//   401:
+//     description: Unauthorized
 func ViewResourceApi(c *gin.Context) {
 	resourceId := c.Param("id")
 	resource := services.ResourceService.GetOne(resourceId)
