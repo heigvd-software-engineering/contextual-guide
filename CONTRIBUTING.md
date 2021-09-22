@@ -12,8 +12,10 @@ Copy the .env.example file to .env and modify it according to your setup.
 You will need a mail account and an SMTP server to enable the [GoTrue](https://github.com/netlify/gotrue) authentication server.
 
 ```
-cp .env.example .env
-vim .env
+cp .app.env.example .app.env
+vim .app.env
+cp .gotrue.env.example .gotrue.env
+vim .gotrue.env
 ```
 
 You can now start the services with Docker Compose.
