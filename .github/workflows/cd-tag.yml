@@ -16,7 +16,7 @@ jobs:
         with:
           registry: ghcr.io
           username: ${{ secrets.GHCR_USERNAME }}
-          password: ${{ secrets.GHCR_ACCESS_TOKEN }}
+          password: ${{ secrets.GHCR_PASSWORD }}
       - name: Build docker image
         run: |
           TAG_NAME=$(echo ${GITHUB_REF:10})
