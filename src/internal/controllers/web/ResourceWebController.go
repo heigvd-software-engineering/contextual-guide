@@ -87,7 +87,7 @@ func RenderResourceQRCode(c *gin.Context) {
 	resourceId := c.Param("id")
 
 	// Generate the QRCode
-	uri := fmt.Sprintf("/resources/%s", resourceId)
+	uri := fmt.Sprintf("https://www.contextual.guide/resources/%s/redirect", resourceId)
 	png, err := qrcode.Encode(uri, qrcode.High, 256)
 	if err != nil {
 		log.Println(err)

@@ -1,21 +1,21 @@
 {{define "content"}}
 <main class="container">
-    <h2>New Resource</h2>
+    <h2><i class="fas fa-map-marker-alt"></i> New event</h2>
     <form action="/resources/create" method="POST">
         <label for="tile">Title</label>
-        <input id="tile" type="text" name="title">
+        <input id="tile" type="text" name="title" placeholder="Title">
         <label for="description">Description</label>
-        <input id="description" type="text" name="description">
-        <label for="timestamp">Timestamp</label>
-        <input id="timestamp" type="datetime-local" name="timestamp" value="2021-01-01T00:00"
-               min="2021-01-01T00:00">
+        <textarea id="description" type="text" name="description" placeholder="Description"></textarea>
+        <label for="timestamp">Date and time</label>
+        <input id="timestamp" type="datetime-local" name="timestamp"
+               min="2021-01-01T00:00" placeholder="Date and time" required>
         <label for="longitude">Longitude</label>
-        <input id="longitude" type="text" name="longitude" pattern="\s*[-+]?(180(\.0+)?|((1[0-7]\d)|([1-9]?\d))(\.\d+)?)$"title="x.xxxxxxxx between -180 to 180" required>
+        <input id="longitude" type="text" name="longitude" pattern="\s*[-+]?(180(\.0+)?|((1[0-7]\d)|([1-9]?\d))(\.\d+)?)$"title="x.xxxxxxxx between -180 to 180" placeholder="Longitude" required>
         <label for="latitude">Latitude</label>
-        <input id="latitude" type="text" name="latitude" pattern="^[-+]?([1-8]?\d(\.\d+)?|90(\.0+)?)" title="x.xxxxxxxx between -90 to 90" required>
-        <label for="redirect">Redirect</label>
-        <input id="redirect" type="url" name="redirect" required>
-        <button type="submit">Save</button>
+        <input id="latitude" type="text" name="latitude" pattern="^[-+]?([1-8]?\d(\.\d+)?|90(\.0+)?)" title="x.xxxxxxxx between -90 to 90" placeholder="Latitude" required>
+        <label for="redirect">Redirection URL</label>
+        <input id="redirect" type="url" name="redirect" placeholder="http://" required>
+        <button type="submit"><i class="fas fa-plus-circle"></i> New event</button>
     </form>
 </main>
 {{ end }}

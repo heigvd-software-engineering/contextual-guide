@@ -1,18 +1,20 @@
 {{define "content"}}
 <main class="container">
-    <h1>All Resources</h1>
+    <h1><i class="fas fa-map-marker-alt"></i> Browse the registry</h1>
     <table>
         <thead>
             <tr>
                 <th>Id</th>
-                <th>Resource</th>
+                <th>Created</th>
+                <th>Updated</th>
             </tr>
         </thead>
         <tbody>
         {{ range .resources }}
             <tr>
                 <td><a href='/resources/{{ .Uuid }}'>{{ .Uuid }}</a></td>
-                <td>{{ .Document }}</td>
+                <td>{{ .CreatedAt }}</td>
+                <td>{{ .UpdatedAt }}</td>
             </tr>
         {{ end }}
         </tbody>

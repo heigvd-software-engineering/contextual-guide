@@ -1,26 +1,30 @@
 {{define "content"}}
 <main class="container">
-    <h1>Your Tokens</h1>
+    <h1><i class="fas fa-key"></i> Your API keys</h1>
     <table>
         <thead>
-            <tr>
-                <th>Name</th>
-                <th></th>
-            </tr>
+        <tr>
+            <th>Name</th>
+            <th>Created</th>
+            <th>Updated</th>
+            <th></th>
+        </tr>
         </thead>
         <tbody>
         {{ range .tokens }}
-            <tr>
-                <td>{{ .Name }}</td>
-                <td>
-                    <a href="/tokens/{{ .Value }}/delete">
-                        <i class="gg-trash trash"></i>
-                    </a>
-                </td>
-            </tr>
+        <tr>
+            <td>{{ .Name }}</td>
+            <td>{{ .CreatedAt }}</td>
+            <td>{{ .UpdatedAt }}</td>
+            <td>
+                <a href="/tokens/{{ .Value }}/delete">
+                    <i class="fas fa-trash"></i>
+                </a>
+            </td>
+        </tr>
         {{ end }}
         </tbody>
     </table>
-    <a href="/tokens/create" role="button">New Token</a>
+    <a href="/tokens/create" role="button"><i class="fas fa-plus-circle"></i> New API key</a>
 </main>
 {{end}}

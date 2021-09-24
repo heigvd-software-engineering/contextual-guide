@@ -1,6 +1,8 @@
 package models
 
-import "time"
+import (
+	"time"
+)
 
 type Resource struct {
 	Uuid    string `gorm:"primary_key"`
