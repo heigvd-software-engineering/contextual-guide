@@ -1,11 +1,10 @@
 {{define "content"}}
 <main class="container">
-        <h1>{{ .code }} - {{ .message }}</h1>
-
-        {{if (eq .code 401)}}
-        <a href="/login">Return to login page</a>
-        {{else}}
-        <a href="/">Return to home page</a>
-        {{end}}
+    <h1>{{ .code }} - {{ .message }}</h1>
+    {{if (eq .code 401)}}
+    <a href="/login">Return to login page</a>
+    {{else}}
+    <a href="/">Return to home page</a>
+    {{end}}
 </main>
 {{end}}

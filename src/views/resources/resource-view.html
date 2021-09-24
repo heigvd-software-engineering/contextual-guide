@@ -1,25 +1,12 @@
 {{define "content"}}
-<main class="container">
-  <h1>/resources/{{ .resource.Uuid }}</h1>
-  <div class="grid">
-    <section>
-      <code>
-        {{ .resource.Document }}
-      </code>
-    </section>
-    <aside>
-      <img src="/resources/{{ .resource.Uuid }}/qrcode.png" alt="QRCode" />
 
-      <div id="qrcode"></div>
-    </aside>
-  </div>
+<main class="container">
+    <h1>/resources/{{ .resource.Uuid }}</h1>
+    <img src="/resources/{{ .resource.Uuid }}/qrcode.png" alt="QRCode">
+    <div class='map' data-longitude="10" data-latitude="10" style="height: 300px"></div>
+    <code>
+        {{ .resource.Content }}
+    </code>
 </main>
 
-
-<script src="/assets/js/qrcode.min.js"></script>
-<script>
-  const qrcode = new QRCode("qrcode");
-  const url = location.protocol + "/" + location.host + "/resources/{{ .resource.Uuid }}";
-  qrcode.makeCode(url);
-</script>
 {{end}}

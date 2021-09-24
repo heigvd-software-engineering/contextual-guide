@@ -1,12 +1,12 @@
 {{define "content"}}
 <main class="container">
-    <h1>Login</h1>
+    <h1><i class="fas fa-sign-in-alt"></i> Login</h1>
     <form action="/login" method="post">
         <label for="email">Email</label>
-        <input type="email" name="email" id="email">
+        <input type="email" name="email" id="email" placeholder="Email">
         <label for="password">Password</label>
-        <input type="password" name="password" id="password">
-        <button type="submit">Login</button>
+        <input type="password" name="password" id="password" placeholder="Password">
+        <button type="submit"><i class="fas fa-sign-in-alt"></i> Login</button>
     </form>
 </main>
 {{end}}

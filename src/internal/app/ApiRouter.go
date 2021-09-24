@@ -12,10 +12,9 @@ func initApiRouter(router *gin.Engine) *gin.Engine {
 
 	// scoped by the api-key
 	router.GET("/api/resources",getAccountFromApiKey, checkLogged, apiController.ListPrivateResources)
-
 	router.POST("/api/resources",getAccountFromApiKey, checkLogged, apiController.CreateResource)
-
 	router.GET("/api/resources/:id",getAccountFromApiKey, checkLogged, apiController.ViewResource)
+
 	//router.PUT("/api/resources/:id", controllers.UpdateResourceApi)
 	//router.DELETE("/api/resources/:id", controllers.ArchiveRessourceApi)
 
