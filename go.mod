@@ -17,9 +17,9 @@ require (
 	github.com/google/uuid v1.3.0
 	github.com/jinzhu/gorm v1.9.16
 	github.com/kr/pretty v0.3.0 // indirect
-	github.com/lithammer/shortuuid/v3 v3.0.7 // indirect
+	github.com/lithammer/shortuuid/v3 v3.0.7
 	github.com/rogpeppe/go-internal v1.8.0 // indirect
-	github.com/skip2/go-qrcode v0.0.0-20200617195104-da1b6568686e // indirect
+	github.com/skip2/go-qrcode v0.0.0-20200617195104-da1b6568686e
 	github.com/spf13/viper v1.9.0 // indirect
 	go.mongodb.org/mongo-driver v1.7.2 // indirect
 	golang.org/x/mod v0.5.0 // indirect

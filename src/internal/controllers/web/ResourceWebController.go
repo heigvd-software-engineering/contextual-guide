@@ -1,22 +1,19 @@
 package webController
 
 import (
-	"encoding/json"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/lithammer/shortuuid/v3"
 	qrcode "github.com/skip2/go-qrcode"
 	"log"
 	"main/src/internal/controllers"
-	apiController "main/src/internal/controllers/api"
 	"main/src/internal/models"
 	"main/src/internal/services"
 	"net/http"
+	"strconv"
+	"time"
 )
 
-type Content struct {
-	Redirect string
-}
 
 func RenderResourceForm(c *gin.Context) {
 	c.HTML(http.StatusOK, "resource-form", gin.H{
@@ -27,22 +24,22 @@ func RenderResourceForm(c *gin.Context) {
 func CreateResource(c *gin.Context) {
 
 	account := services.AccountService.GetAccount(controllers.GetUserFromContext(c).Id)
-	
-	command := apiController.ResourceSaveCommand{
-		Title:       c.PostForm("title"),
-		Description: c.PostForm("description"),
-		Timestamp:   c.PostForm("timestamp"),
-		Longitude:   c.PostForm("longitude"),
-		Latitude:    c.PostForm("latitude"),
-		Redirect:    c.PostForm("redirect"),
-	}
 
-	document, _ := json.Marshal(command)
+	longitude, _ := strconv.ParseFloat(c.PostForm("longitude"), 32)
+	latitude, _ := strconv.ParseFloat(c.PostForm("latitude"), 32)
+
+	timeLayout := "2006-01-02T15:04:05.000Z"
+	timestamp, _ := time.Parse(timeLayout, c.PostForm("timestamp"))
 
 	resource := models.Resource{
-		Uuid: shortuuid.New(),
-		Document: string(document),
-		AccountId: account.GoTrueId,
+		Uuid:        shortuuid.New(),
+		Title:       c.PostForm("title"),
+		Description: c.PostForm("description"),
+		Timestamp:   timestamp,
+		Longitude:   float32(longitude),
+		Latitude:    float32(latitude),
+		Redirect:    c.PostForm("redirect"),
+		AccountId:   account.GoTrueId,
 	}
 
 	services.ResourceService.CreateResource(&resource)
@@ -107,22 +104,7 @@ func RedirectResource(c *gin.Context) {
 	resourceId := c.Param("id")
 	resource := services.ResourceService.GetOne(resourceId)
 
-	// Unmarshal the resource content
-	blob := []byte(resource.Document)
-	var content Content
-	err := json.Unmarshal(blob, &resource)
-	if err != nil {
-		log.Println(err)
-		c.String(500, "Unable to unmarshal resource")
-		return
-	}
-
-	if content.Redirect != "" {
-		c.Redirect(http.StatusFound, content.Redirect)
-	} else {
-		uri := fmt.Sprintf("/resources/%s", resourceId)
-		c.Redirect(http.StatusFound, uri)
-	}
+	c.Redirect(http.StatusFound, resource.Redirect)
 
 	c.Abort()
 }
