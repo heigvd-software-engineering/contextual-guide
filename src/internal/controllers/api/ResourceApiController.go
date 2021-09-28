@@ -2,28 +2,14 @@ package apiController
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/lithammer/shortuuid/v3"
 	"main/src/internal/controllers"
 	"main/src/internal/models"
 	"main/src/internal/services"
 	"net/http"
-	"time"
 )
 
-type Content struct {
-	Redirect string
-}
 
 
-type ResourceSaveCommand struct {
-	Title    string `json:"title"`
-	Description    string `json:"description"`
-	Timestamp    time.Time `json:"timestamp"`
-	Longitude    float32 `json:"longitude"`
-	Latitude    float32 `json:"latitude"`
-	Redirect    string `json:"redirect"`
-	CustomProperties string `json:"CustomProperties"`
-}
 // swagger:route POST /resource Resource resourceSaveCommand
 // Create a new Resource
 // responses:
@@ -37,27 +23,20 @@ func CreateResource(c *gin.Context) {
 
 	account := services.AccountService.GetAccount(controllers.GetUserFromContext(c).Id)
 
-	var command ResourceSaveCommand
+	var command models.ResourceSaveCommand
 
 	if err := c.ShouldBindJSON(&command); err != nil {
-		c.JSON(http.StatusBadRequest, err)
+		c.JSON(http.StatusBadRequest, err.Error())
 		return
 	}
 
+	resource, errorList := models.NewResource(command, account.GoTrueId)
 
-	resource := models.Resource{
-		Uuid: shortuuid.New(),
-		Title: command.Title,
-		Description: command.Description,
-		Timestamp: command.Timestamp,
-		Longitude: command.Longitude,
-		Latitude: command.Latitude,
-		Redirect: command.Redirect,
-		CustomProperties: command.CustomProperties,
-		AccountId: account.GoTrueId,
+	if errorList != nil {
+		c.JSON(http.StatusBadRequest, models.ErrorDTO{Errors: errorList})
+		return
 	}
-
-	services.ResourceService.CreateResource(&resource)
+	services.ResourceService.CreateResource(resource)
 
 	c.JSON(http.StatusCreated,nil)
 }

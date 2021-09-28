@@ -3,18 +3,63 @@
     <h2><i class="fas fa-map-marker-alt"></i> New event</h2>
     <form action="/resources/create" method="POST">
         <label for="tile">Title</label>
-        <input id="tile" type="text" name="title" placeholder="Title">
+        {{ if .errors.title }}
+            {{range index .errors "title"}}
+                <p class="error">{{ . }}</p>
+            {{end}}
+        {{ end }}
+        <input id="tile" type="text" name="title" placeholder="Title" value="{{ .model.Title }}">
         <label for="description">Description</label>
-        <textarea id="description" type="text" name="description" placeholder="Description"></textarea>
+        {{ if .errors.description }}
+            {{range index .errors "description"}}
+                <p class="error">{{ . }}</p>
+            {{end}}
+        {{ end }}
+        <textarea id="description" type="text" name="description" placeholder="Description">{{ .model.Description }}</textarea>
         <label for="timestamp">Date and time</label>
+        {{ if .errors.timestamp }}
+            {{range index .errors "timestamp"}}
+                <p class="error">{{ . }}</p>
+            {{end}}
+        {{ end }}
         <input id="timestamp" type="datetime-local" name="timestamp"
-               min="2021-01-01T00:00" placeholder="Date and time" required>
+               min="2021-01-01T00:00" placeholder="Date and time" required value="{{ .model.Timestamp }}">
         <label for="longitude">Longitude</label>
-        <input id="longitude" type="text" name="longitude" pattern="\s*[-+]?(180(\.0+)?|((1[0-7]\d)|([1-9]?\d))(\.\d+)?)$"title="x.xxxxxxxx between -180 to 180" placeholder="Longitude" required>
+        {{ if .errors.longitude }}
+            {{range index .errors "longitude"}}
+                <p class="error">{{ . }}</p>
+            {{end}}
+        {{ end }}
+        <input id="longitude" type="text" name="longitude"
+               pattern="\s*[-+]?(180(\.0+)?|((1[0-7]\d)|([1-9]?\d))(\.\d+)?)$"
+               title="x.xxxxxxxx between -180 to 180"
+               placeholder="Longitude"
+               required
+               value="{{ .model.Longitude }}"
+        >
         <label for="latitude">Latitude</label>
-        <input id="latitude" type="text" name="latitude" pattern="^[-+]?([1-8]?\d(\.\d+)?|90(\.0+)?)" title="x.xxxxxxxx between -90 to 90" placeholder="Latitude" required>
+        {{ if .errors.latitude }}
+            {{range index .errors "latitude"}}
+                <p class="error">{{ . }}</p>
+            {{end}}
+        {{ end }}
+        <input id="latitude" type="text" name="latitude"
+               pattern="^[-+]?([1-8]?\d(\.\d+)?|90(\.0+)?)"
+               title="x.xxxxxxxx between -90 to 90"
+               placeholder="Latitude"
+               required
+               value="{{ .model.Latitude }}"
+        >
         <label for="redirect">Redirection URL</label>
-        <input id="redirect" type="url" name="redirect" placeholder="http://" required>
+        {{ if .errors.redirect }}
+            {{range index .errors "redirect"}}
+                 <p class="error">{{ . }}</p>
+            {{end}}
+        {{ end }}
+        <input id="redirect" type="url" name="redirect" placeholder="http(s)://" required
+               value="{{ .model.Redirect }}"
+        >
+
         <button type="submit"><i class="fas fa-plus-circle"></i> New event</button>
     </form>
 </main>

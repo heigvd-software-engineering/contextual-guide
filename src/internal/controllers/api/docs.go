@@ -33,7 +33,7 @@ import (
 // swagger:parameters resourceSaveCommand
 type ResourceSaveCommandWrapper struct {
 	// in:body
-	Body ResourceSaveCommand
+	Body models.ResourceSaveCommand
 }
 
 // An JSON representation of the resource
