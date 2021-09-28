@@ -40,8 +40,7 @@ func CreateResource(c *gin.Context) {
 		errList["latitude"] = append(errList["latitude"],message)
 
 	}
-
-	timeLayout := "2006-01-02T15:04:05.000Z"
+	timeLayout := "2006-01-02T15:00"
 	timestamp, err := time.Parse(timeLayout, c.PostForm("timestamp"))
 
 	if err != nil {

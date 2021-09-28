@@ -23,7 +23,7 @@
             {{end}}
         {{ end }}
         <input id="timestamp" type="datetime-local" name="timestamp"
-               min="2021-01-01T00:00" placeholder="Date and time" required value="{{ .model.Timestamp }}">
+               min="2021-01-01T00:00" placeholder="yyyy-MM-ddThh:mm" required value="{{ .model.Timestamp }}">
         <label for="longitude">Longitude</label>
         {{ if .errors.longitude }}
             {{range index .errors "longitude"}}
