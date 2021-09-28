@@ -3,7 +3,6 @@ package webController
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
-	"github.com/lithammer/shortuuid/v3"
 	qrcode "github.com/skip2/go-qrcode"
 	"log"
 	"main/src/internal/controllers"
@@ -21,28 +20,69 @@ func RenderResourceForm(c *gin.Context) {
 	})
 }
 
+
 func CreateResource(c *gin.Context) {
 
 	account := services.AccountService.GetAccount(controllers.GetUserFromContext(c).Id)
 
-	longitude, _ := strconv.ParseFloat(c.PostForm("longitude"), 32)
-	latitude, _ := strconv.ParseFloat(c.PostForm("latitude"), 32)
+	longitude, err := strconv.ParseFloat(c.PostForm("longitude"), 32)
 
-	timeLayout := "2006-01-02T15:04:05.000Z"
-	timestamp, _ := time.Parse(timeLayout, c.PostForm("timestamp"))
+	errList := make(models.ValidationError)
 
-	resource := models.Resource{
-		Uuid:        shortuuid.New(),
-		Title:       c.PostForm("title"),
-		Description: c.PostForm("description"),
-		Timestamp:   timestamp,
-		Longitude:   float32(longitude),
-		Latitude:    float32(latitude),
-		Redirect:    c.PostForm("redirect"),
-		AccountId:   account.GoTrueId,
+	if err != nil {
+		message := fmt.Sprintf("logitude is not in the right format : x.x")
+		errList["longitude"] = append(errList["longitude"],message)
+
+	}
+	latitude, err := strconv.ParseFloat(c.PostForm("latitude"), 32)
+	if err != nil {
+		message := fmt.Sprintf("latitude is not in the right format : x.x")
+		errList["latitude"] = append(errList["latitude"],message)
+
+	}
+	timeLayout := "2006-01-02T15:00"
+	timestamp, err := time.Parse(timeLayout, c.PostForm("timestamp"))
+
+	if err != nil {
+		message := fmt.Sprintf("Timestamp is not in the right format : %s",timeLayout)
+		errList["timestamp"] = append(errList["latitude"],message)
 	}
 
-	services.ResourceService.CreateResource(&resource)
+	command := models.ResourceSaveCommand{
+		Title:            c.PostForm("title"),
+		Description:      c.PostForm("description"),
+		Timestamp:        timestamp,
+		Longitude:        float32(longitude),
+		Latitude:         float32(latitude),
+		Redirect:         c.PostForm("Redirect"),
+		CustomProperties: c.PostForm("customProperties"),
+	}
+	if len(errList) != 0 {
+		c.HTML(http.StatusOK, "resource-form", gin.H{
+			"errors": errList,
+			"user":   controllers.GetUserFromContext(c),
+			"model": command,
+		})
+		return
+	}
+
+
+	resource, errorList := models.NewResource(command, account.GoTrueId)
+
+	fmt.Println(errorList)
+	if len(*errorList) != 0 {
+		c.HTML(http.StatusOK, "resource-form", gin.H{
+			"errors": errorList,
+			"user":      controllers.GetUserFromContext(c),
+			"model": command,
+		})
+
+		return
+	}
+
+
+
+	services.ResourceService.CreateResource(resource)
 
 	c.Redirect(http.StatusFound, "/resources/mine")
 	c.Abort()

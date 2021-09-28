@@ -33,7 +33,7 @@ import (
 // swagger:parameters resourceSaveCommand
 type ResourceSaveCommandWrapper struct {
 	// in:body
-	Body ResourceSaveCommand
+	Body models.ResourceSaveCommand
 }
 
 // An JSON representation of the resource
@@ -58,4 +58,11 @@ type ResourceGetByIdWrapper struct {
 	// required: true
 	// type: string
 	Uuid string
+}
+
+// An JSON representation of the error object
+// swagger:response validationError
+type ErrorDTOWrapper struct {
+	// in:body
+	Body models.ErrorDTO
 }
