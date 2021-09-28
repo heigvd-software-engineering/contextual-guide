@@ -25,21 +25,19 @@ func getAccountFromApiKey(c *gin.Context)  {
 	c.Set("user",nil)
 
 	key := c.Request.Header.Get("x-api-key")
-
 	if key == "" {
 		c.JSON(http.StatusUnauthorized,"You are not authorized")
 	}
 
 	accountId := services.TokenService.GetAccountIdByToken(key)
-
 	if accountId == "" {
 		c.JSON(http.StatusUnauthorized,"You are not authorized")
 	}
-
 
 	user := controllers.LoggedUser{
 		Id: accountId,
 		Email: "",
 	}
+
 	c.Set("user",user)
 }

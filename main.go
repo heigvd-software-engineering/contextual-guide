@@ -1,13 +1,12 @@
 package main
 
 import (
-	"flag"
 	"main/src/cmd/server"
+	"os"
+	"strconv"
 )
 
 func main() {
-	port := flag.Int("port",3000, "-port=3000")
-	flag.Parse()
-
-	server.Run(*port)
+	port, _ := strconv.Atoi(os.Getenv("APP_PORT"))
+	server.Run(port)
 }

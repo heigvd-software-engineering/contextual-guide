@@ -21,10 +21,8 @@ func initGuiRouter(router *gin.Engine) *gin.Engine {
 	router.POST("/tokens/create", checkLogged, webController.CreateToken)
 	router.GET("/tokens/:id/delete", checkLogged, webController.DeleteToken)
 
-
 	router.GET("/login", webController.RenderLoginForm)
 	router.POST("/login", webController.HandleLogin)
-
 
 	router.GET("/register", webController.RenderRegisterForm)
 	router.POST("/register", webController.HandleRegistration)

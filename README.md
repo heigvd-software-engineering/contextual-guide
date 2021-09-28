@@ -5,7 +5,7 @@
 _(!) The entrypoint is in `src/cmd/server/main.go`_
 ### Http server
 
-You can set the http port with the command `-port=<the port>`
+You can set the http port by changing the `.app.env` file.
 
 ### Database
 

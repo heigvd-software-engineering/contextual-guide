@@ -9,17 +9,16 @@ import (
 	"main/src/internal/models"
 	"main/src/internal/services"
 	"net/http"
+	"os"
 	"strconv"
 	"time"
 )
-
 
 func RenderResourceForm(c *gin.Context) {
 	c.HTML(http.StatusOK, "resource-form", gin.H{
 		"user": controllers.GetUserFromContext(c),
 	})
 }
-
 
 func CreateResource(c *gin.Context) {
 
@@ -31,21 +30,21 @@ func CreateResource(c *gin.Context) {
 
 	if err != nil {
 		message := fmt.Sprintf("logitude is not in the right format : x.x")
-		errList["longitude"] = append(errList["longitude"],message)
+		errList["longitude"] = append(errList["longitude"], message)
 
 	}
 	latitude, err := strconv.ParseFloat(c.PostForm("latitude"), 32)
 	if err != nil {
 		message := fmt.Sprintf("latitude is not in the right format : x.x")
-		errList["latitude"] = append(errList["latitude"],message)
+		errList["latitude"] = append(errList["latitude"], message)
 
 	}
 	timeLayout := "2006-01-02T15:00"
 	timestamp, err := time.Parse(timeLayout, c.PostForm("timestamp"))
 
 	if err != nil {
-		message := fmt.Sprintf("Timestamp is not in the right format : %s",timeLayout)
-		errList["timestamp"] = append(errList["latitude"],message)
+		message := fmt.Sprintf("Timestamp is not in the right format : %s", timeLayout)
+		errList["timestamp"] = append(errList["latitude"], message)
 	}
 
 	command := models.ResourceSaveCommand{
@@ -61,11 +60,10 @@ func CreateResource(c *gin.Context) {
 		c.HTML(http.StatusOK, "resource-form", gin.H{
 			"errors": errList,
 			"user":   controllers.GetUserFromContext(c),
-			"model": command,
+			"model":  command,
 		})
 		return
 	}
-
 
 	resource, errorList := models.NewResource(command, account.GoTrueId)
 
@@ -73,14 +71,12 @@ func CreateResource(c *gin.Context) {
 	if len(*errorList) != 0 {
 		c.HTML(http.StatusOK, "resource-form", gin.H{
 			"errors": errorList,
-			"user":      controllers.GetUserFromContext(c),
-			"model": command,
+			"user":   controllers.GetUserFromContext(c),
+			"model":  command,
 		})
 
 		return
 	}
-
-
 
 	services.ResourceService.CreateResource(resource)
 
@@ -91,18 +87,15 @@ func CreateResource(c *gin.Context) {
 func ListAllResources(c *gin.Context) {
 	resources := services.ResourceService.GetAll()
 
-
 	c.HTML(http.StatusOK, "resource-list-view", gin.H{
 		"resources": resources,
 		"user":      controllers.GetUserFromContext(c),
-
 	})
 }
 
 func ListPrivateResources(c *gin.Context) {
 	accountId := controllers.GetUserFromContext(c).Id
 	resources := services.ResourceService.GetAllByAccountId(accountId)
-
 
 	c.HTML(http.StatusOK, "resource-list-view-admin", gin.H{
 		"resources": resources,
@@ -144,7 +137,11 @@ func RedirectResource(c *gin.Context) {
 	resourceId := c.Param("id")
 	resource := services.ResourceService.GetOne(resourceId)
 
-	c.Redirect(http.StatusFound, resource.Redirect)
+	redirect := resource.Redirect
+	if redirect == "" {
+		redirect = fmt.Sprintf("https://%s:%s/resources/%s", os.Getenv("APP_URL"), os.Getenv("APP_PORT"), resourceId)
+	}
 
+	c.Redirect(http.StatusFound, redirect)
 	c.Abort()
 }
