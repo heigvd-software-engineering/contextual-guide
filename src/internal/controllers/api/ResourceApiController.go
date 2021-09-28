@@ -17,8 +17,7 @@ import (
 //     description: Resource successfully created
 //   401:
 //     description: Unauthorized
-//   422:
-//     description: The model validation failed
+//   422: validationError
 func CreateResource(c *gin.Context) {
 
 	account := services.AccountService.GetAccount(controllers.GetUserFromContext(c).Id)

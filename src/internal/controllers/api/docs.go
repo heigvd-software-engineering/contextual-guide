@@ -59,3 +59,10 @@ type ResourceGetByIdWrapper struct {
 	// type: string
 	Uuid string
 }
+
+// An JSON representation of the error object
+// swagger:response validationError
+type ErrorDTOWrapper struct {
+	// in:body
+	Body models.ErrorDTO
+}
