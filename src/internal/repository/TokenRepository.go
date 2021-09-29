@@ -49,7 +49,6 @@ func (ur *tokenRepository) Delete(id int64) {
 
 func (ur *tokenRepository) GetTokenByValue(value string) *models.Token {
 	var tokens models.Token
-	database.DB.Where(&models.Token{Value: value}).Find(&tokens)
-
+	database.DB.Where(&models.Token{Hash: value}).Find(&tokens)
 	return &tokens
 }

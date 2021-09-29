@@ -19,9 +19,10 @@ func RenderTokenForm(c *gin.Context) {
 func CreateToken(c *gin.Context) {
 	account := services.AccountService.GetAccount(controllers.GetUserFromContext(c).Id)
 
+	// the hash of the token
 	token := models.Token{
 		Name:  c.PostForm("name"),
-		Value: shortuuid.New(),
+		Hash: shortuuid.New(),
 		Account: *account,
 		AccountId: account.GoTrueId,
 	}

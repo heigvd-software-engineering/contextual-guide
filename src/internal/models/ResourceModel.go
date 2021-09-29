@@ -19,19 +19,21 @@ type ResourceSaveCommand struct {
 type Resource struct {
 	Uuid    string `gorm:"primary_key"`
 
-	Title string
-	Description string
+	// The Attributes
+	Title string `gorm:"not null"`
+	Description string `gorm:"not null"`
+	Longitude float32 `gorm:"not null"`
+	Latitude float32 `gorm:"not null"`
 	Timestamp time.Time
-	Longitude float32
-	Latitude float32
 	Redirect string
 
-	CustomProperties string
-
-	AccountId string `gorm:"references:GoTrueId"`
+	// When an account is deleted, we must keep the associated resources
+	AccountId string
+	Account Account `gorm:"references:GoTrueId"`
 
 	CreatedAt time.Time
 	UpdatedAt time.Time
+	// Resources shall never be deleted
 }
 
 
@@ -44,7 +46,6 @@ func NewResource(command ResourceSaveCommand, accountId string) (*Resource, *Val
 		Longitude: command.Longitude,
 		Latitude: command.Latitude,
 		Redirect:  command.Redirect,
-		CustomProperties: command.CustomProperties,
 		AccountId: accountId,
 	}
 
