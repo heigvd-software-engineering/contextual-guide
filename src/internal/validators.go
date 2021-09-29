@@ -1,4 +1,4 @@
-package models
+package internal
 
 import (
 	"fmt"
@@ -34,7 +34,7 @@ func inLongitudeBoundary(property string, value float32,validationError *Validat
 	return validationError
 }
 
-func isUrlFormat(property string, value string, validationError *ValidationError )*ValidationError {
+func isUrlFormat(property string, value string, validationError *ValidationError)*ValidationError {
 	urlRegex := regexp.MustCompile(`https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)`)
 
 

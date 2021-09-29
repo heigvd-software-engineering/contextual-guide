@@ -3,6 +3,7 @@ package app
 import (
 	"github.com/gin-contrib/multitemplate"
 	"github.com/gin-gonic/gin"
+	"main/src/internal"
 	"main/src/internal/controllers"
 	"net/http"
 )
@@ -33,6 +34,7 @@ func createRender() multitemplate.Renderer {
 }
 
 func init() {
+	internal.ConnectDatabase()
 
 	Engine = gin.Default()
 

@@ -2,9 +2,9 @@ package app
 
 import (
 	"github.com/gin-gonic/gin"
+	"main/src/internal"
 	"main/src/internal/controllers"
 	apiController "main/src/internal/controllers/api"
-	"main/src/internal/services"
 	"net/http"
 )
 
@@ -29,7 +29,7 @@ func getAccountFromApiKey(c *gin.Context)  {
 		c.JSON(http.StatusUnauthorized,"You are not authorized")
 	}
 
-	accountId := services.TokenService.GetAccountIdByToken(key)
+	accountId := internal.TokenService.GetAccountIdByToken(key)
 	if accountId == "" {
 		c.JSON(http.StatusUnauthorized,"You are not authorized")
 	}

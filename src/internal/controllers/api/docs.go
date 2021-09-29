@@ -27,27 +27,27 @@
 package apiController
 
 import (
-	"main/src/internal/models"
+	"main/src/internal"
 )
 
 // swagger:parameters resourceSaveCommand
 type ResourceSaveCommandWrapper struct {
 	// in:body
-	Body models.ResourceSaveCommand
+	Body internal.ResourceSaveCommand
 }
 
 // An JSON representation of the resource
 // swagger:response resource
 type ResourceDTOWrapper struct {
 	// in:body
-	Body models.Resource
+	Body internal.Resource
 }
 
 // A list of resource
 // swagger:response resourceList
 type ResourceDTOListWrapper struct {
 	// in:body
-	Body []models.Resource
+	Body []internal.Resource
 }
 // swagger:parameters resourceGetById
 type ResourceGetByIdWrapper struct {
@@ -64,5 +64,5 @@ type ResourceGetByIdWrapper struct {
 // swagger:response validationError
 type ErrorDTOWrapper struct {
 	// in:body
-	Body models.ErrorDTO
+	Body internal.ErrorDTO
 }

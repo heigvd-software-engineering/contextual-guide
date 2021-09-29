@@ -8,6 +8,7 @@ import (
 )
 
 func main() {
+
 	u, err := url.Parse(os.Getenv("APP_URL"))
 	if err != nil {
 		panic(err)

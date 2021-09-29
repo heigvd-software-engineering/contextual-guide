@@ -5,9 +5,8 @@ import (
 	"github.com/gin-gonic/gin"
 	qrcode "github.com/skip2/go-qrcode"
 	"log"
+	"main/src/internal"
 	"main/src/internal/controllers"
-	"main/src/internal/models"
-	"main/src/internal/services"
 	"net/http"
 	"os"
 	"strconv"
@@ -22,11 +21,11 @@ func RenderResourceForm(c *gin.Context) {
 
 func CreateResource(c *gin.Context) {
 
-	account := services.AccountService.GetAccount(controllers.GetUserFromContext(c).Id)
+	account := internal.AccountService.GetAccount(controllers.GetUserFromContext(c).Id)
 
 	longitude, err := strconv.ParseFloat(c.PostForm("longitude"), 32)
 
-	errList := make(models.ValidationError)
+	errList := make(internal.ValidationError)
 
 	if err != nil {
 		message := fmt.Sprintf("logitude is not in the right format : x.x")
@@ -47,7 +46,7 @@ func CreateResource(c *gin.Context) {
 		errList["timestamp"] = append(errList["latitude"], message)
 	}
 
-	command := models.ResourceSaveCommand{
+	command := internal.ResourceSaveCommand{
 		Title:            c.PostForm("title"),
 		Description:      c.PostForm("description"),
 		Timestamp:        timestamp,
@@ -65,7 +64,7 @@ func CreateResource(c *gin.Context) {
 		return
 	}
 
-	resource, errorList := models.NewResource(command, account.GoTrueId)
+	resource, errorList := internal.NewResource(command, account.GoTrueId)
 
 	fmt.Println(errorList)
 	if len(*errorList) != 0 {
@@ -78,14 +77,14 @@ func CreateResource(c *gin.Context) {
 		return
 	}
 
-	services.ResourceService.CreateResource(resource)
+	internal.ResourceService.CreateResource(resource)
 
 	c.Redirect(http.StatusFound, "/resources/mine")
 	c.Abort()
 }
 
 func ListAllResources(c *gin.Context) {
-	resources := services.ResourceService.GetAll()
+	resources := internal.ResourceService.GetAll()
 
 	c.HTML(http.StatusOK, "resource-list-view", gin.H{
 		"resources": resources,
@@ -95,7 +94,7 @@ func ListAllResources(c *gin.Context) {
 
 func ListPrivateResources(c *gin.Context) {
 	accountId := controllers.GetUserFromContext(c).Id
-	resources := services.ResourceService.GetAllByAccountId(accountId)
+	resources := internal.ResourceService.GetAllByAccountId(accountId)
 
 	c.HTML(http.StatusOK, "resource-list-view-admin", gin.H{
 		"resources": resources,
@@ -105,7 +104,7 @@ func ListPrivateResources(c *gin.Context) {
 
 func ViewResource(c *gin.Context) {
 	resourceId := c.Param("id")
-	resource := services.ResourceService.GetOne(resourceId)
+	resource := internal.ResourceService.GetOne(resourceId)
 
 	c.HTML(http.StatusOK, "resource-view", gin.H{
 		"resource": resource,
@@ -117,7 +116,7 @@ func RenderResourceQRCode(c *gin.Context) {
 	resourceId := c.Param("id")
 
 	// Generate the QRCode
-	uri := fmt.Sprintf("https://%s:%s/resources/%s/redirect", resourceId)
+	uri := fmt.Sprintf("https://%s/resources/%s/redirect", os.Getenv("APP_URL"), resourceId)
 
 	q, err := qrcode.New(uri, qrcode.High)
 	if err != nil {
@@ -143,7 +142,7 @@ func RenderResourceQRCode(c *gin.Context) {
 
 func RedirectResource(c *gin.Context) {
 	resourceId := c.Param("id")
-	resource := services.ResourceService.GetOne(resourceId)
+	resource := internal.ResourceService.GetOne(resourceId)
 
 	redirect := resource.Redirect
 	if redirect == "" {

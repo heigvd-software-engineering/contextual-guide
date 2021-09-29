@@ -7,8 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"io/ioutil"
 	"log"
-	"main/src/internal/models"
-	"main/src/internal/services"
+	"main/src/internal"
 	"net/http"
 	"net/url"
 	"os"
@@ -59,10 +58,10 @@ func HandleRegistration(c *gin.Context)  {
 
 	_ = json.Unmarshal(body, &registeredUser)
 
-	localAccount := models.Account{
+	localAccount := internal.Account{
 		GoTrueId: registeredUser.Id,
 	}
-	_, err = services.AccountService.CreateAccount(&localAccount)
+	_, err = internal.AccountService.CreateAccount(&localAccount)
 
 	message := fmt.Sprintf("Account successfully created ! Please validate your email : %s", registeredUser.Email)
 

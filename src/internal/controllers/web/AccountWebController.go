@@ -1,10 +1,9 @@
 package webController
 
 import (
-	"main/src/internal/models"
-	"main/src/internal/services"
+	"main/src/internal"
 )
 
-func GetAccount(id string) *models.Account {
-	return services.AccountService.GetAccount(id)
+func GetAccount(id string) *internal.Account {
+	return internal.AccountService.GetAccount(id)
 }

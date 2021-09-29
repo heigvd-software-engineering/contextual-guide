@@ -2,9 +2,8 @@ package apiController
 
 import (
 	"github.com/gin-gonic/gin"
+	"main/src/internal"
 	"main/src/internal/controllers"
-	"main/src/internal/models"
-	"main/src/internal/services"
 	"net/http"
 )
 
@@ -20,22 +19,22 @@ import (
 //   422: validationError
 func CreateResource(c *gin.Context) {
 
-	account := services.AccountService.GetAccount(controllers.GetUserFromContext(c).Id)
+	account := internal.AccountService.GetAccount(controllers.GetUserFromContext(c).Id)
 
-	var command models.ResourceSaveCommand
+	var command internal.ResourceSaveCommand
 
 	if err := c.ShouldBindJSON(&command); err != nil {
 		c.JSON(http.StatusBadRequest, err.Error())
 		return
 	}
 
-	resource, errorList := models.NewResource(command, account.GoTrueId)
+	resource, errorList := internal.NewResource(command, account.GoTrueId)
 
 	if errorList != nil {
-		c.JSON(http.StatusBadRequest, models.ErrorDTO{Errors: errorList})
+		c.JSON(http.StatusBadRequest, internal.ErrorDTO{Errors: errorList})
 		return
 	}
-	services.ResourceService.CreateResource(resource)
+	internal.ResourceService.CreateResource(resource)
 
 	c.JSON(http.StatusCreated,nil)
 }
@@ -48,7 +47,7 @@ func CreateResource(c *gin.Context) {
 //     description: Unauthorized
 func ListPrivateResources(c *gin.Context) {
 	accountId := controllers.GetUserFromContext(c).Id
-	resources := services.ResourceService.GetAllByAccountId(accountId)
+	resources := internal.ResourceService.GetAllByAccountId(accountId)
 
 	c.JSON(http.StatusOK, resources)
 }
@@ -60,7 +59,7 @@ func ListPrivateResources(c *gin.Context) {
 //     description: Unauthorized
 func ViewResource(c *gin.Context) {
 	resourceId := c.Param("id")
-	resource := services.ResourceService.GetOne(resourceId)
+	resource := internal.ResourceService.GetOne(resourceId)
 
 	c.JSON(http.StatusOK,resource)
 }
