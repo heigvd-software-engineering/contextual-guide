@@ -1,37 +1,23 @@
 {{define "content"}}
 
 <main class="container">
-    <h1>/resources/{{ .resource.Uuid }}</h1>
-    <img src="/resources/{{ .resource.Uuid }}/qrcode.png" alt="QRCode">
-    <div class='map' data-longitude="{{ .resource.Longitude }}" data-latitude="{{ .resource.Latitude }}" style="height: 400px"></div>
-    <table>
-        <thead>
-        <tr>
-            <td>Title</td>
-            <td>Description</td>
-            <td>Longitude</td>
-            <td>Latitude</td>
-            <td>Timestamp</td>
-            <td>Redirect</td>
-            <td>Custom properties</td>
-        </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>{{ .resource.Title }}</td>
-                <td>{{ .resource.Description }}</td>
-                <td>{{ .resource.Longitude }}</td>
-                <td>{{ .resource.Latitude }}</td>
-                <td>{{ .resource.Timestamp }}</td>
-                <td><a href="{{ .resource.Redirect }}">{{ .resource.Redirect }}</a></td>
-                <td>
-                    <code>
-                        {{ .resource.CustomProperties }}
-                    </code>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+    <article>
+        <img src="/resources/{{ .resource.Uuid }}/qrcode.png" alt="QRCode" style="float: right">
+
+        <hgroup>
+            <h1>{{ .resource.Title }}</h1>
+            <h2><a href="/resources/{{ .resource.Uuid }}">/resources/{{ .resource.Uuid }}</a></h2>
+        </hgroup>
+
+        <p>{{ .resource.Timestamp }}</p>
+        <p>{{ .resource.Description }}</p>
+
+        <div class='map'
+             data-longitude="{{ .resource.Longitude }}"
+             data-latitude="{{ .resource.Latitude }}"
+             style="height: 400px"></div>
+
+    </article>
 </main>
 
 {{end}}

@@ -17,9 +17,7 @@ func RenderTokenForm(c *gin.Context) {
 }
 
 func CreateToken(c *gin.Context) {
-
 	account := services.AccountService.GetAccount(controllers.GetUserFromContext(c).Id)
-
 
 	token := models.Token{
 		Name:  c.PostForm("name"),
@@ -38,7 +36,6 @@ func CreateToken(c *gin.Context) {
 }
 
 func GetTokens(c *gin.Context) {
-
 	accountId := controllers.GetUserFromContext(c).Id
 
 	tokens := services.TokenService.GetAllByAccountId(accountId)
@@ -50,9 +47,7 @@ func GetTokens(c *gin.Context) {
 }
 
 func DeleteToken(c *gin.Context) {
-
 	id, _ := strconv.ParseInt(c.Param("id"), 10, 64)
-
 	services.TokenService.Delete(id)
 
 	c.Redirect(http.StatusFound, "/tokens")

@@ -3,9 +3,10 @@
 ## Configuration
 
 _(!) The entrypoint is in `src/cmd/server/main.go`_
+
 ### Http server
 
-You can set the http port by changing the `.app.env` file.
+You can set app url in the `.app.env` file.
 
 ### Database
 

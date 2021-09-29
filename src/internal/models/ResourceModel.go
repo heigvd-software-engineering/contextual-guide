@@ -48,12 +48,12 @@ func NewResource(command ResourceSaveCommand, accountId string) (*Resource, *Val
 		AccountId: accountId,
 	}
 
-	errorList := resource.validate()
+	errorList := resource.Validate()
 
 	return resource,errorList
 }
 
-func (r *Resource) validate() *ValidationError {
+func (r *Resource) Validate() *ValidationError {
 
 	errorList := make(ValidationError)
 

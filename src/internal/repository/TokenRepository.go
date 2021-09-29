@@ -25,7 +25,6 @@ func init() {
 }
 
 func (ur *tokenRepository) GetToken(id int64) *models.Token {
-
 	var tokens models.Token
 	//database.DB.Where(&models.Token{: id}).Find(&tokens)
 	return &tokens
@@ -38,7 +37,6 @@ func (ur *tokenRepository) CreateToken(model *models.Token) *models.Token {
 }
 
 func (ur *tokenRepository) GetAllByAccountId(id string) []models.Token {
-
 	tokens := []models.Token{}
 
 	database.DB.Where(&models.Token{AccountId: id}).Find(&tokens)
@@ -46,7 +44,6 @@ func (ur *tokenRepository) GetAllByAccountId(id string) []models.Token {
 }
 
 func (ur *tokenRepository) Delete(id int64) {
-
 	database.DB.Delete(&models.Token{}, id)
 }
 

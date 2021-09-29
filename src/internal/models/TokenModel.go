@@ -3,9 +3,9 @@ package models
 import "time"
 
 type Token struct {
-	Name  string `gorm:"unique"`
-	Value string
+	Value string `gorm:"primaryKey"`
 
+	Name  string
 	AccountId string
 	Account Account `gorm:"references:GoTrueId"`
 

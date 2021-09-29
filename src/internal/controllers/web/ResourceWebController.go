@@ -117,8 +117,16 @@ func RenderResourceQRCode(c *gin.Context) {
 	resourceId := c.Param("id")
 
 	// Generate the QRCode
-	uri := fmt.Sprintf("https://www.contextual.guide/resources/%s/redirect", resourceId)
-	png, err := qrcode.Encode(uri, qrcode.High, 256)
+	uri := fmt.Sprintf("https://%s:%s/resources/%s/redirect", resourceId)
+
+	q, err := qrcode.New(uri, qrcode.High)
+	if err != nil {
+		panic(err)
+	}
+
+	q.DisableBorder = true
+
+	png, err := q.PNG(256)
 	if err != nil {
 		log.Println(err)
 		c.String(500, "Unable to encode qrcode")
@@ -139,7 +147,9 @@ func RedirectResource(c *gin.Context) {
 
 	redirect := resource.Redirect
 	if redirect == "" {
-		redirect = fmt.Sprintf("https://%s:%s/resources/%s", os.Getenv("APP_URL"), os.Getenv("APP_PORT"), resourceId)
+		redirect = fmt.Sprintf("%s/%s",
+			os.Getenv("APP_URL"),
+			resourceId)
 	}
 
 	c.Redirect(http.StatusFound, redirect)

@@ -18,7 +18,7 @@ func notEmpty(property string, value string,validationError *ValidationError) *V
 
 // float value between -180 and 180
 func inLatitudeBoundary(property string, value float32,validationError *ValidationError) *ValidationError {
-	if value > 180 || value < -180 {
+	if value < -180 || value > 180 {
 		message := fmt.Sprintf("%s is not in latitude boundary, between -90 and 90", property)
 		(*validationError)[property] = append((*validationError)[property], message)
 	}
