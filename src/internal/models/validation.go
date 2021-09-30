@@ -1,4 +1,4 @@
-package internal
+package models
 
 import (
 	"fmt"
@@ -7,8 +7,7 @@ import (
 
 type ValidationError map[string][]string
 
-
-func notEmpty(property string, value string,validationError *ValidationError) *ValidationError {
+func notEmpty(property string, value string, validationError *ValidationError) *ValidationError {
 	if value == "" {
 		message := fmt.Sprintf("%s is required", property)
 		(*validationError)[property] = append((*validationError)[property], message)
@@ -17,7 +16,7 @@ func notEmpty(property string, value string,validationError *ValidationError) *V
 }
 
 // float value between -180 and 180
-func inLatitudeBoundary(property string, value float32,validationError *ValidationError) *ValidationError {
+func inLatitudeBoundary(property string, value float32, validationError *ValidationError) *ValidationError {
 	if value < -180 || value > 180 {
 		message := fmt.Sprintf("%s is not in latitude boundary, between -90 and 90", property)
 		(*validationError)[property] = append((*validationError)[property], message)
@@ -26,7 +25,7 @@ func inLatitudeBoundary(property string, value float32,validationError *Validati
 }
 
 // float value between -90 and 90
-func inLongitudeBoundary(property string, value float32,validationError *ValidationError) *ValidationError {
+func inLongitudeBoundary(property string, value float32, validationError *ValidationError) *ValidationError {
 	if value > 90 || value < -90 {
 		message := fmt.Sprintf("%s is not in longitude boundary, between -180 an 180", property)
 		(*validationError)[property] = append((*validationError)[property], message)
@@ -34,9 +33,8 @@ func inLongitudeBoundary(property string, value float32,validationError *Validat
 	return validationError
 }
 
-func isUrlFormat(property string, value string, validationError *ValidationError)*ValidationError {
+func isUrlFormat(property string, value string, validationError *ValidationError) *ValidationError {
 	urlRegex := regexp.MustCompile(`https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)`)
-
 
 	if urlRegex.Match([]byte(value)) {
 		message := fmt.Sprintf("%s is not in url format, http(s)://xxx.xx", property)

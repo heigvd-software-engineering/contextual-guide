@@ -1,54 +1,54 @@
-package webController
+package controllers
 
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/lithammer/shortuuid/v3"
-	"main/src/internal"
-	"main/src/internal/controllers"
+	"main/src/internal/models"
+	"main/src/internal/services"
 	"net/http"
 	"strconv"
 )
 
 func RenderTokenForm(c *gin.Context) {
 	c.HTML(http.StatusOK, "token-form", gin.H{
-		"user": controllers.GetUserFromContext(c),
+		"user": GetUserFromContext(c),
 	})
 }
 
 func CreateToken(c *gin.Context) {
-	account := internal.AccountService.GetAccount(controllers.GetUserFromContext(c).Id)
+	account := services.GetAccount(GetUserFromContext(c).Id)
 
 	// the hash of the token
-	token := internal.Token{
+	token := models.Token{
 		Name:  c.PostForm("name"),
 		Hash: shortuuid.New(),
 		Account: *account,
 		AccountId: account.GoTrueId,
 	}
 
-	internal.TokenService.CreateToken(&token)
+	services.CreateToken(&token)
 
 	c.HTML(http.StatusOK, "created-token-view", gin.H{
 		"token": token,
-		"user":  controllers.GetUserFromContext(c),
+		"user":  GetUserFromContext(c),
 	})
 
 }
 
 func GetTokens(c *gin.Context) {
-	accountId := controllers.GetUserFromContext(c).Id
+	accountId := GetUserFromContext(c).Id
 
-	tokens := internal.TokenService.GetAllByAccountId(accountId)
+	tokens := services.ListTokenByAccountId(accountId)
 
 	c.HTML(http.StatusOK, "token-list-view-admin", gin.H{
 		"tokens": tokens,
-		"user":   controllers.GetUserFromContext(c),
+		"user":   GetUserFromContext(c),
 	})
 }
 
 func DeleteToken(c *gin.Context) {
 	id, _ := strconv.ParseInt(c.Param("id"), 10, 64)
-	internal.TokenService.Delete(id)
+	services.DeleteToken(id)
 
 	c.Redirect(http.StatusFound, "/tokens")
 	c.Abort()

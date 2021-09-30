@@ -5,13 +5,13 @@ import (
 )
 
 type LoggedUser struct {
-	Id string
+	Id    string
 	Email string
 }
 
 func GetUserFromContext(c *gin.Context) *LoggedUser {
-	user , ok :=c.Get("user")
-	if !ok || user == nil{
+	user, ok := c.Get("user")
+	if !ok || user == nil {
 		return nil
 	}
 
@@ -34,8 +34,8 @@ func Render(c *gin.Context) {
 	})
 }
 
-func RenderErrorPage(code int, message string, c *gin.Context){
-	c.HTML(code,"error",gin.H{
+func RenderErrorPage(code int, message string, c *gin.Context) {
+	c.HTML(code, "error", gin.H{
 		"code":    code,
 		"message": message,
 		"user":    GetUserFromContext(c),

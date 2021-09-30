@@ -24,30 +24,30 @@
 //      name: x-api-key
 //
 // swagger:meta
-package apiController
+package controllers
 
 import (
-	"main/src/internal"
+	"main/src/internal/models"
 )
 
 // swagger:parameters resourceSaveCommand
 type ResourceSaveCommandWrapper struct {
 	// in:body
-	Body internal.ResourceSaveCommand
+	Body ResourceSaveCommand
 }
 
 // An JSON representation of the resource
 // swagger:response resource
 type ResourceDTOWrapper struct {
 	// in:body
-	Body internal.Resource
+	Body models.Resource
 }
 
 // A list of resource
 // swagger:response resourceList
 type ResourceDTOListWrapper struct {
 	// in:body
-	Body []internal.Resource
+	Body []models.Resource
 }
 // swagger:parameters resourceGetById
 type ResourceGetByIdWrapper struct {
@@ -64,5 +64,5 @@ type ResourceGetByIdWrapper struct {
 // swagger:response validationError
 type ErrorDTOWrapper struct {
 	// in:body
-	Body internal.ErrorDTO
+	Body models.ErrorDTO
 }

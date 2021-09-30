@@ -1,11 +1,11 @@
-package internal
+package models
 
 import (
 	"testing"
 )
 
 func TestCreateApiKey(t *testing.T) {
-	apiKey := CreateApiKey()
+	apiKey := CreateTokenValue()
 
 	// apiKey are 32 byte array encoded in base64
 	if len(apiKey) == 45 {
@@ -15,7 +15,7 @@ func TestCreateApiKey(t *testing.T) {
 	// apiKey
 	apiKeys := map[string]struct{}{}
 	for i := 0; i < 100000; i++ {
-		apiKeys[CreateApiKey()] = struct{}{}
+		apiKeys[CreateTokenValue()] = struct{}{}
 	}
 	if len(apiKeys) != 100000 {
 		t.Errorf("api keys must be different")
@@ -23,8 +23,8 @@ func TestCreateApiKey(t *testing.T) {
 }
 
 func TestHashApiKey(t *testing.T) {
-	apiKey := CreateApiKey()
-	hash := HashApiKey(apiKey)
+	apiKey := CreateTokenValue()
+	hash := HashTokenValue(apiKey)
 	println(hash)
 	if len(hash) != 40 {
 		t.Errorf("hash is of length %d; want 40", len(hash))
@@ -32,9 +32,9 @@ func TestHashApiKey(t *testing.T) {
 }
 
 func TestValidateApiKey(t *testing.T) {
-	apiKey := CreateApiKey()
-	hash := HashApiKey(apiKey)
-	result := ValidateApiKey(apiKey, hash)
+	apiKey := CreateTokenValue()
+	hash := HashTokenValue(apiKey)
+	result := ValidateTokenValue(apiKey, hash)
 	if !result {
 		t.Errorf("api key validation failed")
 	}

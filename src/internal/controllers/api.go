@@ -1,13 +1,11 @@
-package apiController
+package controllers
 
 import (
 	"github.com/gin-gonic/gin"
-	"main/src/internal"
-	"main/src/internal/controllers"
+	"main/src/internal/models"
+	"main/src/internal/services"
 	"net/http"
 )
-
-
 
 // swagger:route POST /resource Resource resourceSaveCommand
 // Create a new Resource
@@ -17,26 +15,24 @@ import (
 //   401:
 //     description: Unauthorized
 //   422: validationError
-func CreateResource(c *gin.Context) {
+func PostResource(c *gin.Context) {
+	account := services.GetAccount(GetUserFromContext(c).Id)
 
-	account := internal.AccountService.GetAccount(controllers.GetUserFromContext(c).Id)
-
-	var command internal.ResourceSaveCommand
-
+	var command ResourceSaveCommand
 	if err := c.ShouldBindJSON(&command); err != nil {
 		c.JSON(http.StatusBadRequest, err.Error())
 		return
 	}
 
-	resource, errorList := internal.NewResource(command, account.GoTrueId)
-
+	resource, errorList := NewResource(command, account.GoTrueId)
 	if errorList != nil {
-		c.JSON(http.StatusBadRequest, internal.ErrorDTO{Errors: errorList})
+		c.JSON(http.StatusBadRequest, models.ErrorDTO{Errors: errorList})
 		return
 	}
-	internal.ResourceService.CreateResource(resource)
 
-	c.JSON(http.StatusCreated,nil)
+	services.CreateResource(resource)
+
+	c.JSON(http.StatusCreated, nil)
 }
 
 // swagger:route GET /resource Resource Resource
@@ -45,21 +41,22 @@ func CreateResource(c *gin.Context) {
 //   200: resourceList
 //   401:
 //     description: Unauthorized
-func ListPrivateResources(c *gin.Context) {
-	accountId := controllers.GetUserFromContext(c).Id
-	resources := internal.ResourceService.GetAllByAccountId(accountId)
+func GetResources(c *gin.Context) {
+	accountId := GetUserFromContext(c).Id
+	resources := services.GetAllResourceByAccountId(accountId)
 
 	c.JSON(http.StatusOK, resources)
 }
+
 // swagger:route GET /resource/:uuid Resource resourceGetById
 // Get one resource by id
 // responses:
 //   200: resource
 //   401:
 //     description: Unauthorized
-func ViewResource(c *gin.Context) {
+func GetResource(c *gin.Context) {
 	resourceId := c.Param("id")
-	resource := internal.ResourceService.GetOne(resourceId)
+	resource := services.GetResource(resourceId)
 
-	c.JSON(http.StatusOK,resource)
+	c.JSON(http.StatusOK, resource)
 }

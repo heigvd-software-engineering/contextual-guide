@@ -1,12 +1,12 @@
-package webController
+package controllers
 
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	qrcode "github.com/skip2/go-qrcode"
 	"log"
-	"main/src/internal"
-	"main/src/internal/controllers"
+	"main/src/internal/models"
+	"main/src/internal/services"
 	"net/http"
 	"os"
 	"strconv"
@@ -15,17 +15,17 @@ import (
 
 func RenderResourceForm(c *gin.Context) {
 	c.HTML(http.StatusOK, "resource-form", gin.H{
-		"user": controllers.GetUserFromContext(c),
+		"user": GetUserFromContext(c),
 	})
 }
 
 func CreateResource(c *gin.Context) {
 
-	account := internal.AccountService.GetAccount(controllers.GetUserFromContext(c).Id)
+	account := services.GetAccount(GetUserFromContext(c).Id)
 
 	longitude, err := strconv.ParseFloat(c.PostForm("longitude"), 32)
 
-	errList := make(internal.ValidationError)
+	errList := make(models.ValidationError)
 
 	if err != nil {
 		message := fmt.Sprintf("logitude is not in the right format : x.x")
@@ -46,7 +46,7 @@ func CreateResource(c *gin.Context) {
 		errList["timestamp"] = append(errList["latitude"], message)
 	}
 
-	command := internal.ResourceSaveCommand{
+	command := ResourceSaveCommand{
 		Title:            c.PostForm("title"),
 		Description:      c.PostForm("description"),
 		Timestamp:        timestamp,
@@ -58,57 +58,56 @@ func CreateResource(c *gin.Context) {
 	if len(errList) != 0 {
 		c.HTML(http.StatusOK, "resource-form", gin.H{
 			"errors": errList,
-			"user":   controllers.GetUserFromContext(c),
+			"user":   GetUserFromContext(c),
 			"model":  command,
 		})
 		return
 	}
 
-	resource, errorList := internal.NewResource(command, account.GoTrueId)
+	resource, errorList := NewResource(command, account.GoTrueId)
 
 	fmt.Println(errorList)
 	if len(*errorList) != 0 {
 		c.HTML(http.StatusOK, "resource-form", gin.H{
 			"errors": errorList,
-			"user":   controllers.GetUserFromContext(c),
+			"user":   GetUserFromContext(c),
 			"model":  command,
 		})
 
 		return
 	}
 
-	internal.ResourceService.CreateResource(resource)
+	services.CreateResource(resource)
 
-	c.Redirect(http.StatusFound, "/resources/mine")
+	c.Redirect(http.StatusFound, "/resources")
 	c.Abort()
 }
 
-func ListAllResources(c *gin.Context) {
-	resources := internal.ResourceService.GetAll()
-
+func Registry(c *gin.Context) {
+	resources := services.GetAllResource()
 	c.HTML(http.StatusOK, "resource-list-view", gin.H{
 		"resources": resources,
-		"user":      controllers.GetUserFromContext(c),
+		"user":      GetUserFromContext(c),
 	})
 }
 
-func ListPrivateResources(c *gin.Context) {
-	accountId := controllers.GetUserFromContext(c).Id
-	resources := internal.ResourceService.GetAllByAccountId(accountId)
+func ListResources(c *gin.Context) {
+	accountId := GetUserFromContext(c).Id
+	resources := services.GetAllResourceByAccountId(accountId)
 
 	c.HTML(http.StatusOK, "resource-list-view-admin", gin.H{
 		"resources": resources,
-		"user":      controllers.GetUserFromContext(c),
+		"user":      GetUserFromContext(c),
 	})
 }
 
 func ViewResource(c *gin.Context) {
 	resourceId := c.Param("id")
-	resource := internal.ResourceService.GetOne(resourceId)
+	resource := services.GetResource(resourceId)
 
 	c.HTML(http.StatusOK, "resource-view", gin.H{
 		"resource": resource,
-		"user":     controllers.GetUserFromContext(c),
+		"user":     GetUserFromContext(c),
 	})
 }
 
@@ -142,7 +141,7 @@ func RenderResourceQRCode(c *gin.Context) {
 
 func RedirectResource(c *gin.Context) {
 	resourceId := c.Param("id")
-	resource := internal.ResourceService.GetOne(resourceId)
+	resource := services.GetResource(resourceId)
 
 	redirect := resource.Redirect
 	if redirect == "" {

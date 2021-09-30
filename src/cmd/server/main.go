@@ -2,11 +2,11 @@ package server
 
 import (
 	"fmt"
-	"main/src/internal/app"
+	"main/src/internal"
 )
 
 func Run(port int) {
-	if err := app.Engine.Run(fmt.Sprintf(":%d",port)); err != nil {
+	if err := internal.Engine.Run(fmt.Sprintf(":%d", port)); err != nil {
 		panic(err)
 	}
 }

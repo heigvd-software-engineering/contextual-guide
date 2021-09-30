@@ -1,4 +1,4 @@
-package webController
+package controllers
 
 import (
 	"bytes"
@@ -7,7 +7,8 @@ import (
 	"github.com/gin-gonic/gin"
 	"io/ioutil"
 	"log"
-	"main/src/internal"
+	"main/src/internal/models"
+	"main/src/internal/services"
 	"net/http"
 	"net/url"
 	"os"
@@ -15,34 +16,32 @@ import (
 	"strings"
 )
 
-type credentials struct {
-	Email string `json:"email"`
+type Credentials struct {
+	Email    string `json:"email"`
 	Password string `json:"password"`
 }
 
 type RegisteredUser struct {
-		Id string `json:"id"`
-		Email string `json:"email"`
+	Id    string `json:"id"`
+	Email string `json:"email"`
 }
 
-func RenderRegisterForm(c *gin.Context)  {
-	c.HTML(http.StatusOK,"register-form", nil)
+func RenderRegisterForm(c *gin.Context) {
+	c.HTML(http.StatusOK, "register-form", nil)
 }
 
-func HandleRegistration(c *gin.Context)  {
-	user := credentials{
-		Email: c.PostForm("email"),
+func HandleRegistration(c *gin.Context) {
+	user := Credentials{
+		Email:    c.PostForm("email"),
 		Password: c.PostForm("password"),
 	}
 
 	payloadBuf := new(bytes.Buffer)
 	_ = json.NewEncoder(payloadBuf).Encode(user)
 
-
 	client := &http.Client{}
 
-	req, _ := http.NewRequest("POST", fmt.Sprintf("%s/signup",os.Getenv("GOTRUE_URL")), payloadBuf)
-
+	req, _ := http.NewRequest("POST", fmt.Sprintf("%s/signup", os.Getenv("GOTRUE_URL")), payloadBuf)
 
 	res, err := client.Do(req)
 
@@ -53,15 +52,14 @@ func HandleRegistration(c *gin.Context)  {
 	body, _ := ioutil.ReadAll(res.Body)
 	defer res.Body.Close()
 
-
 	registeredUser := RegisteredUser{}
 
 	_ = json.Unmarshal(body, &registeredUser)
 
-	localAccount := internal.Account{
+	localAccount := models.Account{
 		GoTrueId: registeredUser.Id,
 	}
-	_, err = internal.AccountService.CreateAccount(&localAccount)
+	_, err = services.CreateAccount(&localAccount)
 
 	message := fmt.Sprintf("Account successfully created ! Please validate your email : %s", registeredUser.Email)
 
@@ -70,27 +68,25 @@ func HandleRegistration(c *gin.Context)  {
 		message = err.Error()
 	}
 
-	c.HTML(http.StatusOK,"callback", gin.H{
+	c.HTML(http.StatusOK, "callback", gin.H{
 		"Message": message,
 	})
 
 }
 
-
-func RenderLoginForm(c *gin.Context)  {
-	c.HTML(http.StatusOK,"login-form", nil)
+func RenderLoginForm(c *gin.Context) {
+	c.HTML(http.StatusOK, "login-form", nil)
 
 }
-
 
 type tokenDTO struct {
 	AccessToken string `json:"access_token"`
 }
 
-func HandleLogin(c *gin.Context)  {
+func HandleLogin(c *gin.Context) {
 
-	credentials := credentials{
-		Email: c.PostForm("email"),
+	credentials := Credentials{
+		Email:    c.PostForm("email"),
 		Password: c.PostForm("password"),
 	}
 
@@ -100,7 +96,7 @@ func HandleLogin(c *gin.Context)  {
 	data.Set("grant_type", "password")
 
 	client := &http.Client{}
-	r, err := http.NewRequest("POST", fmt.Sprintf("%s/token",os.Getenv("GOTRUE_URL")), strings.NewReader(data.Encode()))
+	r, err := http.NewRequest("POST", fmt.Sprintf("%s/token", os.Getenv("GOTRUE_URL")), strings.NewReader(data.Encode()))
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -122,19 +118,18 @@ func HandleLogin(c *gin.Context)  {
 	//FIXME: secure=true for prod
 	c.SetCookie("sessionid", tokenDto.AccessToken, 3600, "/", os.Getenv("APP_URL"), false, false)
 
-	c.Redirect(http.StatusFound,"/resources")
+	c.Redirect(http.StatusFound, "/resources")
 }
-
 
 func HandleLogout(c *gin.Context) {
 
-	c.SetCookie("sessionid","",-1,"/",os.Getenv("APP_URL"),false,false)
+	c.SetCookie("sessionid", "", -1, "/", os.Getenv("APP_URL"), false, false)
 
-	c.Redirect(http.StatusFound,"/")
+	c.Redirect(http.StatusFound, "/")
 }
 
 func RenderVerifyForm(c *gin.Context) {
-	c.HTML(200, "verify",nil)
+	c.HTML(200, "verify", nil)
 }
 
 func Verfify(c *gin.Context) {
@@ -142,13 +137,13 @@ func Verfify(c *gin.Context) {
 	token := c.PostForm("confirmation_token")
 	verificationType := "signup"
 
-	bodyString := map[string]string{"password": password, "token": token, "type" : verificationType}
+	bodyString := map[string]string{"password": password, "token": token, "type": verificationType}
 
 	fmt.Println(bodyString)
 
 	body, _ := json.Marshal(bodyString)
 
-	_, err := http.Post(fmt.Sprintf("%s/verify",os.Getenv("GOTRUE_URL")), "application/json", bytes.NewBuffer(body))
+	_, err := http.Post(fmt.Sprintf("%s/verify", os.Getenv("GOTRUE_URL")), "application/json", bytes.NewBuffer(body))
 	message := fmt.Sprintf("Account successfully verified")
 
 	if err != nil {
@@ -156,7 +151,7 @@ func Verfify(c *gin.Context) {
 		message = err.Error()
 	}
 
-	c.HTML(http.StatusOK,"callback", gin.H{
+	c.HTML(http.StatusOK, "callback", gin.H{
 		"Message": message,
 	})
 }
