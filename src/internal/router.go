@@ -6,8 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v4"
 	"main/src/internal/controllers"
-	"main/src/internal/database"
-	"main/src/internal/services"
+	"main/src/internal/models"
 	"net/http"
 	"os"
 )
@@ -36,7 +35,7 @@ func createRender() multitemplate.Renderer {
 }
 
 func init() 	{
-	database.ConnectDatabase()
+	models.ConnectDatabase()
 
 	Engine = gin.Default()
 
@@ -51,9 +50,7 @@ func init() 	{
 }
 
 func checkLogged(c *gin.Context) {
-
 	user, _ := c.Get("user")
-
 	if user == nil {
 		controllers.RenderErrorPage(http.StatusUnauthorized, "You are not authorized", c)
 	}
@@ -78,7 +75,7 @@ func addSiteRoutes(router *gin.Engine) *gin.Engine {
 	router.POST("/register", controllers.HandleRegistration)
 
 	router.GET("/verify", controllers.RenderVerifyForm)
-	router.POST("/verify", controllers.Verfify)
+	router.POST("/verify", controllers.Verify)
 
 	router.GET("/logout", controllers.HandleLogout)
 
@@ -107,7 +104,6 @@ func extractCookie(c *gin.Context) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, fmt.Errorf("Unexpected signing method: %v", token.Header["alg"])
 		}
-
 		return []byte(secret), nil
 	})
 	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
@@ -144,7 +140,7 @@ func getAccountFromApiKey(c *gin.Context) {
 		c.JSON(http.StatusUnauthorized, "You are not authorized")
 	}
 
-	token := services.GetTokenByValue(key)
+	token := models.GetTokenByValue(key)
 	if token == nil {
 		c.JSON(http.StatusUnauthorized, "You are not authorized")
 	}

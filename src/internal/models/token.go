@@ -15,11 +15,22 @@ type Token struct {
 
 	// When an account is deleted, we must delete all the associated tokens
 	AccountId string
-	Account   Account `gorm:"references:GoTrueId,constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
+	Account   Account `gorm:"references:GoTrueId"`
 
 	CreatedAt time.Time
 	UpdatedAt time.Time
 	DeletedAt *time.Time `sql:"index"`
+}
+
+func GetToken(id int64) *Token {
+	var tokens Token
+	//database.DB.Where(&Token{: id}).Find(&tokens)
+	return &tokens
+}
+
+func CreateToken(model *Token) *Token {
+	DB.Create(model)
+	return model
 }
 
 // CreateTokenValue returns an random token value made of 32 bytes encoded in base64.
@@ -43,4 +54,22 @@ func HashTokenValue(value string) string {
 func ValidateTokenValue(value string, hash string) bool {
 	return HashTokenValue(value) == hash
 }
+
+func ListTokenByAccountId(id string) []Token {
+	tokens := []Token{}
+	DB.Where(&Token{AccountId: id}).Find(&tokens)
+	return tokens
+}
+
+func DeleteToken(id int64) {
+	DB.Delete(&Token{}, id)
+}
+
+func GetTokenByValue(value string) *Token {
+	var tokens Token
+	DB.Where(&Token{Hash: value}).Find(&tokens)
+	return &tokens
+}
+
+
 

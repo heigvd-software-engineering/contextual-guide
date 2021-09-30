@@ -8,7 +8,6 @@ import (
 	"io/ioutil"
 	"log"
 	"main/src/internal/models"
-	"main/src/internal/services"
 	"net/http"
 	"net/url"
 	"os"
@@ -35,16 +34,12 @@ func HandleRegistration(c *gin.Context) {
 		Email:    c.PostForm("email"),
 		Password: c.PostForm("password"),
 	}
-
 	payloadBuf := new(bytes.Buffer)
 	_ = json.NewEncoder(payloadBuf).Encode(user)
 
 	client := &http.Client{}
-
 	req, _ := http.NewRequest("POST", fmt.Sprintf("%s/signup", os.Getenv("GOTRUE_URL")), payloadBuf)
-
 	res, err := client.Do(req)
-
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -53,13 +48,9 @@ func HandleRegistration(c *gin.Context) {
 	defer res.Body.Close()
 
 	registeredUser := RegisteredUser{}
-
 	_ = json.Unmarshal(body, &registeredUser)
 
-	localAccount := models.Account{
-		GoTrueId: registeredUser.Id,
-	}
-	_, err = services.CreateAccount(&localAccount)
+	models.GetOrCreateAccount(registeredUser.Id)
 
 	message := fmt.Sprintf("Account successfully created ! Please validate your email : %s", registeredUser.Email)
 
@@ -71,7 +62,6 @@ func HandleRegistration(c *gin.Context) {
 	c.HTML(http.StatusOK, "callback", gin.H{
 		"Message": message,
 	})
-
 }
 
 func RenderLoginForm(c *gin.Context) {
@@ -84,7 +74,6 @@ type tokenDTO struct {
 }
 
 func HandleLogin(c *gin.Context) {
-
 	credentials := Credentials{
 		Email:    c.PostForm("email"),
 		Password: c.PostForm("password"),
@@ -102,29 +91,27 @@ func HandleLogin(c *gin.Context) {
 	}
 	r.Header.Add("Content-Type", "application/x-www-form-urlencoded")
 	r.Header.Add("Content-Length", strconv.Itoa(len(data.Encode())))
-
 	res, err := client.Do(r)
 	defer res.Body.Close()
-
 	if err != nil {
 		fmt.Println(err)
 	}
 
 	body, _ := ioutil.ReadAll(res.Body)
 
-	tokenDto := tokenDTO{}
-	_ = json.Unmarshal(body, &tokenDto)
+	tokenDTO := tokenDTO{}
+	_ = json.Unmarshal(body, &tokenDTO)
+
+	println(string(body))
 
 	//FIXME: secure=true for prod
-	c.SetCookie("sessionid", tokenDto.AccessToken, 3600, "/", os.Getenv("APP_URL"), false, false)
+	c.SetCookie("sessionid", tokenDTO.AccessToken, 3600, "/", os.Getenv("APP_URL"), false, false)
 
 	c.Redirect(http.StatusFound, "/resources")
 }
 
 func HandleLogout(c *gin.Context) {
-
 	c.SetCookie("sessionid", "", -1, "/", os.Getenv("APP_URL"), false, false)
-
 	c.Redirect(http.StatusFound, "/")
 }
 
@@ -132,7 +119,7 @@ func RenderVerifyForm(c *gin.Context) {
 	c.HTML(200, "verify", nil)
 }
 
-func Verfify(c *gin.Context) {
+func Verify(c *gin.Context) {
 	password := c.PostForm("password")
 	token := c.PostForm("confirmation_token")
 	verificationType := "signup"

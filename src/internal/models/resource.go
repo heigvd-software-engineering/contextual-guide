@@ -1,6 +1,8 @@
 package models
 
-import "time"
+import (
+	"time"
+)
 
 // Resource holds resource data in the database.
 type Resource struct {
@@ -36,4 +38,28 @@ func (r *Resource) ValidateResource() *ValidationError {
 	isUrlFormat("redirect", r.Redirect, &errorList)
 
 	return &errorList
+}
+
+func GetResource(id string) *Resource {
+	var resource Resource
+	DB.Where(&Resource{Uuid: id}).Find(&resource)
+	return &resource
+}
+
+func CreateResource(model *Resource) *Resource {
+	DB.Create(model)
+	return model
+}
+
+func GetAllResource() []Resource {
+	var resources []Resource
+	DB.Preload("Account", &resources)
+	return resources
+}
+
+func GetAllResourceByAccountId(id string) []Resource {
+	var resources []Resource
+	DB.Preload("Account", &resources)
+	DB.Where(&Resource{AccountId: id}).Find(&resources)
+	return resources
 }

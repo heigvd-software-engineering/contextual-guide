@@ -6,7 +6,6 @@ import (
 	qrcode "github.com/skip2/go-qrcode"
 	"log"
 	"main/src/internal/models"
-	"main/src/internal/services"
 	"net/http"
 	"os"
 	"strconv"
@@ -21,7 +20,7 @@ func RenderResourceForm(c *gin.Context) {
 
 func CreateResource(c *gin.Context) {
 
-	account := services.GetAccount(GetUserFromContext(c).Id)
+	account := models.GetOrCreateAccount(GetUserFromContext(c).Id)
 
 	longitude, err := strconv.ParseFloat(c.PostForm("longitude"), 32)
 
@@ -77,14 +76,14 @@ func CreateResource(c *gin.Context) {
 		return
 	}
 
-	services.CreateResource(resource)
+	models.CreateResource(resource)
 
 	c.Redirect(http.StatusFound, "/resources")
 	c.Abort()
 }
 
 func Registry(c *gin.Context) {
-	resources := services.GetAllResource()
+	resources := models.GetAllResource()
 	c.HTML(http.StatusOK, "resource-list-view", gin.H{
 		"resources": resources,
 		"user":      GetUserFromContext(c),
@@ -93,7 +92,7 @@ func Registry(c *gin.Context) {
 
 func ListResources(c *gin.Context) {
 	accountId := GetUserFromContext(c).Id
-	resources := services.GetAllResourceByAccountId(accountId)
+	resources := models.GetAllResourceByAccountId(accountId)
 
 	c.HTML(http.StatusOK, "resource-list-view-admin", gin.H{
 		"resources": resources,
@@ -103,7 +102,7 @@ func ListResources(c *gin.Context) {
 
 func ViewResource(c *gin.Context) {
 	resourceId := c.Param("id")
-	resource := services.GetResource(resourceId)
+	resource := models.GetResource(resourceId)
 
 	c.HTML(http.StatusOK, "resource-view", gin.H{
 		"resource": resource,
@@ -141,7 +140,7 @@ func RenderResourceQRCode(c *gin.Context) {
 
 func RedirectResource(c *gin.Context) {
 	resourceId := c.Param("id")
-	resource := services.GetResource(resourceId)
+	resource := models.GetResource(resourceId)
 
 	redirect := resource.Redirect
 	if redirect == "" {

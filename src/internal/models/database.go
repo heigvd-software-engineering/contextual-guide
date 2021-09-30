@@ -1,10 +1,9 @@
-package database
+package models
 
 import (
 	"fmt"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
-	"main/src/internal/models"
 	"os"
 )
 
@@ -26,9 +25,9 @@ func ConnectDatabase() {
 	}
 
 	// Migrate the db
-	db.AutoMigrate(&models.Account{})
-	db.AutoMigrate(&models.Resource{})
-	db.AutoMigrate(&models.Token{})
+	db.AutoMigrate(&Account{})
+	db.AutoMigrate(&Resource{})
+	db.AutoMigrate(&Token{})
 
 	DB = db
 }

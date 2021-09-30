@@ -3,7 +3,6 @@ package controllers
 import (
 	"github.com/gin-gonic/gin"
 	"main/src/internal/models"
-	"main/src/internal/services"
 	"net/http"
 )
 
@@ -16,7 +15,7 @@ import (
 //     description: Unauthorized
 //   422: validationError
 func PostResource(c *gin.Context) {
-	account := services.GetAccount(GetUserFromContext(c).Id)
+	account := models.GetOrCreateAccount(GetUserFromContext(c).Id)
 
 	var command ResourceSaveCommand
 	if err := c.ShouldBindJSON(&command); err != nil {
@@ -30,7 +29,7 @@ func PostResource(c *gin.Context) {
 		return
 	}
 
-	services.CreateResource(resource)
+	models.CreateResource(resource)
 
 	c.JSON(http.StatusCreated, nil)
 }
@@ -43,7 +42,7 @@ func PostResource(c *gin.Context) {
 //     description: Unauthorized
 func GetResources(c *gin.Context) {
 	accountId := GetUserFromContext(c).Id
-	resources := services.GetAllResourceByAccountId(accountId)
+	resources := models.GetAllResourceByAccountId(accountId)
 
 	c.JSON(http.StatusOK, resources)
 }
@@ -56,7 +55,7 @@ func GetResources(c *gin.Context) {
 //     description: Unauthorized
 func GetResource(c *gin.Context) {
 	resourceId := c.Param("id")
-	resource := services.GetResource(resourceId)
+	resource := models.GetResource(resourceId)
 
 	c.JSON(http.StatusOK, resource)
 }
