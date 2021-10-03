@@ -90,7 +90,7 @@ func addSiteRoutes(router *gin.Engine) *gin.Engine {
 	router.GET("/resources/:uuid/delete", controllers.DeleteResource)
 
 
-	router.GET("/resources/:uuid/qrcode.png", controllers.RenderResourceQRCode)
+	router.GET("/resources/:uuid/:size/qrcode.png", controllers.RenderResourceQRCode)
 	router.GET("/resources/:uuid/redirect", controllers.RedirectResource)
 
 

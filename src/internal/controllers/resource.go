@@ -7,7 +7,7 @@ import (
 	qrcode "github.com/skip2/go-qrcode"
 	"log"
 	"main/src/internal/models"
-
+	"strconv"
 
 	"net/http"
 	"os"
@@ -26,7 +26,7 @@ func ResourceForm(c *gin.Context) {
 	}
 
 	c.HTML(http.StatusOK, "resource-form", gin.H{
-		"title" :  title,
+		"title":    title,
 		"action":   action,
 		"resource": resource,
 		"user":     GetUserFromContext(c),
@@ -111,10 +111,17 @@ func ListResources(c *gin.Context) {
 }
 
 func RenderResourceQRCode(c *gin.Context) {
-	resourceId := c.Param("uuid")
+	uuid := c.Param("uuid")
+
+	// Check the size of the QRCode
+	size, err := strconv.Atoi(c.Param("size"))
+	if err != nil || !(size >= 128 && size <= 512) {
+		c.AbortWithStatus(404)
+		return
+	}
 
 	// Generate the QRCode
-	uri := fmt.Sprintf("https://%s/resources/%s/redirect", os.Getenv("APP_URL"), resourceId)
+	uri := fmt.Sprintf("https://%s/resources/%s/redirect", os.Getenv("APP_URL"), uuid)
 
 	q, err := qrcode.New(uri, qrcode.High)
 	if err != nil {
@@ -123,7 +130,7 @@ func RenderResourceQRCode(c *gin.Context) {
 
 	q.DisableBorder = true
 
-	png, err := q.PNG(256)
+	png, err := q.PNG(size)
 	if err != nil {
 		log.Println(err)
 		c.String(500, "Unable to encode qrcode")
@@ -136,6 +143,7 @@ func RenderResourceQRCode(c *gin.Context) {
 	c.Header("Content-Type", "application/octet-stream")
 	c.Header("Content-Length", fmt.Sprintf("%d", len(png)))
 	c.Writer.Write(png)
+
 }
 
 func RedirectResource(c *gin.Context) {

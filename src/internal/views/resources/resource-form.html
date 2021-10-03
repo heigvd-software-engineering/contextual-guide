@@ -5,7 +5,7 @@
         <input id="uuid" type="hidden" name="uuid" value="{{ .resource.Uuid }}">
         <label for="title">Title</label>
         {{ if .errors.title }}
-        {{range index .errors "title"}}
+        {{ range index .errors "title" }}
         <p class="error">{{ . }}</p>
         {{end}}
         {{ end }}

@@ -50,3 +50,17 @@
     --switch-color: var(--primary-inverse);
     --switch-checked-background-color: var(--primary);
 }
+
+/* Resource */
+
+.resource .qrcode {
+    float: right;
+}
+
+.resource .head {
+    min-height: 128px;
+}
+
+.resource .map {
+    height: 400px;
+}
