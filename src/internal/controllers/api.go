@@ -1,10 +1,6 @@
 package controllers
 
-import (
-	"github.com/gin-gonic/gin"
-	"main/src/internal/models"
-	"net/http"
-)
+/*
 
 // swagger:route POST /resource Resource resourceSaveCommand
 // Create a new Resource
@@ -55,7 +51,9 @@ func GetResources(c *gin.Context) {
 //     description: Unauthorized
 func GetResource(c *gin.Context) {
 	resourceId := c.Param("id")
-	resource := models.GetResource(resourceId)
+	resource := models.ReadResource(resourceId)
 
 	c.JSON(http.StatusOK, resource)
 }
+
+ */

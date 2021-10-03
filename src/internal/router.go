@@ -15,27 +15,27 @@ var Engine *gin.Engine
 
 func createRender() multitemplate.Renderer {
 	renderer := multitemplate.NewRenderer()
-	renderer.AddFromFiles("home", "src/views/layouts/default.html", "src/views/layouts/header.html", "src/views/layouts/footer.html", "src/views/pages/home.html")
-	renderer.AddFromFiles("error", "src/views/layouts/default.html", "src/views/layouts/header.html", "src/views/layouts/footer.html", "src/views/pages/error.html")
-	renderer.AddFromFiles("verify", "src/views/layouts/default.html", "src/views/layouts/header.html", "src/views/layouts/footer.html", "src/views/auth/validation-form.html")
-	renderer.AddFromFiles("resource-list-view-admin", "src/views/layouts/default.html", "src/views/layouts/header.html", "src/views/layouts/footer.html", "src/views/resources/resource-list-view-admin.html")
-	renderer.AddFromFiles("resource-list-view", "src/views/layouts/default.html", "src/views/layouts/header.html", "src/views/layouts/footer.html", "src/views/resources/resource-list-view.html")
-	renderer.AddFromFiles("resource-view", "src/views/layouts/default.html", "src/views/layouts/header.html", "src/views/layouts/footer.html", "src/views/resources/resource-view.html")
-	renderer.AddFromFiles("resource-form", "src/views/layouts/default.html", "src/views/layouts/header.html", "src/views/layouts/footer.html", "src/views/resources/resource-form.html")
+	renderer.AddFromFiles("home", "src/internal/views/layouts/default.html", "src/internal/views/layouts/header.html", "src/internal/views/layouts/footer.html", "src/internal/views/pages/home.html")
+	renderer.AddFromFiles("error", "src/internal/views/layouts/default.html", "src/internal/views/layouts/header.html", "src/internal/views/layouts/footer.html", "src/internal/views/pages/error.html")
+	renderer.AddFromFiles("verify", "src/internal/views/layouts/default.html", "src/internal/views/layouts/header.html", "src/internal/views/layouts/footer.html", "src/internal/views/auth/validation-form.html")
+	renderer.AddFromFiles("resource-list-view-admin", "src/internal/views/layouts/default.html", "src/internal/views/layouts/header.html", "src/internal/views/layouts/footer.html", "src/internal/views/resources/resource-list.html")
+	renderer.AddFromFiles("resource-list-view", "src/internal/views/layouts/default.html", "src/internal/views/layouts/header.html", "src/internal/views/layouts/footer.html", "src/internal/views/resources/registry.html")
+	renderer.AddFromFiles("resource-view", "src/internal/views/layouts/default.html", "src/internal/views/layouts/header.html", "src/internal/views/layouts/footer.html", "src/internal/views/resources/resource-view.html")
+	renderer.AddFromFiles("resource-form", "src/internal/views/layouts/default.html", "src/internal/views/layouts/header.html", "src/internal/views/layouts/footer.html", "src/internal/views/resources/resource-form.html")
 
-	renderer.AddFromFiles("token-form", "src/views/layouts/default.html", "src/views/layouts/header.html", "src/views/layouts/footer.html", "src/views/tokens/token-form.html")
-	renderer.AddFromFiles("token-list-view-admin", "src/views/layouts/default.html", "src/views/layouts/header.html", "src/views/layouts/footer.html", "src/views/tokens/token-list-view-admin.html")
-	renderer.AddFromFiles("created-token-view", "src/views/layouts/default.html", "src/views/layouts/header.html", "src/views/layouts/footer.html", "src/views/tokens/created-token-view.html")
+	renderer.AddFromFiles("token-form", "src/internal/views/layouts/default.html", "src/internal/views/layouts/header.html", "src/internal/views/layouts/footer.html", "src/internal/views/tokens/token-form.html")
+	renderer.AddFromFiles("token-list-view-admin", "src/internal/views/layouts/default.html", "src/internal/views/layouts/header.html", "src/internal/views/layouts/footer.html", "src/internal/views/tokens/token-list.html")
+	renderer.AddFromFiles("created-token-view", "src/internal/views/layouts/default.html", "src/internal/views/layouts/header.html", "src/internal/views/layouts/footer.html", "src/internal/views/tokens/token-view.html")
 
-	renderer.AddFromFiles("login-form", "src/views/layouts/default.html", "src/views/layouts/header.html", "src/views/layouts/footer.html", "src/views/auth/login-form.html")
-	renderer.AddFromFiles("register-form", "src/views/layouts/default.html", "src/views/layouts/header.html", "src/views/layouts/footer.html", "src/views/auth/register-form.html")
-	renderer.AddFromFiles("callback", "src/views/layouts/default.html", "src/views/layouts/header.html", "src/views/layouts/footer.html", "src/views/auth/callback.html")
+	renderer.AddFromFiles("login-form", "src/internal/views/layouts/default.html", "src/internal/views/layouts/header.html", "src/internal/views/layouts/footer.html", "src/internal/views/auth/login-form.html")
+	renderer.AddFromFiles("register-form", "src/internal/views/layouts/default.html", "src/internal/views/layouts/header.html", "src/internal/views/layouts/footer.html", "src/internal/views/auth/register-form.html")
+	renderer.AddFromFiles("callback", "src/internal/views/layouts/default.html", "src/internal/views/layouts/header.html", "src/internal/views/layouts/footer.html", "src/internal/views/auth/callback.html")
 
 	return renderer
 }
 
 func init() 	{
-	models.ConnectDatabase()
+	models.ConnectDatabaseEnv()
 
 	Engine = gin.Default()
 
@@ -44,7 +44,7 @@ func init() 	{
 	Engine = addSiteRoutes(Engine)
 	Engine = initApiRouter(Engine)
 
-	Engine.LoadHTMLGlob("src/views/*/*.html")
+	Engine.LoadHTMLGlob("src/internal/views/*/*.html")
 	Engine.HTMLRender = createRender()
 
 }
@@ -66,7 +66,7 @@ func addSiteRoutes(router *gin.Engine) *gin.Engine {
 	router.GET("/tokens", checkLogged, controllers.GetTokens)
 	router.GET("/tokens/create", checkLogged, controllers.RenderTokenForm)
 	router.POST("/tokens/create", checkLogged, controllers.CreateToken)
-	router.GET("/tokens/:id/delete", checkLogged, controllers.DeleteToken)
+	router.GET("/tokens/:hash/delete", checkLogged, controllers.DeleteToken)
 
 	router.GET("/login", controllers.RenderLoginForm)
 	router.POST("/login", controllers.HandleLogin)
@@ -80,13 +80,20 @@ func addSiteRoutes(router *gin.Engine) *gin.Engine {
 	router.GET("/logout", controllers.HandleLogout)
 
 	router.GET("/registry", controllers.Registry)
-	router.GET("/resources", controllers.ListResources)
-	router.GET("/resources/:id", controllers.ViewResource)
-	router.GET("/resources/:id/qrcode.png", controllers.RenderResourceQRCode)
-	router.GET("/resources/:id/redirect", controllers.RedirectResource)
 
-	router.GET("/resources/create", checkLogged, controllers.RenderResourceForm)
-	router.POST("/resources/create", checkLogged, controllers.CreateResource)
+	router.GET("/resources", controllers.ListResources)
+	router.GET("/resources/create", checkLogged, controllers.ResourceForm)
+	router.POST("/resources", checkLogged, controllers.CreateResource)
+	router.GET("/resources/:uuid", controllers.ReadResource)
+	router.GET("/resources/:uuid/update", controllers.ResourceForm)
+	router.POST("/resources/:uuid", controllers.UpdateResource)
+	router.GET("/resources/:uuid/delete", controllers.DeleteResource)
+
+
+	router.GET("/resources/:uuid/qrcode.png", controllers.RenderResourceQRCode)
+	router.GET("/resources/:uuid/redirect", controllers.RedirectResource)
+
+
 	return router
 
 }
@@ -106,11 +113,12 @@ func extractCookie(c *gin.Context) {
 		}
 		return []byte(secret), nil
 	})
-	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
+
+	claims, ok := token.Claims.(jwt.MapClaims)
+	if ok && token != nil && token.Valid {
 		accountId, _ := claims["sub"].(string)
 		email, _ := claims["email"].(string)
-
-		user := controllers.LoggedUser{
+		user := controllers.User{
 			Id:    accountId,
 			Email: email,
 		}
@@ -121,6 +129,7 @@ func extractCookie(c *gin.Context) {
 // API
 func initApiRouter(router *gin.Engine) *gin.Engine {
 
+	/*
 	// scoped by the api-key
 	router.GET("/api/resources", getAccountFromApiKey, checkLogged, controllers.GetResources)
 	router.POST("/api/resources", getAccountFromApiKey, checkLogged, controllers.PostResource)
@@ -128,7 +137,7 @@ func initApiRouter(router *gin.Engine) *gin.Engine {
 
 	//router.PUT("/api/resources/:id", controllers.UpdateResourceApi)
 	//router.DELETE("/api/resources/:id", controllers.ArchiveRessourceApi)
-
+	 */
 	return router
 }
 
@@ -145,7 +154,7 @@ func getAccountFromApiKey(c *gin.Context) {
 		c.JSON(http.StatusUnauthorized, "You are not authorized")
 	}
 
-	user := controllers.LoggedUser{
+	user := controllers.User{
 		Id:    token.AccountId,
 		Email: "",
 	}

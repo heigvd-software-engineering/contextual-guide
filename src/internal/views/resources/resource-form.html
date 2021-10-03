@@ -1,14 +1,15 @@
 {{define "content"}}
 <main class="container">
-    <h2><i class="fas fa-map-marker-alt"></i> New event</h2>
-    <form action="/resources/create" method="POST">
-        <label for="tile">Title</label>
+    <h2><i class="fas fa-map-marker-alt"></i> {{.title}}</h2>
+    <form action="{{.action}}" method="POST" enctype="multipart/form-data">
+        <input id="uuid" type="hidden" name="uuid" value="{{ .resource.Uuid }}">
+        <label for="title">Title</label>
         {{ if .errors.title }}
         {{range index .errors "title"}}
         <p class="error">{{ . }}</p>
         {{end}}
         {{ end }}
-        <input id="tile" type="text" name="title" placeholder="Title" value="{{ .model.Title }}">
+        <input id="title" type="text" name="title" placeholder="Title" value="{{ .resource.Title }}">
         <label for="description">Description</label>
         {{ if .errors.description }}
         {{range index .errors "description"}}
@@ -16,7 +17,7 @@
         {{end}}
         {{ end }}
         <textarea id="description" type="text" name="description"
-                  placeholder="Description">{{ .model.Description }}</textarea>
+                  placeholder="Description">{{ .resource.Description }}</textarea>
         <label for="timestamp">Date and time</label>
         {{ if .errors.timestamp }}
         {{range index .errors "timestamp"}}
@@ -24,7 +25,7 @@
         {{end}}
         {{ end }}
         <input id="timestamp" type="datetime-local" name="timestamp"
-               min="2021-01-01T00:00" placeholder="yyyy-MM-ddThh:mm" value="{{ .model.Timestamp }}">
+               min="2021-01-01T00:00" placeholder="yyyy-MM-ddThh:mm" value="{{ .resource.Timestamp }}">
         <label for="longitude">Longitude</label>
         {{ if .errors.longitude }}
         {{range index .errors "longitude"}}
@@ -32,10 +33,9 @@
         {{end}}
         {{ end }}
         <input id="longitude" type="text" name="longitude"
-               pattern="\s*[-+]?(180(\.0+)?|((1[0-7]\d)|([1-9]?\d))(\.\d+)?)$"
                title="x.xxxxxxxx between -180 to 180"
                placeholder="Longitude"
-               value="{{ .model.Longitude }}">
+               value="{{ .resource.Longitude }}">
         <label for="latitude">Latitude</label>
         {{ if .errors.latitude }}
         {{range index .errors "latitude"}}
@@ -43,10 +43,9 @@
         {{end}}
         {{ end }}
         <input id="latitude" type="text" name="latitude"
-               pattern="^[-+]?([1-8]?\d(\.\d+)?|90(\.0+)?)"
                title="x.xxxxxxxx between -90 to 90"
                placeholder="Latitude"
-               value="{{ .model.Latitude }}">
+               value="{{ .resource.Latitude }}">
         <label for="redirect">Redirection URL</label>
         {{ if .errors.redirect }}
         {{range index .errors "redirect"}}
@@ -57,9 +56,9 @@
                type="url"
                name="redirect"
                placeholder="http(s)://"
-               value="{{ .model.Redirect }}">
+               value="{{ .resource.Redirect }}">
 
-        <button type="submit"><i class="fas fa-plus-circle"></i> New event</button>
+        <button type="submit"><i class="fas fa-save"></i> Save</button>
     </form>
 </main>
 {{ end }}

@@ -5,6 +5,7 @@ import (
 	"crypto/sha1"
 	"encoding/base64"
 	"encoding/hex"
+	"gorm.io/gorm"
 	"time"
 )
 
@@ -19,18 +20,34 @@ type Token struct {
 
 	CreatedAt time.Time
 	UpdatedAt time.Time
-	DeletedAt *time.Time `sql:"index"`
-}
-
-func GetToken(id int64) *Token {
-	var tokens Token
-	//database.DB.Where(&Token{: id}).Find(&tokens)
-	return &tokens
+	DeletedAt gorm.DeletedAt `gorm:"index"`
 }
 
 func CreateToken(model *Token) *Token {
 	DB.Create(model)
 	return model
+}
+
+func ReadToken(hash string) *Token {
+	var tokens Token
+	//database.DB.Where(&Token{: id}).Find(&tokens)
+	return &tokens
+}
+
+func DeleteToken(hash string) {
+	DB.Where("hash = ?", hash).Delete(&Token{})
+}
+
+func ListTokenByAccountId(id string) []Token {
+	tokens := []Token{}
+	DB.Where(&Token{AccountId: id}).Find(&tokens)
+	return tokens
+}
+
+func GetTokenByValue(value string) *Token {
+	var tokens Token
+	DB.Where(&Token{Hash: value}).Find(&tokens)
+	return &tokens
 }
 
 // CreateTokenValue returns an random token value made of 32 bytes encoded in base64.
@@ -54,22 +71,5 @@ func HashTokenValue(value string) string {
 func ValidateTokenValue(value string, hash string) bool {
 	return HashTokenValue(value) == hash
 }
-
-func ListTokenByAccountId(id string) []Token {
-	tokens := []Token{}
-	DB.Where(&Token{AccountId: id}).Find(&tokens)
-	return tokens
-}
-
-func DeleteToken(id int64) {
-	DB.Delete(&Token{}, id)
-}
-
-func GetTokenByValue(value string) *Token {
-	var tokens Token
-	DB.Where(&Token{Hash: value}).Find(&tokens)
-	return &tokens
-}
-
 
 

@@ -4,19 +4,19 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type LoggedUser struct {
+type User struct {
 	Id    string
 	Email string
 }
 
-func GetUserFromContext(c *gin.Context) *LoggedUser {
+func GetUserFromContext(c *gin.Context) *User {
 	user, ok := c.Get("user")
 	if !ok || user == nil {
 		return nil
 	}
 
-	var loggedUser LoggedUser
-	loggedUser = user.(LoggedUser)
+	var loggedUser User
+	loggedUser = user.(User)
 
 	return &loggedUser
 }

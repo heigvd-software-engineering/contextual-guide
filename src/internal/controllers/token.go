@@ -4,7 +4,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"main/src/internal/models"
 	"net/http"
-	"strconv"
 )
 
 func RenderTokenForm(c *gin.Context) {
@@ -33,7 +32,6 @@ func CreateToken(c *gin.Context) {
 		"value": value,
 		"user":  GetUserFromContext(c),
 	})
-
 }
 
 func GetTokens(c *gin.Context) {
@@ -48,8 +46,8 @@ func GetTokens(c *gin.Context) {
 }
 
 func DeleteToken(c *gin.Context) {
-	id, _ := strconv.ParseInt(c.Param("id"), 10, 64)
-	models.DeleteToken(id)
+	hash := c.Param("hash")
+	models.DeleteToken(hash)
 
 	c.Redirect(http.StatusFound, "/tokens")
 	c.Abort()

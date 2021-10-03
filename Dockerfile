@@ -8,7 +8,7 @@ RUN go build -o server .
 
 FROM scratch
 COPY ./src/assets /src/assets
-COPY ./src/views /src/views
+COPY src/internal/views /src/views
 COPY --from=build /app/server /app/server
 EXPOSE 3000
 CMD ["/app/server"]

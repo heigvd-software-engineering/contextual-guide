@@ -1,6 +1,7 @@
 package models
 
 import (
+	"gorm.io/gorm"
 	"time"
 )
 
@@ -9,7 +10,7 @@ type Account struct {
 	GoTrueId  string `gorm:"primaryKey"`
 	CreatedAt time.Time
 	UpdatedAt time.Time
-	DeletedAt *time.Time `sql:"index"`
+	DeletedAt gorm.DeletedAt `gorm:"index"`
 }
 
 // GetOrCreateAccount gets or creates an account corresponding to the provided GoTrue identifier.

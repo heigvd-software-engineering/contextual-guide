@@ -26,10 +26,7 @@
 // swagger:meta
 package controllers
 
-import (
-	"main/src/internal/models"
-)
-
+/*
 // swagger:parameters resourceSaveCommand
 type ResourceSaveCommandWrapper struct {
 	// in:body
@@ -66,3 +63,6 @@ type ErrorDTOWrapper struct {
 	// in:body
 	Body models.ErrorDTO
 }
+
+
+ */

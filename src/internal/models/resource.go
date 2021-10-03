@@ -1,6 +1,7 @@
 package models
 
 import (
+	"gorm.io/gorm"
 	"time"
 )
 
@@ -9,12 +10,12 @@ type Resource struct {
 	Uuid string `gorm:"primary_key"`
 
 	// The Attributes of the resource.
-	Title       string  `gorm:"not null"`
-	Description string  `gorm:"not null"`
-	Longitude   float32 `gorm:"not null"`
-	Latitude    float32 `gorm:"not null"`
-	Timestamp   time.Time
-	Redirect    string
+	Title       string    `form:"title" json:"title" binding:"required"`
+	Description string    `form:"description" json:"description"`
+	Longitude   float32   `form:"longitude" json:"longitude" binding:"required,gte=-180,lte=180"`
+	Latitude    float32   `form:"latitude" json:"latitude" binding:"required,gte=-90,lte=90"`
+	Timestamp   time.Time `form:"timestamp" json:"timestamp"`
+	Redirect    string    `form:"redirect" json:"redirect"`
 
 	// When an account is deleted, we must keep the associated resources.
 	AccountId string
@@ -22,11 +23,11 @@ type Resource struct {
 
 	CreatedAt time.Time
 	UpdatedAt time.Time
-	// Resources shall never be deleted.
+	DeletedAt gorm.DeletedAt `gorm:"index"`
 }
 
-// ValidateResource return true if the attributes of the resource are valid.
-func (r *Resource) ValidateResource() *ValidationError {
+// Validate return true if the attributes of the resource are valid.
+func (r *Resource) Validate() *ValidationError {
 	errorList := make(ValidationError)
 
 	notEmpty("title", r.Title, &errorList)
@@ -40,18 +41,27 @@ func (r *Resource) ValidateResource() *ValidationError {
 	return &errorList
 }
 
-func GetResource(id string) *Resource {
+func CreateResource(resource *Resource) *Resource {
+	DB.Create(resource)
+	return resource
+}
+
+func ReadResource(uuid string) *Resource {
 	var resource Resource
-	DB.Where(&Resource{Uuid: id}).Find(&resource)
+	DB.Where(&Resource{Uuid: uuid}).Find(&resource)
 	return &resource
 }
 
-func CreateResource(model *Resource) *Resource {
-	DB.Create(model)
+func UpdateResource(model *Resource) *Resource {
+	DB.Updates(model)
 	return model
 }
 
-func GetAllResource() []Resource {
+func DeleteResource(uuid string) {
+	DB.Where("uuid = ?", uuid).Delete(&Resource{})
+}
+
+func GetAllResources() []Resource {
 	var resources []Resource
 	DB.Preload("Account", &resources)
 	return resources

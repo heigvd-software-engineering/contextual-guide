@@ -8,15 +8,17 @@
                 <th>Created</th>
                 <th>Updated</th>
                 <th></th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
         {{ range .resources }}
             <tr>
-                <td><a href='/resources/{{ .Uuid }}'>{{ .Uuid }}</a></td>
+                <td><a href="/resources/{{ .Uuid }}">{{ .Uuid }}</a></td>
                 <td>{{ .CreatedAt }}</td>
                 <td>{{ .UpdatedAt }}</td>
-                <td><a href="#"><i class="fas fa-archive"></i></a></td>
+                <td><a href="/resources/{{ .Uuid }}/update"><i class="fas fa-pen"></i></a></td>
+                <td><a href="/resources/{{ .Uuid }}/delete"><i class="fas fa-archive"></i></a></td>
             </tr>
         {{ end }}
         </tbody>
