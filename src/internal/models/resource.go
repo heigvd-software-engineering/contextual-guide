@@ -1,6 +1,7 @@
 package models
 
 import (
+	"github.com/lithammer/shortuuid/v3"
 	"gorm.io/gorm"
 	"time"
 )
@@ -26,39 +27,27 @@ type Resource struct {
 	DeletedAt gorm.DeletedAt `gorm:"index"`
 }
 
-// Validate return true if the attributes of the resource are valid.
-func (r *Resource) Validate() *ValidationError {
-	errorList := make(ValidationError)
-
-	notEmpty("title", r.Title, &errorList)
-	notEmpty("description", r.Description, &errorList)
-
-	inLatitudeBoundary("latitude", r.Latitude, &errorList)
-	inLongitudeBoundary("longitude", r.Longitude, &errorList)
-
-	isUrlFormat("redirect", r.Redirect, &errorList)
-
-	return &errorList
-}
-
-func CreateResource(resource *Resource) *Resource {
-	DB.Create(resource)
-	return resource
-}
-
 func ReadResource(uuid string) *Resource {
 	var resource Resource
 	DB.Where(&Resource{Uuid: uuid}).Find(&resource)
 	return &resource
 }
 
-func UpdateResource(model *Resource) *Resource {
-	DB.Updates(model)
-	return model
+func CreateResource(accountId string, resource *Resource) *Resource {
+	resource.Uuid = shortuuid.New()
+	resource.AccountId = accountId
+	DB.Create(resource)
+	return resource
 }
 
-func DeleteResource(uuid string) {
-	DB.Where("uuid = ?", uuid).Delete(&Resource{})
+func UpdateResource(accountId string, resource *Resource) *Resource {
+	resource.AccountId = accountId
+	DB.Where("account_id = ? and uuid = ?", accountId, resource.Uuid).Updates(resource)
+	return resource
+}
+
+func DeleteResource(accountId string, uuid string) {
+	DB.Where("account_id = ? and uuid = ?", accountId, uuid).Delete(&Resource{})
 }
 
 func GetAllResources() []Resource {

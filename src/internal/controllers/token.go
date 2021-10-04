@@ -27,8 +27,8 @@ func CreateToken(c *gin.Context) {
 
 	models.CreateToken(&token)
 
-	c.HTML(http.StatusOK, "created-token-view", gin.H{
-		"name": token.Name,
+	c.HTML(http.StatusOK, "token-view", gin.H{
+		"name":  token.Name,
 		"value": value,
 		"user":  GetUserFromContext(c),
 	})
@@ -39,7 +39,7 @@ func GetTokens(c *gin.Context) {
 
 	tokens := models.ListTokenByAccountId(accountId)
 
-	c.HTML(http.StatusOK, "token-list-view-admin", gin.H{
+	c.HTML(http.StatusOK, "token-list", gin.H{
 		"tokens": tokens,
 		"user":   GetUserFromContext(c),
 	})

@@ -3,7 +3,6 @@ package controllers
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
-	"github.com/lithammer/shortuuid/v3"
 	qrcode "github.com/skip2/go-qrcode"
 	"log"
 	"main/src/internal/models"
@@ -13,12 +12,24 @@ import (
 	"os"
 )
 
+func ListResources(c *gin.Context) {
+	user := GetUserFromContext(c)
+	resources := models.GetAllResourceByAccountId(user.Id)
+
+	c.HTML(http.StatusOK, "resource-list", gin.H{
+		"resources": resources,
+		"user":      user,
+	})
+}
+
 func ResourceForm(c *gin.Context) {
-	var title string = "New event"
-	var action string = "/resources"
+	user := GetUserFromContext(c)
+	uuid := c.Param("uuid")
+
+	var title = "New event"
+	var action = "/resources"
 	var resource models.Resource
 
-	uuid := c.Param("uuid")
 	if uuid != "" {
 		title = "Edit event"
 		action = "/resources/" + uuid
@@ -29,64 +40,62 @@ func ResourceForm(c *gin.Context) {
 		"title":    title,
 		"action":   action,
 		"resource": resource,
-		"user":     GetUserFromContext(c),
+		"user":     user,
 	})
 }
 
 func CreateResource(c *gin.Context) {
 	user := GetUserFromContext(c)
-	resource := models.Resource{
-		Uuid:      shortuuid.New(),
-		AccountId: user.Id,
-	}
 
+	resource := models.Resource{}
 	error := c.ShouldBind(&resource)
 	if error != nil {
 		fmt.Println(error)
 	}
 
-	models.CreateResource(&resource)
+	models.CreateResource(user.Id, &resource)
 
 	c.Redirect(http.StatusFound, "/resources")
 	c.Abort()
 }
 
 func ReadResource(c *gin.Context) {
-	resourceId := c.Param("uuid")
+	user := GetUserFromContext(c)
 
-	resource := models.ReadResource(resourceId)
+	uuid := c.Param("uuid")
+	resource := models.ReadResource(uuid)
 
 	c.HTML(http.StatusOK, "resource-view", gin.H{
 		"resource": resource,
-		"user":     GetUserFromContext(c),
+		"user":     user,
 	})
 }
 
 func UpdateResource(c *gin.Context) {
-	uuid := c.Param("uuid")
 	user := GetUserFromContext(c)
-	resource := models.Resource{
-		Uuid:      uuid,
-		AccountId: user.Id,
-	}
 
+	resource := models.Resource{}
 	error := c.ShouldBind(&resource)
 	if error != nil {
 		fmt.Println(error)
 	}
 
-	models.UpdateResource(&resource)
+	resource.Uuid = c.Param("uuid")
+	resource.AccountId = user.Id
+
+	models.UpdateResource(user.Id, &resource)
 
 	c.HTML(http.StatusOK, "resource-view", gin.H{
 		"resource": resource,
-		"user":     GetUserFromContext(c),
+		"user":  user,
 	})
 }
 
 func DeleteResource(c *gin.Context) {
+	user := GetUserFromContext(c)
 	uuid := c.Param("uuid")
 
-	models.DeleteResource(uuid)
+	models.DeleteResource(user.Id, uuid)
 
 	c.Redirect(http.StatusFound, "/resources")
 	c.Abort()
@@ -94,17 +103,7 @@ func DeleteResource(c *gin.Context) {
 
 func Registry(c *gin.Context) {
 	resources := models.GetAllResources()
-	c.HTML(http.StatusOK, "resource-list-view", gin.H{
-		"resources": resources,
-		"user":      GetUserFromContext(c),
-	})
-}
-
-func ListResources(c *gin.Context) {
-	accountId := GetUserFromContext(c).Id
-	resources := models.GetAllResourceByAccountId(accountId)
-
-	c.HTML(http.StatusOK, "resource-list-view-admin", gin.H{
+	c.HTML(http.StatusOK, "registry", gin.H{
 		"resources": resources,
 		"user":      GetUserFromContext(c),
 	})

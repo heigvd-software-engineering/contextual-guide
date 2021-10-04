@@ -15,21 +15,23 @@ var Engine *gin.Engine
 
 func createRender() multitemplate.Renderer {
 	renderer := multitemplate.NewRenderer()
+
 	renderer.AddFromFiles("home", "src/internal/views/layouts/default.html", "src/internal/views/layouts/header.html", "src/internal/views/layouts/footer.html", "src/internal/views/pages/home.html")
 	renderer.AddFromFiles("error", "src/internal/views/layouts/default.html", "src/internal/views/layouts/header.html", "src/internal/views/layouts/footer.html", "src/internal/views/pages/error.html")
 	renderer.AddFromFiles("verify", "src/internal/views/layouts/default.html", "src/internal/views/layouts/header.html", "src/internal/views/layouts/footer.html", "src/internal/views/auth/validation-form.html")
-	renderer.AddFromFiles("resource-list-view-admin", "src/internal/views/layouts/default.html", "src/internal/views/layouts/header.html", "src/internal/views/layouts/footer.html", "src/internal/views/resources/resource-list.html")
-	renderer.AddFromFiles("resource-list-view", "src/internal/views/layouts/default.html", "src/internal/views/layouts/header.html", "src/internal/views/layouts/footer.html", "src/internal/views/resources/registry.html")
-	renderer.AddFromFiles("resource-view", "src/internal/views/layouts/default.html", "src/internal/views/layouts/header.html", "src/internal/views/layouts/footer.html", "src/internal/views/resources/resource-view.html")
-	renderer.AddFromFiles("resource-form", "src/internal/views/layouts/default.html", "src/internal/views/layouts/header.html", "src/internal/views/layouts/footer.html", "src/internal/views/resources/resource-form.html")
-
-	renderer.AddFromFiles("token-form", "src/internal/views/layouts/default.html", "src/internal/views/layouts/header.html", "src/internal/views/layouts/footer.html", "src/internal/views/tokens/token-form.html")
-	renderer.AddFromFiles("token-list-view-admin", "src/internal/views/layouts/default.html", "src/internal/views/layouts/header.html", "src/internal/views/layouts/footer.html", "src/internal/views/tokens/token-list.html")
-	renderer.AddFromFiles("created-token-view", "src/internal/views/layouts/default.html", "src/internal/views/layouts/header.html", "src/internal/views/layouts/footer.html", "src/internal/views/tokens/token-view.html")
+	renderer.AddFromFiles("registry", "src/internal/views/layouts/default.html", "src/internal/views/layouts/header.html", "src/internal/views/layouts/footer.html", "src/internal/views/resources/registry.html")
 
 	renderer.AddFromFiles("login-form", "src/internal/views/layouts/default.html", "src/internal/views/layouts/header.html", "src/internal/views/layouts/footer.html", "src/internal/views/auth/login-form.html")
 	renderer.AddFromFiles("register-form", "src/internal/views/layouts/default.html", "src/internal/views/layouts/header.html", "src/internal/views/layouts/footer.html", "src/internal/views/auth/register-form.html")
 	renderer.AddFromFiles("callback", "src/internal/views/layouts/default.html", "src/internal/views/layouts/header.html", "src/internal/views/layouts/footer.html", "src/internal/views/auth/callback.html")
+
+	renderer.AddFromFiles("token-form", "src/internal/views/layouts/default.html", "src/internal/views/layouts/header.html", "src/internal/views/layouts/footer.html", "src/internal/views/tokens/token-form.html")
+	renderer.AddFromFiles("token-list", "src/internal/views/layouts/default.html", "src/internal/views/layouts/header.html", "src/internal/views/layouts/footer.html", "src/internal/views/tokens/token-list.html")
+	renderer.AddFromFiles("token-view", "src/internal/views/layouts/default.html", "src/internal/views/layouts/header.html", "src/internal/views/layouts/footer.html", "src/internal/views/tokens/token-view.html")
+
+	renderer.AddFromFiles("resource-list", "src/internal/views/layouts/default.html", "src/internal/views/layouts/header.html", "src/internal/views/layouts/footer.html", "src/internal/views/resources/resource-list.html")
+	renderer.AddFromFiles("resource-view", "src/internal/views/layouts/default.html", "src/internal/views/layouts/header.html", "src/internal/views/layouts/footer.html", "src/internal/views/resources/resource-view.html")
+	renderer.AddFromFiles("resource-form", "src/internal/views/layouts/default.html", "src/internal/views/layouts/header.html", "src/internal/views/layouts/footer.html", "src/internal/views/resources/resource-form.html")
 
 	return renderer
 }

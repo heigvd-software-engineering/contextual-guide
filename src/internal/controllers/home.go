@@ -10,15 +10,15 @@ type User struct {
 }
 
 func GetUserFromContext(c *gin.Context) *User {
-	user, ok := c.Get("user")
-	if !ok || user == nil {
+	value, ok := c.Get("user")
+	if !ok || value == nil {
 		return nil
 	}
 
-	var loggedUser User
-	loggedUser = user.(User)
+	var user User
+	user = value.(User)
 
-	return &loggedUser
+	return &user
 }
 
 func Render(c *gin.Context) {

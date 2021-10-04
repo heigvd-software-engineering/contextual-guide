@@ -10,6 +10,7 @@ import (
 	"github.com/testcontainers/testcontainers-go/wait"
 )
 
+// InitTestDatabase initializes a container and a database connection.
 func InitTestDatabase(ctx context.Context) (testcontainers.Container, *gorm.DB, error) {
 	// Create the Postgres test container
 	req := testcontainers.ContainerRequest{
@@ -62,17 +63,27 @@ func InitTestDatabase(ctx context.Context) (testcontainers.Container, *gorm.DB, 
 	return container, database, nil
 }
 
+// SetupTestDatabase setups the global DB variable.
+func SetupTestDatabase(t *testing.T, ctx context.Context) testcontainers.Container {
+		container, database, err := InitTestDatabase(ctx)
+		if err != nil {
+			t.Fatal(err)
+		}
+		DB = database
+		return container
+}
+
+// TestDatabase tests wether the database is initialized correctly.
 func TestDatabase(t *testing.T) {
 	// Initialize the test container database
 	ctx := context.Background()
 	container, database, err := InitTestDatabase(ctx)
 	defer container.Terminate(ctx)
-
-	// Check whether the database behaves correctly
 	if err != nil {
 		t.Fatal(err)
 	}
 
+	// Check whether the database behaves correctly
 	if "postgres" != database.Name() {
 		t.Fatal("A problem occured while initializing the database")
 	}

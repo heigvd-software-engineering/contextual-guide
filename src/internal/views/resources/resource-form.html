@@ -2,7 +2,9 @@
 <main class="container">
     <h2><i class="fas fa-map-marker-alt"></i> {{.title}}</h2>
     <form action="{{.action}}" method="POST" enctype="multipart/form-data">
+        {{ if .resource.Uuid }}
         <input id="uuid" type="hidden" name="uuid" value="{{ .resource.Uuid }}">
+        {{ end }}
         <label for="title">Title</label>
         {{ if .errors.title }}
         {{ range index .errors "title" }}
