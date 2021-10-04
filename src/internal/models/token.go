@@ -23,31 +23,26 @@ type Token struct {
 	DeletedAt gorm.DeletedAt `gorm:"index"`
 }
 
-func CreateToken(model *Token) *Token {
-	DB.Create(model)
-	return model
-}
-
-func ReadToken(hash string) *Token {
-	var tokens Token
-	//database.DB.Where(&Token{: id}).Find(&tokens)
-	return &tokens
-}
-
-func DeleteToken(hash string) {
-	DB.Where("hash = ?", hash).Delete(&Token{})
-}
-
-func ListTokenByAccountId(id string) []Token {
+func ListTokenByAccountId(accountId string) []Token {
 	tokens := []Token{}
-	DB.Where(&Token{AccountId: id}).Find(&tokens)
+	DB.Where("account_id = ?", accountId).Find(&tokens)
 	return tokens
 }
 
-func GetTokenByValue(value string) *Token {
-	var tokens Token
-	DB.Where(&Token{Hash: value}).Find(&tokens)
-	return &tokens
+func ReadToken(hash string) *Token {
+	var token Token
+	DB.Where("hash = ?", hash).Find(&token)
+	return &token
+}
+
+func CreateToken(accountId string, token *Token) *Token {
+	token.AccountId = accountId
+	DB.Create(token)
+	return token
+}
+
+func DeleteToken(accountId string, hash string) {
+	DB.Where("hash = ? and account_id = ?", hash, accountId).Delete(&Token{})
 }
 
 // CreateTokenValue returns an random token value made of 32 bytes encoded in base64.

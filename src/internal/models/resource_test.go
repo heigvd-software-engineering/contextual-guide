@@ -2,7 +2,6 @@ package models
 
 import (
 	"context"
-	"fmt"
 	"testing"
 )
 
@@ -55,8 +54,8 @@ func TestCreateUpdateDeleteResource(t *testing.T) {
 
 	// Delete resource (owner)
 	DeleteResource(account1.GoTrueId, resource.Uuid)
-	fmt.Println(resource.DeletedAt)
+	resource = *ReadResource(resource.Uuid)
 	if resource.Uuid != ""  {
-		t.Fatal("'account 2' should be able to delete the resource")
+		t.Fatal("'account 1' should be able to delete the resource")
 	}
 }

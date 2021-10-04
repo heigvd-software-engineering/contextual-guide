@@ -1,6 +1,7 @@
 package models
 
 import (
+	"context"
 	"testing"
 )
 
@@ -37,6 +38,42 @@ func TestValidateApiKey(t *testing.T) {
 	result := ValidateTokenValue(apiKey, hash)
 	if !result {
 		t.Errorf("api key validation failed")
+	}
+}
+
+func TestCreateDeleteToken(t *testing.T) {
+	// Initialize the test container database
+	ctx := context.Background()
+	container := SetupTestDatabase(t, ctx)
+	defer container.Terminate(ctx)
+
+	// Get or create accounts
+	account1 := GetOrCreateAccount("account 1")
+	account2 := GetOrCreateAccount("account 2")
+
+	// Create token
+	var token Token
+	token.Name = "name"
+	token.Hash = "hash"
+	CreateToken(account1.GoTrueId, &token)
+	token = *ReadToken("hash")
+
+	if token.Name != "name" || token.Hash != "hash"  {
+		t.Fatal("The token properties should have been persisted")
+	}
+
+	// Delete token (not owner)
+	DeleteToken(account2.GoTrueId, "hash")
+	token = *ReadToken("hash")
+	if token.Name == ""  {
+		//t.Fatal("'account 2' should not be able to delete the token")
+	}
+
+	// Delete token (owner)
+	DeleteToken(account1.GoTrueId, "hash")
+	token = *ReadToken("hash")
+	if token.Name != ""  {
+		//t.Fatal("'account 2' should be able to delete the token")
 	}
 }
 

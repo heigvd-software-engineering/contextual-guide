@@ -13,19 +13,15 @@ func RenderTokenForm(c *gin.Context) {
 }
 
 func CreateToken(c *gin.Context) {
-	account := models.GetOrCreateAccount(GetUserFromContext(c).Id)
-
-	println(account.GoTrueId)
+	account := GetUserFromContext(c)
 
 	value := models.CreateTokenValue()
-	token := models.Token{
-		Name:      c.PostForm("name"),
-		Hash:      models.HashTokenValue(value),
-		Account:   *account,
-		AccountId: account.GoTrueId,
+	token := &models.Token{
+		Name: c.PostForm("name"),
+		Hash: models.HashTokenValue(value),
 	}
 
-	models.CreateToken(&token)
+	models.CreateToken(account.Id, token)
 
 	c.HTML(http.StatusOK, "token-view", gin.H{
 		"name":  token.Name,
@@ -35,9 +31,9 @@ func CreateToken(c *gin.Context) {
 }
 
 func GetTokens(c *gin.Context) {
-	accountId := GetUserFromContext(c).Id
+	account := GetUserFromContext(c)
 
-	tokens := models.ListTokenByAccountId(accountId)
+	tokens := models.ListTokenByAccountId(account.Id)
 
 	c.HTML(http.StatusOK, "token-list", gin.H{
 		"tokens": tokens,
@@ -46,8 +42,9 @@ func GetTokens(c *gin.Context) {
 }
 
 func DeleteToken(c *gin.Context) {
+	account := GetUserFromContext(c)
 	hash := c.Param("hash")
-	models.DeleteToken(hash)
+	models.DeleteToken(account.Id, hash)
 
 	c.Redirect(http.StatusFound, "/tokens")
 	c.Abort()

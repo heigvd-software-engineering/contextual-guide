@@ -130,7 +130,6 @@ func extractCookie(c *gin.Context) {
 
 // API
 func initApiRouter(router *gin.Engine) *gin.Engine {
-
 	/*
 	// scoped by the api-key
 	router.GET("/api/resources", getAccountFromApiKey, checkLogged, controllers.GetResources)
@@ -151,7 +150,7 @@ func getAccountFromApiKey(c *gin.Context) {
 		c.JSON(http.StatusUnauthorized, "You are not authorized")
 	}
 
-	token := models.GetTokenByValue(key)
+	token := models.ReadToken(key)
 	if token == nil {
 		c.JSON(http.StatusUnauthorized, "You are not authorized")
 	}
