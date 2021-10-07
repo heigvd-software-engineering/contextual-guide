@@ -61,14 +61,13 @@ paths:
           description: ""
       tags:
       - Resource
-  /resource/:uuid:
+  /resource/{uuid}:
     get:
       description: Get one resource by id
       operationId: resourceGetById
       parameters:
-      - description: 'name: uuid'
-        in: path
-        name: Uuid
+      - in: path
+        name: uuid
         required: true
         type: string
       responses:

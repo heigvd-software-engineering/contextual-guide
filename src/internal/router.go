@@ -130,7 +130,7 @@ func extractCookie(c *gin.Context) {
 
 // API
 func initApiRouter(router *gin.Engine) *gin.Engine {
-	/*
+
 	// scoped by the api-key
 	router.GET("/api/resources", getAccountFromApiKey, checkLogged, controllers.GetResources)
 	router.POST("/api/resources", getAccountFromApiKey, checkLogged, controllers.PostResource)
@@ -138,7 +138,7 @@ func initApiRouter(router *gin.Engine) *gin.Engine {
 
 	//router.PUT("/api/resources/:id", controllers.UpdateResourceApi)
 	//router.DELETE("/api/resources/:id", controllers.ArchiveRessourceApi)
-	 */
+
 	return router
 }
 

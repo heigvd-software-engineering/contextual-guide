@@ -1,6 +1,10 @@
 package controllers
 
-/*
+import (
+	"github.com/gin-gonic/gin"
+	"main/src/internal/models"
+	"net/http"
+)
 
 // swagger:route POST /resource Resource resourceSaveCommand
 // Create a new Resource
@@ -13,19 +17,13 @@ package controllers
 func PostResource(c *gin.Context) {
 	account := models.GetOrCreateAccount(GetUserFromContext(c).Id)
 
-	var command ResourceSaveCommand
-	if err := c.ShouldBindJSON(&command); err != nil {
+	var resource models.Resource
+	if err := c.ShouldBindJSON(&resource); err != nil {
 		c.JSON(http.StatusBadRequest, err.Error())
 		return
 	}
 
-	resource, errorList := NewResource(command, account.GoTrueId)
-	if errorList != nil {
-		c.JSON(http.StatusBadRequest, models.ErrorDTO{Errors: errorList})
-		return
-	}
-
-	models.CreateResource(resource)
+	models.CreateResource(account.GoTrueId, &resource)
 
 	c.JSON(http.StatusCreated, nil)
 }
@@ -56,4 +54,3 @@ func GetResource(c *gin.Context) {
 	c.JSON(http.StatusOK, resource)
 }
 
- */

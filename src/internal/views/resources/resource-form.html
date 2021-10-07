@@ -5,60 +5,101 @@
         {{ if .resource.Uuid }}
         <input id="uuid" type="hidden" name="uuid" value="{{ .resource.Uuid }}">
         {{ end }}
+
         <label for="title">Title</label>
-        {{ if .errors.title }}
-        {{ range index .errors "title" }}
-        <p class="error">{{ . }}</p>
+        {{if index .errors "Title"}}
+        <input id="title"
+               type="text"
+               name="title"
+               placeholder="Title"
+               value="{{ if .resource.Title }}{{ .resource.Title }}{{ end }}"
+               aria-invalid="true">
+        <p class="error">The title is required</p>
+        {{else}}
+        <input id="title"
+               type="text"
+               name="title"
+               placeholder="Title"
+               value="{{ if .resource.Title }}{{ .resource.Title }}{{ end }}">
         {{end}}
-        {{ end }}
-        <input id="title" type="text" name="title" placeholder="Title" value="{{ .resource.Title }}">
+
         <label for="description">Description</label>
-        {{ if .errors.description }}
-        {{range index .errors "description"}}
-        <p class="error">{{ . }}</p>
-        {{end}}
-        {{ end }}
         <textarea id="description" type="text" name="description"
-                  placeholder="Description">{{ .resource.Description }}</textarea>
+                  placeholder="Description">{{ if .resource.Description }}{{ .resource.Description }}{{ end }}</textarea>
+
         <label for="timestamp">Date and time</label>
-        {{ if .errors.timestamp }}
-        {{range index .errors "timestamp"}}
-        <p class="error">{{ . }}</p>
+        {{if index .errors "Timestamp"}}
+        <p class="error">The provided value is invalid</p>
+        <input id="timestamp"
+               type="datetime-local"
+               name="timestamp"
+               min="2021-01-01T00:00"
+               placeholder="yyyy-MM-ddThh:mm"
+               value="{{ if .resource.Timestamp }}{{ .resource.Timestamp }}{{ end }}"
+               aria-invalid="true">
+        {{else}}
+        <input id="timestamp"
+               type="datetime-local"
+               name="timestamp"
+               min="2021-01-01T00:00"
+               placeholder="yyyy-MM-ddThh:mm"
+               value="{{ if .resource.Timestamp }}{{ .resource.Timestamp }}{{ end }}">
         {{end}}
-        {{ end }}
-        <input id="timestamp" type="datetime-local" name="timestamp"
-               min="2021-01-01T00:00" placeholder="yyyy-MM-ddThh:mm" value="{{ .resource.Timestamp }}">
+
         <label for="longitude">Longitude</label>
-        {{ if .errors.longitude }}
-        {{range index .errors "longitude"}}
-        <p class="error">{{ . }}</p>
-        {{end}}
-        {{ end }}
-        <input id="longitude" type="text" name="longitude"
+        {{if index .errors "Longitude"}}
+        <input id="longitude"
+               type="text"
+               name="longitude"
                title="x.xxxxxxxx between -180 to 180"
                placeholder="Longitude"
-               value="{{ .resource.Longitude }}">
-        <label for="latitude">Latitude</label>
-        {{ if .errors.latitude }}
-        {{range index .errors "latitude"}}
-        <p class="error">{{ . }}</p>
+               value="{{ if .resource.Longitude }}{{ .resource.Longitude }}{{ end }}"
+               aria-invalid="true">
+        <p class="error">The latitude must be a number between -180 and 180</p>
+        {{else}}
+        <input id="longitude"
+               type="text"
+               name="longitude"
+               title="x.xxxxxxxx between -180 to 180"
+               placeholder="Longitude"
+               value="{{ if .resource.Longitude }}{{ .resource.Longitude }}{{ end }}">
         {{end}}
-        {{ end }}
-        <input id="latitude" type="text" name="latitude"
+
+        <label for="latitude">Latitude</label>
+        {{if index .errors "Latitude"}}
+        <input id="latitude"
+               type="text"
+               name="latitude"
                title="x.xxxxxxxx between -90 to 90"
                placeholder="Latitude"
-               value="{{ .resource.Latitude }}">
-        <label for="redirect">Redirection URL</label>
-        {{ if .errors.redirect }}
-        {{range index .errors "redirect"}}
-        <p class="error">{{ . }}</p>
+               value="{{ if .resource.Latitude }}{{ .resource.Latitude }}{{ end }}"
+               aria-invalid="true">
+        <p class="error">The longitude must be a number between -90 and 90</p>
+        {{else}}
+        <input id="latitude"
+               type="text"
+               name="latitude"
+               title="x.xxxxxxxx between -90 to 90"
+               placeholder="Latitude"
+               value="{{ if .resource.Latitude }}{{ .resource.Latitude }}{{ end }}">
         {{end}}
-        {{ end }}
+
+        <label for="redirect">Redirection URL</label>
+        {{if index .errors "Redirect"}}
         <input id="redirect"
                type="url"
                name="redirect"
                placeholder="http(s)://"
-               value="{{ .resource.Redirect }}">
+               value="{{ if .resource.Redirect }}{{ index .resource.Redirect }}{{ end }}"
+               aria-invalid="true">
+        <p class="error">The provided redirection URL is invalid</p>
+        {{else}}
+        <input id="redirect"
+               type="url"
+               name="redirect"
+               placeholder="http(s)://"
+               value="{{ if .resource.Redirect }}{{ index .resource.Redirect }}{{ end }}">
+        {{end}}
 
         <button type="submit"><i class="fas fa-save"></i> Save</button>
     </form>

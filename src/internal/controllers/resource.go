@@ -1,8 +1,10 @@
 package controllers
 
 import (
+	err "errors"
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"github.com/go-playground/validator/v10"
 	qrcode "github.com/skip2/go-qrcode"
 	"log"
 	"main/src/internal/models"
@@ -28,8 +30,9 @@ func ResourceForm(c *gin.Context) {
 
 	var title = "New event"
 	var action = "/resources"
-	var resource models.Resource
+	errors := make(map[string]string)
 
+	var resource models.Resource
 	if uuid != "" {
 		title = "Edit event"
 		action = "/resources/" + uuid
@@ -39,18 +42,35 @@ func ResourceForm(c *gin.Context) {
 	c.HTML(http.StatusOK, "resource-form", gin.H{
 		"title":    title,
 		"action":   action,
-		"resource": resource,
 		"user":     user,
+		"resource": resource,
+		"errors":   errors,
 	})
 }
 
 func CreateResource(c *gin.Context) {
 	user := GetUserFromContext(c)
 
-	resource := models.Resource{}
+	var resource models.Resource
 	error := c.ShouldBind(&resource)
+	errors := make(map[string]string)
 	if error != nil {
-		fmt.Println(error)
+		var validationErrors validator.ValidationErrors
+		if err.As(error, &validationErrors) {
+			for _, b := range validationErrors {
+				errors[b.Field()] = b.Error()
+			}
+		}
+		var title = "New event"
+		var action = "/resources"
+		c.HTML(http.StatusOK, "resource-form", gin.H{
+			"title":    title,
+			"action":   action,
+			"user":     user,
+			"resource": resource,
+			"errors":   errors,
+		})
+		return
 	}
 
 	models.CreateResource(user.Id, &resource)
@@ -87,7 +107,7 @@ func UpdateResource(c *gin.Context) {
 
 	c.HTML(http.StatusOK, "resource-view", gin.H{
 		"resource": resource,
-		"user":  user,
+		"user":     user,
 	})
 }
 
@@ -142,18 +162,18 @@ func RenderResourceQRCode(c *gin.Context) {
 	c.Header("Content-Type", "application/octet-stream")
 	c.Header("Content-Length", fmt.Sprintf("%d", len(png)))
 	c.Writer.Write(png)
-
 }
 
 func RedirectResource(c *gin.Context) {
 	resourceId := c.Param("uuid")
 	resource := models.ReadResource(resourceId)
 
-	redirect := resource.Redirect
-	if redirect == "" {
-		redirect = fmt.Sprintf("%s/%s",
-			os.Getenv("APP_URL"),
-			resourceId)
+	var redirect = fmt.Sprintf("%s/%s",
+		os.Getenv("APP_URL"),
+		resourceId)
+
+	if len(resource.Redirect) > 0 {
+		redirect = resource.Redirect
 	}
 
 	c.Redirect(http.StatusFound, redirect)

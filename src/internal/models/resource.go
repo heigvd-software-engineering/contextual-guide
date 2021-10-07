@@ -8,15 +8,15 @@ import (
 
 // Resource holds resource data in the database.
 type Resource struct {
-	Uuid string `gorm:"primary_key"`
+	Uuid string `gorm:"primary_key" json:"uuid,omitempty"`
 
 	// The Attributes of the resource.
-	Title       string    `form:"title" json:"title" binding:"required"`
-	Description string    `form:"description" json:"description"`
-	Longitude   float32   `form:"longitude" json:"longitude" binding:"required,gte=-180,lte=180"`
-	Latitude    float32   `form:"latitude" json:"latitude" binding:"required,gte=-90,lte=90"`
-	Timestamp   time.Time `form:"timestamp" json:"timestamp"`
-	Redirect    string    `form:"redirect" json:"redirect"`
+	Title       string  `form:"title" json:"title" binding:"required"`
+	Description string  `form:"description" json:"description,omitempty"`
+	Longitude   float32 `form:"longitude" json:"longitude" binding:"required,gte=-180,lte=180"`
+	Latitude    float32 `form:"latitude" json:"latitude" binding:"required,gte=-90,lte=90"`
+	Timestamp   time.Time    `form:"timestamp" json:"timestamp,omitempty"`
+	Redirect    string  `form:"redirect" json:"redirect,omitempty"`
 
 	// When an account is deleted, we must keep the associated resources.
 	AccountId string

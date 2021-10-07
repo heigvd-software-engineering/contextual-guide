@@ -26,11 +26,12 @@
 // swagger:meta
 package controllers
 
-/*
+import "main/src/internal/models"
+
 // swagger:parameters resourceSaveCommand
 type ResourceSaveCommandWrapper struct {
 	// in:body
-	Body ResourceSaveCommand
+	Body models.Resource
 }
 
 // An JSON representation of the resource
@@ -57,12 +58,3 @@ type ResourceGetByIdWrapper struct {
 	Uuid string
 }
 
-// An JSON representation of the error object
-// swagger:response validationError
-type ErrorDTOWrapper struct {
-	// in:body
-	Body models.ErrorDTO
-}
-
-
- */
