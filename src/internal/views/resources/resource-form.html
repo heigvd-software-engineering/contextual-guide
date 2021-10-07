@@ -35,7 +35,7 @@
                name="timestamp"
                min="2021-01-01T00:00"
                placeholder="yyyy-MM-ddThh:mm"
-               value="{{ if .resource.Timestamp }}{{ .resource.Timestamp }}{{ end }}"
+               value="{{ if .resource.Timestamp }}{{ .resource.Timestamp.Format "2006-01-02T15:04" }}{{ end }}"
                aria-invalid="true">
         {{else}}
         <input id="timestamp"
@@ -43,7 +43,7 @@
                name="timestamp"
                min="2021-01-01T00:00"
                placeholder="yyyy-MM-ddThh:mm"
-               value="{{ if .resource.Timestamp }}{{ .resource.Timestamp }}{{ end }}">
+               value="{{ if .resource.Timestamp }}{{ .resource.Timestamp.Format "2006-01-02T15:04" }}{{ end }}">
         {{end}}
 
         <label for="longitude">Longitude</label>

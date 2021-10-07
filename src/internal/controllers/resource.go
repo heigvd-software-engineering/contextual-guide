@@ -100,6 +100,8 @@ func UpdateResource(c *gin.Context) {
 		fmt.Println(error)
 	}
 
+	fmt.Println(resource)
+
 	resource.Uuid = c.Param("uuid")
 	resource.AccountId = user.Id
 

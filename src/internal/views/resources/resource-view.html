@@ -13,7 +13,7 @@
                 {{ end }}
             </h2>
         </hgroup>
-        <p class="timestamp"><i>{{ .resource.Timestamp }}</i></p>
+        <p class="timestamp"><i>{{ .resource.Timestamp.Format "02 Jan 2006 at 15:04" }}</i></p>
         <p class="description">{{ .resource.Description }}</p>
         <div class='map'
              data-longitude="{{ .resource.Longitude }}"

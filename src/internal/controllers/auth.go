@@ -123,12 +123,11 @@ func Verify(c *gin.Context) {
 	verificationType := "signup"
 
 	bodyString := map[string]string{"password": password, "token": token, "type": verificationType}
-	
 	body, _ := json.Marshal(bodyString)
 
-	_, err := http.Post(fmt.Sprintf("%s/verify", os.Getenv("GOTRUE_URL")), "application/json", bytes.NewBuffer(body))
 	message := fmt.Sprintf("Account successfully verified")
 
+	_, err := http.Post(fmt.Sprintf("%s/verify", os.Getenv("GOTRUE_URL")), "application/json", bytes.NewBuffer(body))
 	if err != nil {
 		fmt.Println(err)
 		message = err.Error()
