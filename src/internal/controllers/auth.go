@@ -102,8 +102,6 @@ func HandleLogin(c *gin.Context) {
 	tokenDTO := tokenDTO{}
 	_ = json.Unmarshal(body, &tokenDTO)
 
-	println(string(body))
-
 	//FIXME: secure=true for prod
 	c.SetCookie("sessionid", tokenDTO.AccessToken, 3600, "/", os.Getenv("APP_URL"), false, false)
 
@@ -125,9 +123,7 @@ func Verify(c *gin.Context) {
 	verificationType := "signup"
 
 	bodyString := map[string]string{"password": password, "token": token, "type": verificationType}
-
-	fmt.Println(bodyString)
-
+	
 	body, _ := json.Marshal(bodyString)
 
 	_, err := http.Post(fmt.Sprintf("%s/verify", os.Getenv("GOTRUE_URL")), "application/json", bytes.NewBuffer(body))
