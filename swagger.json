@@ -1,0 +1,194 @@
+{
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "schemes": [
+    "http"
+  ],
+  "swagger": "2.0",
+  "info": {
+    "description": "Documentation of the open API of the Contextual-guide project",
+    "title": "Contextual Guide",
+    "version": "0.0.1"
+  },
+  "host": "localhost:3000",
+  "basePath": "/api",
+  "paths": {
+    "/resource": {
+      "get": {
+        "description": "Gets all resources scoped by the apikey",
+        "tags": [
+          "Resource"
+        ],
+        "operationId": "getResourceList",
+        "responses": {
+          "200": {
+            "$ref": "#/responses/resourceList"
+          },
+          "401": {
+            "description": ""
+          }
+        }
+      },
+      "post": {
+        "description": "Creates a new Resource",
+        "tags": [
+          "Resource"
+        ],
+        "operationId": "postResource",
+        "parameters": [
+          {
+            "name": "Body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/Resource"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": ""
+          },
+          "401": {
+            "description": ""
+          },
+          "422": {
+            "$ref": "#/responses/validationError"
+          }
+        }
+      }
+    },
+    "/resource/:uuid": {
+      "get": {
+        "description": "Gets resource by uuid",
+        "tags": [
+          "Resource"
+        ],
+        "operationId": "getResource",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "name: uuid",
+            "name": "Uuid",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/responses/resource"
+          },
+          "401": {
+            "description": ""
+          }
+        }
+      },
+      "put": {
+        "description": "Updates an existing Resource",
+        "tags": [
+          "Resource"
+        ],
+        "operationId": "putResource",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "name: uuid",
+            "name": "Uuid",
+            "in": "path",
+            "required": true
+          },
+          {
+            "name": "Body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/Resource"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": ""
+          },
+          "401": {
+            "description": ""
+          },
+          "422": {
+            "$ref": "#/responses/validationError"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Resource": {
+      "type": "object",
+      "title": "Resource holds resource data in the database.",
+      "properties": {
+        "description": {
+          "type": "string",
+          "x-go-name": "Description"
+        },
+        "latitude": {
+          "type": "number",
+          "format": "float",
+          "x-go-name": "Latitude"
+        },
+        "longitude": {
+          "type": "number",
+          "format": "float",
+          "x-go-name": "Longitude"
+        },
+        "redirect": {
+          "type": "string",
+          "x-go-name": "Redirect"
+        },
+        "referenced": {
+          "type": "boolean",
+          "x-go-name": "Referenced"
+        },
+        "timestamp": {
+          "type": "string",
+          "format": "date-time",
+          "x-go-name": "Timestamp"
+        },
+        "title": {
+          "description": "The Attributes of the resource.",
+          "type": "string",
+          "x-go-name": "Title"
+        },
+        "uuid": {
+          "type": "string",
+          "x-go-name": "Uuid"
+        }
+      },
+      "x-go-package": "main/src/internal/models"
+    }
+  },
+  "responses": {
+    "getResource": {
+      "description": "",
+      "schema": {
+        "$ref": "#/definitions/Resource"
+      }
+    },
+    "getResourceList": {
+      "description": "",
+      "schema": {
+        "type": "array",
+        "items": {
+          "$ref": "#/definitions/Resource"
+        }
+      }
+    }
+  },
+  "securityDefinitions": {
+    "apikey": {
+      "type": "apiKey",
+      "name": "x-api-key",
+      "in": "header"
+    }
+  }
+}

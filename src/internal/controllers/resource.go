@@ -14,30 +14,42 @@ import (
 	"os"
 )
 
+func LatestResources(c *gin.Context) {
+	resources := models.LatestResources()
+	c.HTML(http.StatusOK, "latest", gin.H{
+		"resources": resources,
+		"user":      GetUserFromContext(c),
+	})
+}
+
 func ListResources(c *gin.Context) {
 	user := GetUserFromContext(c)
 	resources := models.GetAllResourceByAccountId(user.Id)
-
 	c.HTML(http.StatusOK, "resource-list", gin.H{
 		"resources": resources,
 		"user":      user,
 	})
 }
 
-func ResourceForm(c *gin.Context) {
+func GetResource(c *gin.Context) {
 	user := GetUserFromContext(c)
+
 	uuid := c.Param("uuid")
+	resource := models.ReadResource(uuid)
 
-	var title = "New event"
-	var action = "/resources"
+	c.HTML(http.StatusOK, "resource-view", gin.H{
+		"resource": resource,
+		"user":     user,
+	})
+}
+
+func CreateResourceForm(c *gin.Context) {
+	user := GetUserFromContext(c)
+
+	title := "New signal"
+	action := "/resources"
 	errors := make(map[string]string)
-
-	var resource models.Resource
-	if uuid != "" {
-		title = "Edit event"
-		action = "/resources/" + uuid
-		resource = *models.ReadResource(uuid)
-	}
+	resource := &models.Resource{}
 
 	c.HTML(http.StatusOK, "resource-form", gin.H{
 		"title":    title,
@@ -53,6 +65,9 @@ func CreateResource(c *gin.Context) {
 
 	var resource models.Resource
 	error := c.ShouldBind(&resource)
+	fmt.Println(resource.Referenced)
+
+
 	errors := make(map[string]string)
 	if error != nil {
 		var validationErrors validator.ValidationErrors
@@ -61,7 +76,7 @@ func CreateResource(c *gin.Context) {
 				errors[b.Field()] = b.Error()
 			}
 		}
-		var title = "New event"
+		var title = "New signal"
 		var action = "/resources"
 		c.HTML(http.StatusOK, "resource-form", gin.H{
 			"title":    title,
@@ -79,15 +94,21 @@ func CreateResource(c *gin.Context) {
 	c.Abort()
 }
 
-func ReadResource(c *gin.Context) {
+func UpdateResourceForm(c *gin.Context) {
 	user := GetUserFromContext(c)
-
 	uuid := c.Param("uuid")
-	resource := models.ReadResource(uuid)
 
-	c.HTML(http.StatusOK, "resource-view", gin.H{
-		"resource": resource,
+	title := "Edit signal"
+	action := "/resources/" + uuid
+	resource := models.ReadResource(uuid)
+	errors := make(map[string]string)
+
+	c.HTML(http.StatusOK, "resource-form", gin.H{
+		"title":    title,
+		"action":   action,
 		"user":     user,
+		"resource": resource,
+		"errors":   errors,
 	})
 }
 
@@ -99,8 +120,6 @@ func UpdateResource(c *gin.Context) {
 	if error != nil {
 		fmt.Println(error)
 	}
-
-	fmt.Println(resource)
 
 	resource.Uuid = c.Param("uuid")
 	resource.AccountId = user.Id
@@ -121,14 +140,6 @@ func DeleteResource(c *gin.Context) {
 
 	c.Redirect(http.StatusFound, "/resources")
 	c.Abort()
-}
-
-func Registry(c *gin.Context) {
-	resources := models.GetAllResources()
-	c.HTML(http.StatusOK, "registry", gin.H{
-		"resources": resources,
-		"user":      GetUserFromContext(c),
-	})
 }
 
 func RenderResourceQRCode(c *gin.Context) {

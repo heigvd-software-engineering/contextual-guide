@@ -28,28 +28,20 @@ package controllers
 
 import "main/src/internal/models"
 
-// swagger:parameters resourceSaveCommand
-type ResourceSaveCommandWrapper struct {
-	// in:body
-	Body models.Resource
-}
-
-// An JSON representation of the resource
-// swagger:response resource
-type ResourceDTOWrapper struct {
-	// in:body
-	Body models.Resource
-}
-
-// A list of resource
-// swagger:response resourceList
-type ResourceDTOListWrapper struct {
+// swagger:response getResourceList
+type GetResourceListResp struct {
 	// in:body
 	Body []models.Resource
 }
-// swagger:parameters resourceGetById
-type ResourceGetByIdWrapper struct {
 
+// swagger:response getResource
+type GetResourceResp struct {
+	// in:body
+	Body models.Resource
+}
+
+// swagger:parameters getResource
+type GetResourceParams struct {
 	// name: uuid
 	// in: path
 	// description: The uuid of the resource
@@ -58,3 +50,21 @@ type ResourceGetByIdWrapper struct {
 	Uuid string
 }
 
+// swagger:parameters postResource
+type PostResourceParams struct {
+	// in:body
+	Body models.Resource
+}
+
+// swagger:parameters putResource
+type PutResourceParams struct {
+	// name: uuid
+	// in: path
+	// description: The uuid of the resource
+	// required: true
+	// type: string
+	Uuid string
+
+	// in:body
+	Body models.Resource
+}

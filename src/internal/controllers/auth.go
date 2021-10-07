@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"github.com/golang-jwt/jwt/v4"
 	"io/ioutil"
 	"log"
 	"main/src/internal/models"
@@ -136,4 +137,60 @@ func Verify(c *gin.Context) {
 	c.HTML(http.StatusOK, "callback", gin.H{
 		"Message": message,
 	})
+}
+
+func IsAuthorized(c *gin.Context) {
+	user, _ := c.Get("user")
+	if user == nil {
+		RenderErrorPage(http.StatusUnauthorized, "You are not authorized", c)
+	}
+}
+
+func GetAccountFromCookie(c *gin.Context) {
+	jwtToken, err := c.Request.Cookie("sessionid")
+
+	c.Set("user", nil)
+	if err != nil {
+		return
+	}
+
+	secret := os.Getenv("JWT_SECRET")
+	token, _ := jwt.Parse(jwtToken.Value, func(token *jwt.Token) (interface{}, error) {
+		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+			return nil, fmt.Errorf("Unexpected signing method: %v", token.Header["alg"])
+		}
+		return []byte(secret), nil
+	})
+
+	claims, ok := token.Claims.(jwt.MapClaims)
+	if ok && token != nil && token.Valid {
+		accountId, _ := claims["sub"].(string)
+		email, _ := claims["email"].(string)
+		user := User{
+			Id:    accountId,
+			Email: email,
+		}
+		c.Set("user", user)
+	}
+}
+
+func GetAccountFromApiKey(c *gin.Context) {
+	c.Set("user", nil)
+
+	key := c.Request.Header.Get("x-api-key")
+	if key == "" {
+		c.JSON(http.StatusUnauthorized, "You are not authorized")
+	}
+
+	token := models.ReadToken(key)
+	if token == nil {
+		c.JSON(http.StatusUnauthorized, "You are not authorized")
+	}
+
+	user := User{
+		Id:    token.AccountId,
+		Email: "",
+	}
+
+	c.Set("user", user)
 }

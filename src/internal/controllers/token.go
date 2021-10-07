@@ -4,7 +4,20 @@ import (
 	"github.com/gin-gonic/gin"
 	"main/src/internal/models"
 	"net/http"
+	"os"
 )
+
+func GetTokens(c *gin.Context) {
+	account := GetUserFromContext(c)
+
+	tokens := models.ListTokenByAccountId(account.Id)
+
+	c.HTML(http.StatusOK, "token-list", gin.H{
+		"tokens": tokens,
+		"user":   GetUserFromContext(c),
+		"swagger": os.Getenv("SWAGGER_URL"),
+	})
+}
 
 func RenderTokenForm(c *gin.Context) {
 	c.HTML(http.StatusOK, "token-form", gin.H{
@@ -30,16 +43,7 @@ func CreateToken(c *gin.Context) {
 	})
 }
 
-func GetTokens(c *gin.Context) {
-	account := GetUserFromContext(c)
 
-	tokens := models.ListTokenByAccountId(account.Id)
-
-	c.HTML(http.StatusOK, "token-list", gin.H{
-		"tokens": tokens,
-		"user":   GetUserFromContext(c),
-	})
-}
 
 func DeleteToken(c *gin.Context) {
 	account := GetUserFromContext(c)

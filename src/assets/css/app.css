@@ -51,7 +51,13 @@
     --switch-checked-background-color: var(--primary);
 }
 
-/* Resource */
+body {
+    margin-top: 10px
+}
+
+.grow {
+    width: 100%;
+}
 
 .resource .qrcode {
     float: right;

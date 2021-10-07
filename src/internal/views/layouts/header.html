@@ -3,8 +3,8 @@
         <ul><li><strong><a class="contrast" href="/"><i class="fas fa-map"></i> Contextual Guide</a></strong></li></ul>
         <ul>
                 {{ if .user }}
+                <li><a class="contrast" href="/resources"><i class="fas fa-map-marker-alt"></i> Signals</a></li>
                 <li><a class="contrast" href="/tokens"><i class="fas fa-key"></i> API keys</a></li>
-                <li><a class="contrast" href="/resources"><i class="fas fa-map-marker-alt"></i> Events</a></li>
                 <li class="primary"><i class="fas fa-user"></i> {{.user.Email}}</li>
                 <li><a href="/logout"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
                 {{ else }}
