@@ -6,7 +6,7 @@ import (
 	"net/http"
 )
 
-// swagger:route GET /resource Resource listResource
+// swagger:route GET /resource Resource getResourceList
 // Gets all resources scoped by the apikey
 // responses:
 //   200: resourceList
@@ -22,8 +22,7 @@ func ListResourceApi(c *gin.Context) {
 // swagger:route POST /resource Resource createResource
 // Creates a new Resource
 // responses:
-//   201:
-//     description: Resource successfully created
+//   200: resource
 //   401:
 //     description: Unauthorized
 //   422: validationError
@@ -40,14 +39,13 @@ func CreateResourceApi(c *gin.Context) {
 
 	models.CreateResource(account.Id, &resource)
 
-	c.JSON(http.StatusCreated, nil)
+	c.JSON(http.StatusOK, resource)
 }
 
 // swagger:route PUT /resource/:uuid Resource updateResource
 // Updates an existing Resource
 // responses:
-//   201:
-//     description: Resource successfully updated
+//   200: resource
 //   401:
 //     description: Unauthorized
 //   422: validationError
@@ -67,7 +65,7 @@ func UpdateResourceApi(c *gin.Context) {
 
 	models.UpdateResource(account.Id, resource)
 
-	c.JSON(http.StatusCreated, nil)
+	c.JSON(http.StatusOK, resource)
 }
 
 // swagger:route GET /resource/:uuid Resource getResource
@@ -86,7 +84,7 @@ func GetResourceApi(c *gin.Context) {
 // swagger:route DELETE /resource/:uuid Resource deleteResource
 // Deletes resource by uuid
 // responses:
-//   201: resource
+//   200: resource
 //   401:
 //     description: Unauthorized
 func DeleteResourceApi(c *gin.Context) {

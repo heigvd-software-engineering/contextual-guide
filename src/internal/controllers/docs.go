@@ -28,14 +28,14 @@ package controllers
 
 import "main/src/internal/models"
 
-// swagger:response getResourceList
-type GetResourceListResp struct {
+// swagger:response resourceList
+type ResourceListResp struct {
 	// in:body
 	Body []models.Resource
 }
 
-// swagger:response getResource
-type GetResourceResp struct {
+// swagger:response resource
+type ResourceResp struct {
 	// in:body
 	Body models.Resource
 }

@@ -38,19 +38,10 @@
         "tags": [
           "Resource"
         ],
-        "operationId": "postResource",
-        "parameters": [
-          {
-            "name": "Body",
-            "in": "body",
-            "schema": {
-              "$ref": "#/definitions/Resource"
-            }
-          }
-        ],
+        "operationId": "createResource",
         "responses": {
-          "201": {
-            "description": ""
+          "200": {
+            "$ref": "#/responses/resource"
           },
           "401": {
             "description": ""
@@ -91,32 +82,31 @@
         "tags": [
           "Resource"
         ],
-        "operationId": "putResource",
-        "parameters": [
-          {
-            "type": "string",
-            "description": "name: uuid",
-            "name": "Uuid",
-            "in": "path",
-            "required": true
-          },
-          {
-            "name": "Body",
-            "in": "body",
-            "schema": {
-              "$ref": "#/definitions/Resource"
-            }
-          }
-        ],
+        "operationId": "updateResource",
         "responses": {
-          "201": {
-            "description": ""
+          "200": {
+            "$ref": "#/responses/resource"
           },
           "401": {
             "description": ""
           },
           "422": {
             "$ref": "#/responses/validationError"
+          }
+        }
+      },
+      "delete": {
+        "description": "Deletes resource by uuid",
+        "tags": [
+          "Resource"
+        ],
+        "operationId": "deleteResource",
+        "responses": {
+          "200": {
+            "$ref": "#/responses/resource"
+          },
+          "401": {
+            "description": ""
           }
         }
       }
@@ -155,7 +145,6 @@
           "x-go-name": "Timestamp"
         },
         "title": {
-          "description": "The Attributes of the resource.",
           "type": "string",
           "x-go-name": "Title"
         },
@@ -168,13 +157,13 @@
     }
   },
   "responses": {
-    "getResource": {
+    "resource": {
       "description": "",
       "schema": {
         "$ref": "#/definitions/Resource"
       }
     },
-    "getResourceList": {
+    "resourceList": {
       "description": "",
       "schema": {
         "type": "array",
