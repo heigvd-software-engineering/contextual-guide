@@ -7,9 +7,9 @@
             <h1 class="title">{{ .resource.Title }}</h1>
             <h2 class="uuid">
                 {{ if .resource.Redirect }}
-                <a href="{{ .resource.Redirect }}" target="_blank" rel="noreferrer">{{ .resource.Redirect }}</a>
+                <i class="fas fa-external-link-alt"></i> <a href="{{ .resource.Redirect }}" target="_blank" rel="noreferrer">{{ .resource.Redirect }}</a>
                 {{ else }}
-                <a href="/resources/{{ .resource.Uuid }}">{{ .resource.Uuid }}</a>
+                <i class="fas fa-link"></i> <a href="/resources/{{ .resource.Uuid }}">{{ .resource.Uuid }}</a>
                 {{ end }}
             </h2>
         </hgroup>
