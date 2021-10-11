@@ -1,0 +1,26 @@
+{{define "content"}}
+<main class="container">
+    <h1><i class="fas fa-map-marker-alt"></i> Your signals</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th class="grow">Title</th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+        {{ range .resources }}
+            <tr>
+                <td><a href="/resources/{{ .Uuid }}">{{ .Uuid }}</a></td>
+                <td>{{ .Title }}</td>
+                <td><a href="/resources/{{ .Uuid }}/update"><i class="fas fa-pen"></i></a></td>
+                <td><a href="/resources/{{ .Uuid }}/delete"><i class="fas fa-archive"></i></a></td>
+            </tr>
+        {{ end }}
+        </tbody>
+    </table>
+    <a href="/resources/create" role="button"><i class="fas fa-plus-circle"></i> New signal</a>
+</main>
+{{end}}

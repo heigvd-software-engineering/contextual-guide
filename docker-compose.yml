@@ -36,6 +36,17 @@ services:
     working_dir: /go/src/github.com/cosmtrek/hub
     volumes:
       - ".:/go/src/github.com/cosmtrek/hub"
+  swagger:
+    image: quay.io/goswagger/swagger
+    container_name: swagger
+    environment:
+      - GOPATH=/go
+    volumes:
+      - ".:/go/src"
+    working_dir: /go/src
+    command: ["serve", "swagger.json", "--port", "4000", "--no-open"]
+    ports:
+      - "4000:4000"
 
 volumes:
   data:

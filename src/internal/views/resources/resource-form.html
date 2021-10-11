@@ -1,0 +1,133 @@
+{{define "content"}}
+<main class="container">
+    <h2><i class="fas fa-map-marker-alt"></i> {{.title}}</h2>
+    <form action="{{.action}}" method="POST" enctype="multipart/form-data">
+        {{ if .resource.Uuid }}
+        <input id="uuid" type="hidden" name="uuid" value="{{ .resource.Uuid }}">
+        {{ end }}
+
+        <fieldset>
+            <label for="title">Title</label>
+            {{if index .errors "Title"}}
+            <input id="title"
+                   type="text"
+                   name="title"
+                   placeholder="Title"
+                   value="{{ if .resource.Title }}{{ .resource.Title }}{{ end }}"
+                   aria-invalid="true">
+            <p class="error">The title is required</p>
+            {{else}}
+            <input id="title"
+                   type="text"
+                   name="title"
+                   placeholder="Title"
+                   value="{{ if .resource.Title }}{{ .resource.Title }}{{ end }}">
+            {{end}}
+        </fieldset>
+
+        <fieldset>
+            <label for="description">Description</label>
+            <textarea id="description" type="text" name="description"
+                      placeholder="Description">{{ if .resource.Description }}{{ .resource.Description }}{{ end }}</textarea>
+        </fieldset>
+
+        <fieldset>
+            <label for="timestamp">Date and time</label>
+            {{if index .errors "Timestamp"}}
+            <p class="error">The provided value is invalid</p>
+            <input id="timestamp"
+                   type="datetime-local"
+                   name="timestamp"
+                   min="2021-01-01T00:00"
+                   placeholder="yyyy-MM-ddThh:mm"
+                   value="{{ if not .resource.Timestamp.IsZero }}{{ .resource.Timestamp.Format " 2006-01-02T15:04" }}{{
+            end
+            }}"
+            aria-invalid="true">
+            {{else}}
+            <input id="timestamp"
+                   type="datetime-local"
+                   name="timestamp"
+                   min="2021-01-01T00:00"
+                   placeholder="yyyy-MM-ddThh:mm"
+                   value="{{ if not .resource.Timestamp.IsZero }}{{ .resource.Timestamp.Format " 2006-01-02T15:04" }}{{
+            end
+            }}">
+            {{end}}
+        </fieldset>
+
+        <fieldset>
+            <label for="longitude">Longitude</label>
+            {{if index .errors "Longitude"}}
+            <input id="longitude"
+                   type="text"
+                   name="longitude"
+                   title="x.xxxxxxxx between -180 to 180"
+                   placeholder="Longitude"
+                   value="{{ if .resource.Longitude }}{{ .resource.Longitude }}{{ end }}"
+                   aria-invalid="true">
+            <p class="error">The longitude is required and must be comprised between -180.0 and 180.0</p>
+            {{else}}
+            <input id="longitude"
+                   type="text"
+                   name="longitude"
+                   title="x.xxxxxxxx between -180 to 180"
+                   placeholder="Longitude"
+                   value="{{ if .resource.Longitude }}{{ .resource.Longitude }}{{ end }}">
+            {{end}}
+        </fieldset>
+
+        <fieldset>
+            <label for="latitude">Latitude</label>
+            {{if index .errors "Latitude"}}
+            <input id="latitude"
+                   type="text"
+                   name="latitude"
+                   title="x.xxxxxxxx between -90 to 90"
+                   placeholder="Latitude"
+                   value="{{ if .resource.Latitude }}{{ .resource.Latitude }}{{ end }}"
+                   aria-invalid="true">
+            <p class="error">The latitude is required and must be comprised between -90.0 and 90.0</p>
+            {{else}}
+            <input id="latitude"
+                   type="text"
+                   name="latitude"
+                   title="x.xxxxxxxx between -90 to 90"
+                   placeholder="Latitude"
+                   value="{{ if .resource.Latitude }}{{ .resource.Latitude }}{{ end }}">
+            {{end}}
+        </fieldset>
+
+        <fieldset>
+            <label for="redirect">Redirection URL</label>
+            {{if index .errors "Redirect"}}
+            <input id="redirect"
+                   type="url"
+                   name="redirect"
+                   placeholder="http(s)://"
+                   value="{{ if .resource.Redirect }}{{ index .resource.Redirect }}{{ end }}"
+                   aria-invalid="true">
+            <p class="error">The provided redirection URL is invalid</p>
+            {{else}}
+            <input id="redirect"
+                   type="url"
+                   name="redirect"
+                   placeholder="http(s)://"
+                   value="{{ if .resource.Redirect }}{{ index .resource.Redirect }}{{ end }}">
+            {{end}}
+        </fieldset>
+
+        <fieldset>
+            <label for="referenced">Referenced</label>
+            <input id="referenced"
+                   type="checkbox"
+                   name="referenced"
+                   role="switch"
+                   value="true"
+                   {{ if .resource.Referenced }}checked{{ end }}/>
+        </fieldset>
+
+        <button type="submit"><i class="fas fa-save"></i> Save</button>
+    </form>
+</main>
+{{ end }}

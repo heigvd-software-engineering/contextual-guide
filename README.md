@@ -24,7 +24,9 @@ The database configuration is set with some env variables
 
  1. [Install](https://goswagger.io/install.html) go-swagger
 
-### Generate documentation with `go-swagger`
+### Swagger
+
+
 
 ```bash
   swagger generate spec -o ./swagger.yaml --scan-models

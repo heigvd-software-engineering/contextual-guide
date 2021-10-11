@@ -1,0 +1,11 @@
+{{define "content"}}
+
+<main class="container">
+    <h2><i class="fas fa-key"></i> New API key</h2>
+    <form action="/tokens/create" method="POST">
+        <label for="name">Name</label>
+        <input name="name" id="name" placeholder="Name">
+        <button type="submit"><i class="fas fa-save"></i> New API key</button>
+    </form>
+</main>
+{{ end }}

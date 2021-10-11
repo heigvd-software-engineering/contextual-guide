@@ -1,0 +1,24 @@
+{{define "content"}}
+
+<main class="container">
+    <article class="resource">
+        <img src="/resources/{{ .resource.Uuid }}/128/qrcode.png" alt="QRCode" class="qrcode">
+        <hgroup class="head">
+            <h1 class="title">{{ .resource.Title }}</h1>
+            <h2 class="uuid">
+                {{ if .resource.Redirect }}
+                <i class="fas fa-external-link-alt"></i> <a href="{{ .resource.Redirect }}" target="_blank" rel="noreferrer">{{ .resource.Redirect }}</a>
+                {{ else }}
+                <i class="fas fa-link"></i> <a href="/resources/{{ .resource.Uuid }}">{{ .resource.Uuid }}</a>
+                {{ end }}
+            </h2>
+        </hgroup>
+        <p class="timestamp"><i>{{ .resource.Timestamp.Format "02 Jan 2006 at 15:04" }}</i></p>
+        <p class="description">{{ .resource.Description }}</p>
+        <div class='map'
+             data-longitude="{{ .resource.Longitude }}"
+             data-latitude="{{ .resource.Latitude }}"></div>
+    </article>
+</main>
+
+{{end}}
